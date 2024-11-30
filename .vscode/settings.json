@@ -1,0 +1,20 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "node_modules": true,
+        ".vscode": true,
+        ".eslintrc.json": true,
+        "next.config.mjs": false,
+        "next-env.d.ts": true,
+        "README.md": true,
+        "tsconfig.json": true,
+        ".gitignore": true,
+        ".next": true
+    },
+    "explorerExclude.backup": {}
+}

@@ -1,0 +1,120 @@
+[
+  {
+    "created_at": "2024-09-08T17:15:45.737513+00:00",
+    "email": "johnnetr+5@gmail.com",
+    "id": "95065e2a-6e13-4dc8-8e84-0a703d34fc28",
+    "paymentStatus": "paid",
+    "amount": 2900,
+    "planType": "basic",
+    "paid_at": null,
+    "name": "Johnny Tran",
+    "height": "161 - 170 cm (5&apos;3&quot; - 5&apos;7&quot;)",
+    "gender": "man",
+    "eyeColor": "Hazel",
+    "ethnicity": "Asian",
+    "bodyType": "Mesomorph (Athletic)",
+    "age": "26-29 years",
+    "styles": [
+      {
+        "type": "userSelected",
+        "styles": [
+          {
+            "clothingTitle": "Light blue denim jacket",
+            "clothingPrompt": "Casual light blue denim jacket with subtle texture",
+            "backgroundTitle": "Realtor",
+            "backgroundPrompt": "Professional realtor background with modern furniture"
+          },
+          {
+            "clothingTitle": "Light gray textured sweatshirt",
+            "clothingPrompt": "Casual light gray textured sweatshirt with subtle texture",
+            "backgroundTitle": "Yellow",
+            "backgroundPrompt": "Bright and cheerful yellow background"
+          },
+          {
+            "clothingTitle": "Cream long-sleeve henley",
+            "clothingPrompt": "Casual cream long-sleeve henley with subtle texture",
+            "backgroundTitle": "Loft Interior",
+            "backgroundPrompt": "Modern loft interior background with exposed brick"
+          },
+          {
+            "clothingTitle": "Dark gray patterned blazer",
+            "clothingPrompt": "Professional dark gray patterned blazer with matching trousers",
+            "backgroundTitle": "Yellow",
+            "backgroundPrompt": "Bright and cheerful yellow background"
+          },
+          {
+            "clothingTitle": "Dark blue tailored suit",
+            "clothingPrompt": "Executive wearing an elegant dark blue tailored suit",
+            "backgroundTitle": "Cafe",
+            "backgroundPrompt": "Cozy cafe with warm lighting and inviting atmosphere"
+          },
+          {
+            "clothingTitle": "White kandura",
+            "clothingPrompt": "Traditional white kandura with subtle texture",
+            "backgroundTitle": "Lobby",
+            "backgroundPrompt": "Modern lobby background with sleek furniture"
+          }
+        ]
+      },
+      {
+        "type": "preSelected",
+        "styles": [
+          {
+            "clothingTitle": "White buttoned shirt",
+            "clothingPrompt": "A white buttoned shirt",
+            "backgroundTitle": "Garden",
+            "backgroundPrompt": "Lush garden with colorful flowers and green foliage"
+          },
+          {
+            "clothingTitle": "Black sweater",
+            "clothingPrompt": "A black sweater",
+            "backgroundTitle": "Office",
+            "backgroundPrompt": "Modern office setting with a desk and computer"
+          },
+          {
+            "clothingTitle": "Light gray suit jacket over a white dress shirt",
+            "clothingPrompt": "A light gray suit jacket over a white dress shirt",
+            "backgroundTitle": "Grey",
+            "backgroundPrompt": "Neutral grey background"
+          },
+          {
+            "clothingTitle": "Black sweater",
+            "clothingPrompt": "A black sweater",
+            "backgroundTitle": "Outdoors",
+            "backgroundPrompt": "Outdoor scene with trees and a path"
+          }
+        ]
+      }
+    ],
+    "userPhotos": {
+      "aiGenerated": [
+        "https://sdbooth2-production.s3.amazonaws.com/km9vd71j4ap8m0t7yuoa4e30kggm",
+        "https://sdbooth2-production.s3.amazonaws.com/0dh0sj1q455xgui78qpkjb36znl2"
+      ],
+      "userSelfies": [
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496960876-IMG_1232%202.jpeg",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496961988-IMG_1236%202.jpeg",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496962933-IMG_1237%202.jpeg",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496964049-Screenshot%202024-09-13%20at%2014.44.35.png",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496965101-Screenshot%202024-09-13%20at%2014.45.56.png",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496966186-2.png",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496967314-1.jpeg",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496968436-Screenshot%202024-09-13%20at%2014.46.26.png",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496969538-IMG_0570.jpeg",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496970857-IMG_0571.jpeg",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496972172-IMG_0574.jpeg",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496973478-IMG_1242%202.jpeg",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496974643-IMG_1243%202.jpeg",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496975887-IMG_1253%202.jpeg",
+        "https://bovtokbsxuyuotbotmgx.supabase.co/storage/v1/object/public/userphotos/95065e2a-6e13-4dc8-8e84-0a703d34fc28/selfies/1726496977462-IMG_1254%202.jpeg"
+      ]
+    },
+    "submissionDate": "2024-09-16T19:09:59.909+00:00",
+    "workStatus": "completed",
+    "downloadHistory": [
+      "https://sdbooth2-production.s3.amazonaws.com/km9vd71j4ap8m0t7yuoa4e30kggm",
+      "https://sdbooth2-production.s3.amazonaws.com/0dh0sj1q455xgui78qpkjb36znl2",
+      "https://sdbooth2-production.s3.amazonaws.com/0dh0sj1q455xgui78qpkjb36znl2"
+    ]
+  }
+]

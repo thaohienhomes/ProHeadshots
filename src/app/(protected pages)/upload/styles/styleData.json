@@ -1,0 +1,371 @@
+{
+    "backgroundStyles": [
+      {
+        "backgroundTitle": "Streets",
+        "backgroundPrompt": "Vibrant urban street scene with soft focus buildings",
+        "image": "/background/Streets.jpg"
+      },
+      {
+        "backgroundTitle": "Bookshelf",
+        "backgroundPrompt": "Soft focus bookshelf background in a library with scholarly ambiance",
+        "image": "/background/Bookshelf.jpg"
+      },
+      {
+        "backgroundTitle": "Garden",
+        "backgroundPrompt": "Out-of-focus garden with muted colors and natural elements",
+        "image": "/background/Garden.jpg"
+      },
+      {
+        "backgroundTitle": "Marina",
+        "backgroundPrompt": "Defocused marina scene with subtle water reflections",
+        "image": "/background/Marina.jpg"
+      },
+      {
+        "backgroundTitle": "Office",
+        "backgroundPrompt": "Blurred modern office interior with professional atmosphere",
+        "image": "/background/Office.jpg"
+      },
+      {
+        "backgroundTitle": "Lake",
+        "backgroundPrompt": "Serene lake scene with calm waters and surrounding landscape",
+        "image": "/background/Lake.jpg"
+      },
+      {
+        "backgroundTitle": "Cafe",
+        "backgroundPrompt": "Cozy cafe with warm lighting and inviting atmosphere",
+        "image": "/background/Cafe.jpg"
+      },
+      {
+        "backgroundTitle": "Kitchen",
+        "backgroundPrompt": "Modern kitchen with sleek appliances and clean countertops",
+        "image": "/background/Kitchen.jpg"
+      },
+      {
+        "backgroundTitle": "White",
+        "backgroundPrompt": "Simple and smooth white background backdrop",
+        "image": "/background/White.jpg"
+      },
+      {
+        "backgroundTitle": "Red brick",
+        "backgroundPrompt": "Warm red brick background with subtle texture",
+        "image": "/background/Red brick.jpg"
+      },
+      {
+        "backgroundTitle": "Yellow",
+        "backgroundPrompt": "Bright and cheerful yellow background backdrop",
+        "image": "/background/Yellow.jpg"
+      },
+      {
+        "backgroundTitle": "Grey",
+        "backgroundPrompt": "Neutral dark grey background backdrop",
+        "image": "/background/Grey.jpg"
+      },
+      {
+        "backgroundTitle": "Alley",
+        "backgroundPrompt": "Narrow alleyway with brick walls and dim lighting",
+        "image": "/background/Alley.jpg"
+      },
+      {
+        "backgroundTitle": "Fence",
+        "backgroundPrompt": "Wooden fence with intricate details and texture",
+        "image": "/background/Fence.jpg"
+      },
+      {
+        "backgroundTitle": "Park",
+        "backgroundPrompt": "Lush park scene with greenery and walking paths",
+        "image": "/background/Park.jpg"
+      },
+      {
+        "backgroundTitle": "Building",
+        "backgroundPrompt": "Modern building with sleek architecture and glass windows",
+        "image": "/background/Building.jpg"
+      },
+      {
+        "backgroundTitle": "Blue",
+        "backgroundPrompt": "Calm blue background backdrop",
+        "image": "/background/Blue.jpg"
+      },
+      {
+        "backgroundTitle": "Realtor",
+        "backgroundPrompt": "Professional realtor background with modern furniture",
+        "image": "/background/Realtor.jpg"
+      },
+      {
+        "backgroundTitle": "Window",
+        "backgroundPrompt": "Simple window background with subtle texture",
+        "image": "/background/Window.jpg"
+      },
+      {
+        "backgroundTitle": "Golden gate",
+        "backgroundPrompt": "Warm golden gate background with intricate details",
+        "image": "/background/Golden gate.jpg"
+      },
+      {
+        "backgroundTitle": "Tulips",
+        "backgroundPrompt": "Vibrant tulip background with colorful flowers",
+        "image": "/background/Tulips.jpg"
+      },
+      {
+        "backgroundTitle": "French rooftop",
+        "backgroundPrompt": "Charming French rooftop scene with ornate details",
+        "image": "/background/French rooftop.jpg"
+      },
+      {
+        "backgroundTitle": "Hotel",
+        "backgroundPrompt": "Luxurious hotel background with modern furniture",
+        "image": "/background/Hotel.jpg"
+      },
+      {
+        "backgroundTitle": "Yellow brick",
+        "backgroundPrompt": "Warm yellow brick background with subtle texture",
+        "image": "/background/Yellow brick.jpg"
+      },
+      {
+        "backgroundTitle": "Green",
+        "backgroundPrompt": "Lush green background with subtle texture",
+        "image": "/background/Green.jpg"
+      },
+      {
+        "backgroundTitle": "Woods",
+        "backgroundPrompt": "Serene woods scene with tall trees and calm atmosphere",
+        "image": "/background/Woods.jpg"
+      },
+      {
+        "backgroundTitle": "Lobby",
+        "backgroundPrompt": "Modern lobby background with sleek furniture",
+        "image": "/background/Lobby.jpg"
+      },
+      {
+        "backgroundTitle": "Dark",
+        "backgroundPrompt": "Simple dark background with subtle texture",
+        "image": "/background/Dark.jpg"
+      },
+      {
+        "backgroundTitle": "Patriotic Display",
+        "backgroundPrompt": "Vibrant patriotic display background with colorful flags",
+        "image": "/background/Patriotic Display.jpg"
+      },
+      {
+        "backgroundTitle": "Beach Stairs",
+        "backgroundPrompt": "Charming beach stairs scene with wooden details",
+        "image": "/background/Beach Stairs.jpg"
+      },
+      {
+        "backgroundTitle": "Brooklyn Waterfront",
+        "backgroundPrompt": "Scenic Brooklyn waterfront scene with boats and calm waters",
+        "image": "/background/Brooklyn Waterfront.jpg"
+      },
+      {
+        "backgroundTitle": "Rustic Charm",
+        "backgroundPrompt": "Cozy rustic charm background with wooden details",
+        "image": "/background/Rustic Charm.jpg"
+      },
+      {
+        "backgroundTitle": "Loft Interior",
+        "backgroundPrompt": "Modern loft interior background with exposed brick",
+        "image": "/background/Loft Interior.jpg"
+      },
+      {
+        "backgroundTitle": "Urban Sunlight",
+        "backgroundPrompt": "Bright urban sunlight background with modern architecture",
+        "image": "/background/Urban Sunlight.jpg"
+      },
+      {
+        "backgroundTitle": "Lush Greenery",
+        "backgroundPrompt": "Lush greenery background with colorful flowers and foliage",
+        "image": "/background/Lush Greenery.jpg"
+      },
+      {
+        "backgroundTitle": "Wildflower Field",
+        "backgroundPrompt": "Expansive field filled with colorful wildflowers",
+        "image": "/background/Wildflower Field.jpg"
+      }
+    ],
+    "clothingStyles": [
+      {
+        "clothingTitle": "Fitted black turtleneck shirt",
+        "clothingPrompt": "Sleek, fitted black turtleneck shirt",
+        "image": "/clothing/Fitted black turtleneck shirt.jpg"
+      },
+      {
+        "clothingTitle": "Navy blazer with light blue shirt",
+        "clothingPrompt": "Navy blazer over a light blue dress shirt, business attire",
+        "image": "/clothing/Navy blazer with light blue shirt.jpg"
+      },
+      {
+        "clothingTitle": "Dark blue tailored suit",
+        "clothingPrompt": "Executive wearing an elegant dark blue tailored suit",
+        "image": "/clothing/Dark blue tailored suit.jpg"
+      },
+      {
+        "clothingTitle": "Light gray suit ensemble",
+        "clothingPrompt": "Light gray suit ensemble with matching tie",
+        "image": "/clothing/Light gray suit ensemble.jpg"
+      },
+      {
+        "clothingTitle": "White button-up shirt",
+        "clothingPrompt": "Clean, classic white button-up shirt",
+        "image": "/clothing/White button-up shirt.jpg"
+      },
+      {
+        "clothingTitle": "Dark gray patterned blazer",
+        "clothingPrompt": "Professional dark gray patterned blazer with matching trousers",
+        "image": "/clothing/Dark gray patterned blazer.jpg"
+      },
+      {
+        "clothingTitle": "Blue scrub set",
+        "clothingPrompt": "Medical blue scrub set with white accents",
+        "image": "/clothing/Blue scrub set.jpg"
+      },
+      {
+        "clothingTitle": "White lab coat with black outfit",
+        "clothingPrompt": "Scientific white lab coat with black trousers and accessories",
+        "image": "/clothing/White lab coat with black outfit.jpg"
+      },
+      {
+        "clothingTitle": "Black v-neck sweater",
+        "clothingPrompt": "Casual black v-neck sweater with subtle texture",
+        "image": "/clothing/Black v-neck sweater.jpg"
+      },
+      {
+        "clothingTitle": "Black long-sleeve button-up shirt",
+        "clothingPrompt": "Classic black long-sleeve button-up shirt with subtle texture",
+        "image": "/clothing/Black long-sleeve button-up shirt.jpg"
+      },
+      {
+        "clothingTitle": "White t-shirt and black trousers",
+        "clothingPrompt": "Simple white t-shirt with black trousers and sneakers",
+        "image": "/clothing/White t-shirt and black trousers.jpg"
+      },
+      {
+        "clothingTitle": "Black and white striped polo",
+        "clothingPrompt": "Classic black and white striped polo with subtle texture",
+        "image": "/clothing/Black and white striped polo.jpg"
+      },
+      {
+        "clothingTitle": "Light blue short-sleeve button-down",
+        "clothingPrompt": "Casual light blue short-sleeve button-down with subtle texture",
+        "image": "/clothing/Light blue short-sleeve button-down.jpg"
+      },
+      {
+        "clothingTitle": "Black relaxed-fit balloon sleeve top",
+        "clothingPrompt": "Casual black relaxed-fit balloon sleeve top with subtle texture",
+        "image": "/clothing/Black relaxed-fit balloon sleeve top.jpg"
+      },
+      {
+        "clothingTitle": "Light gray cardigan",
+        "clothingPrompt": "Classic light gray cardigan with subtle texture",
+        "image": "/clothing/Light gray cardigan.jpg"
+      },
+      {
+        "clothingTitle": "Light blue denim jacket",
+        "clothingPrompt": "Casual light blue denim jacket with subtle texture",
+        "image": "/clothing/Light blue denim jacket.jpg"
+      },
+      {
+        "clothingTitle": "Black tweed jacket",
+        "clothingPrompt": "Classic black tweed jacket with subtle texture",
+        "image": "/clothing/Black tweed jacket.jpg"
+      },
+      {
+        "clothingTitle": "Cream long-sleeve henley",
+        "clothingPrompt": "Casual cream long-sleeve henley with subtle texture",
+        "image": "/clothing/Cream long-sleeve henley.jpg"
+      },
+      {
+        "clothingTitle": "Navy blue short-sleeve polo",
+        "clothingPrompt": "Professional navy blue short-sleeve polo with subtle texture",
+        "image": "/clothing/Navy blue short-sleeve polo.jpg"
+      },
+      {
+        "clothingTitle": "Cream short-sleeve polo",
+        "clothingPrompt": "Casual cream short-sleeve polo with subtle texture",
+        "image": "/clothing/Cream short-sleeve polo.jpg"
+      },
+      {
+        "clothingTitle": "Light gray blazer",
+        "clothingPrompt": "Professional light gray blazer with subtle texture",
+        "image": "/clothing/Light gray blazer.jpg"
+      },
+      {
+        "clothingTitle": "Light blue denim shirt",
+        "clothingPrompt": "Casual light blue denim shirt with subtle texture",
+        "image": "/clothing/Light blue denim shirt.jpg"
+      },
+      {
+        "clothingTitle": "Blue and white checked button-up",
+        "clothingPrompt": "Classic blue and white checked button-up with subtle texture",
+        "image": "/clothing/Blue and white checked button-up.jpg"
+      },
+      {
+        "clothingTitle": "Light gray ribbed turtleneck",
+        "clothingPrompt": "Casual light gray ribbed turtleneck with subtle texture",
+        "image": "/clothing/Light gray ribbed turtleneck.jpg"
+      },
+      {
+        "clothingTitle": "Blue and orange plaid shirt",
+        "clothingPrompt": "Classic blue and orange plaid shirt with subtle texture",
+        "image": "/clothing/Blue and orange plaid shirt.jpg"
+      },
+      {
+        "clothingTitle": "Dark green blazer outfit",
+        "clothingPrompt": "Professional dark green blazer outfit with subtle texture",
+        "image": "/clothing/Dark green blazer outfit.jpg"
+      },
+      {
+        "clothingTitle": "Multicolored striped sweater",
+        "clothingPrompt": "Casual multicolored striped sweater with subtle texture",
+        "image": "/clothing/Multicolored striped sweater.jpg"
+      },
+      {
+        "clothingTitle": "Light gray textured sweatshirt",
+        "clothingPrompt": "Casual light gray textured sweatshirt with subtle texture",
+        "image": "/clothing/Light gray textured sweatshirt.jpg"
+      },
+      {
+        "clothingTitle": "Black graduation robe",
+        "clothingPrompt": "Formal black graduation robe with subtle texture",
+        "image": "/clothing/Black graduation robe.jpg"
+      },
+      {
+        "clothingTitle": "White chef's coat with black trim",
+        "clothingPrompt": "Professional white chef's coat with black trim and subtle texture",
+        "image": "/clothing/White chef's coat with black trim.jpg"
+      },
+      {
+        "clothingTitle": "Yellow safety vest with reflective stripes",
+        "clothingPrompt": "Safety yellow vest with reflective stripes and subtle texture",
+        "image": "/clothing/Yellow safety vest with reflective stripes.jpg"
+      },
+      {
+        "clothingTitle": "White pilot shirt with epaulets",
+        "clothingPrompt": "Professional white pilot shirt with epaulets and subtle texture",
+        "image": "/clothing/White pilot shirt with epaulets.jpg"
+      },
+      {
+        "clothingTitle": "White kandura",
+        "clothingPrompt": "Traditional white kandura with subtle texture",
+        "image": "/clothing/White kandura.jpg"
+      },
+      {
+        "clothingTitle": "Light cream graphic hoodie",
+        "clothingPrompt": "Casual light cream graphic hoodie with subtle texture",
+        "image": "/clothing/Light cream graphic hoodie.jpg"
+      },
+      {
+        "clothingTitle": "Brown cable-knit turtleneck",
+        "clothingPrompt": "Casual brown cable-knit turtleneck with subtle texture",
+        "image": "/clothing/Brown cable-knit turtleneck.jpg"
+      },
+      {
+        "clothingTitle": "Dark olive green blazer",
+        "clothingPrompt": "Professional dark olive green blazer with subtle texture",
+        "image": "/clothing/Dark olive green blazer.jpg"
+      },
+      {
+        "clothingTitle": "Dark blue military uniform",
+        "clothingPrompt": "Formal dark blue military uniform with insignia and subtle texture",
+        "image": "/clothing/Dark blue military uniform.jpg"
+      }
+    ]
+  }

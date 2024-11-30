@@ -1,0 +1,96 @@
+/* globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  color: #f6f5ec;
+  background-color: #091e25;
+}
+
+/* USP icons*/
+.active-icon,
+.group:hover .inactive-icon {
+  filter: invert(65%) sepia(75%) saturate(1217%) hue-rotate(330deg)
+    brightness(101%) contrast(101%);
+}
+
+.inactive-icon {
+  filter: brightness(0) saturate(100%); /* This will make the image black */
+}
+/* USP icons*/
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  border: 5px solid #091e25; /* mainBlack */
+  border-top: 5px solid #ff914e; /* mainGreen */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes progress-piece {
+  0% {
+    left: -25%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.animate-progress-piece {
+  animation: progress-piece 2s linear infinite;
+}
+
+/* New animation for infinite scrolling cards */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.33%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll linear infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background-size: 200% 200%;
+  animation: gradient-animation 3s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer {
+  animation: shimmer 1.5s infinite;
+}
