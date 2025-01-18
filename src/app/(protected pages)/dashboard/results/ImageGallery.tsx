@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { trackDownload } from "@/action/trackDownload";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { fixDiscrepancy } from "@/action/fixDiscrepancy";
 
 interface ImageGalleryProps {
@@ -50,7 +50,7 @@ export default function ImageGallery({
       link.href = url;
       const promptId = promptsResult[index]?.data?.prompt?.id;
       const filename = promptId
-        ? `ai-headshot-${promptId}.png`
+        ? `ai-headshot-${promptId}-${index + 1}.png`
         : `ai-generated-image-${index + 1}.png`;
       link.download = filename;
       document.body.appendChild(link);
@@ -94,10 +94,37 @@ export default function ImageGallery({
     checkDiscrepancy();
   }, []);
 
-  const displayImages =
-    promptsResult.length > 0
-      ? promptsResult.map((result) => result.data.prompt.images[0])
-      : images;
+  const displayImages = useMemo(() => {
+    if (promptsResult.length > 0) {
+      // Sort promptsResult by created_at in reverse order (newest first)
+      const sortedPrompts = [...promptsResult].sort((a, b) => {
+        const dateA = new Date(
+          a.data?.prompt?.created_at || a.timestamp
+        ).getTime();
+        const dateB = new Date(
+          b.data?.prompt?.created_at || b.timestamp
+        ).getTime();
+        return dateB - dateA; // Changed to dateB - dateA for reverse chronological
+      });
+
+      // Then flatten the images while maintaining order
+      return sortedPrompts.flatMap((result) => result.data.prompt.images);
+    }
+    return images;
+  }, [promptsResult, images]);
+
+  // console.log({
+  //   totalDisplayedImages: displayImages.length,
+  //   skeletonCount: hasDiscrepancy ? remainingSlots : 0,
+  //   totalVisibleItems:
+  //     displayImages.length + (hasDiscrepancy ? remainingSlots : 0),
+  //   loadingState: isLoading,
+  //   promptsResultLength: promptsResult.length,
+  //   imagesPerPrompt: promptsResult.map(
+  //     (result) => result.data.prompt.images.length
+  //   ),
+  //   originalImagesLength: images.length,
+  // });
 
   return (
     <>
