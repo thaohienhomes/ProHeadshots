@@ -18,14 +18,14 @@ interface UserData {
 interface Prompt {
   id: number;
   text: string;
-  steps: number | null;
   images: string[];
-  tune_id: number;
-  created_at: string;
-  trained_at: string;
-  updated_at: string;
-  negative_prompt: string;
-  started_training_at: string;
+  steps?: number | null;
+  tune_id?: number;
+  created_at?: string;
+  trained_at?: string;
+  updated_at?: string;
+  negative_prompt?: string;
+  started_training_at?: string;
   callback?: string;
 }
 
@@ -72,20 +72,19 @@ export async function fixDiscrepancy(userData: UserData | null) {
       try {
         const astriaPrompts = await getAstriaPrompts(userData.apiStatus.id.toString());
         
+        // Log unique images from Astria prompts
+        const uniqueAstriaImages = new Set(
+          astriaPrompts.flatMap(prompt => prompt.images || [])
+        );
+        console.log("Total unique Astria images:", uniqueAstriaImages.size);
+
         // Get existing prompt IDs from promptsResult
         const existingPromptIds = new Set(
           userData.promptsResult?.map(item => item.data.prompt.id) || []
         );
 
-        // Find unique prompts from Astria
-        const uniqueAstriaPrompts = astriaPrompts.filter(
-          prompt => !existingPromptIds.has(prompt.id)
-        );
-
-        // Create new entries in promptsResult format
-        // @ts-expect-error Ignoring type mismatch for Astria API response
-        const newPromptEntries = await Promise.all(uniqueAstriaPrompts.map(async (prompt: Prompt) => {
-          // Resolve all image URLs
+        // Instead of filtering out existing prompts, update them with latest data
+        const updatedPromptsResult = await Promise.all(astriaPrompts.map(async (prompt: Prompt) => {
           const resolvedImages = await Promise.all(prompt.images.map(getFinalImageUrl));
           
           return {
@@ -94,7 +93,7 @@ export async function fixDiscrepancy(userData: UserData | null) {
                 id: prompt.id,
                 text: prompt.text,
                 steps: prompt.steps,
-                images: resolvedImages, // Use the resolved URLs
+                images: resolvedImages,
                 tune_id: prompt.tune_id,
                 created_at: prompt.created_at,
                 trained_at: prompt.trained_at,
@@ -107,15 +106,17 @@ export async function fixDiscrepancy(userData: UserData | null) {
           };
         }));
 
-        // Combine existing and new prompts
-        const updatedPromptsResult = [
-          ...(userData.promptsResult || []),
-          ...newPromptEntries
-        ];
-
         await updateUser({
           promptsResult: updatedPromptsResult
         });
+
+        const uniqueImageUrls = new Set(
+          updatedPromptsResult.flatMap(entry => 
+            entry.data.prompt.images || []
+          )
+        );
+
+        console.log("Total unique images:", uniqueImageUrls.size);
 
         return updatedPromptsResult;
       } catch (error) {
