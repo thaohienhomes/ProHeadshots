@@ -79,24 +79,66 @@ export default function ImageGallery({
   const planLimit = userData ? getPlanLimit(userData.planType) : 0;
   const currentCount = userData?.promptsResult?.length || 0;
   const remainingSlots = Math.max(0, planLimit - currentCount);
-  const hasDiscrepancy = isLoading && currentCount < planLimit;
 
   useEffect(() => {
     async function checkDiscrepancy() {
-      if (currentCount < planLimit && userData) {
+      const totalImagesFromPrompts = promptsResult.reduce(
+        (total, result) => total + (result.data?.prompt?.images?.length || 0),
+        0
+      );
+
+      const imageCountsPerPrompt = promptsResult.map(
+        (result) => result.data?.prompt?.images?.length || 0
+      );
+
+      console.log("Images received:", {
+        imagesFromProps: images.length,
+        promptResults: promptsResult.length,
+        imageCountsPerPrompt,
+        totalImagesFromPrompts,
+        expectedByPlan: planLimit,
+        isCorrect: totalImagesFromPrompts === planLimit,
+        difference: planLimit - totalImagesFromPrompts,
+      });
+
+      // Check discrepancy based on total images, not prompt count
+      const hasDiscrepancy =
+        totalImagesFromPrompts < planLimit && userData !== null;
+
+      console.log({
+        isDiscrepancyCheck: true,
+        totalImages: totalImagesFromPrompts,
+        planLimit,
+        shouldFix: hasDiscrepancy,
+        userData: !!userData,
+      });
+
+      if (hasDiscrepancy) {
+        console.log("Fixing discrepancy...");
         const updatedPrompts = await fixDiscrepancy(userData);
+        console.log("Discrepancy fix result:", !!updatedPrompts);
         if (updatedPrompts) {
           setPromptsResult(updatedPrompts);
         }
+      } else {
+        console.log("No fix needed:", {
+          reason: !userData
+            ? "No user data"
+            : "Image count meets or exceeds plan limit",
+          totalImages: totalImagesFromPrompts,
+          planLimit,
+        });
+        // Only set loading to false if we have all images
+        if (totalImagesFromPrompts >= planLimit) {
+          setIsLoading(false);
+        }
       }
-      setIsLoading(false);
     }
     checkDiscrepancy();
   }, []);
 
   const displayImages = useMemo(() => {
     if (promptsResult.length > 0) {
-      // Sort promptsResult by created_at in reverse order (newest first)
       const sortedPrompts = [...promptsResult].sort((a, b) => {
         const dateA = new Date(
           a.data?.prompt?.created_at || a.timestamp
@@ -104,27 +146,18 @@ export default function ImageGallery({
         const dateB = new Date(
           b.data?.prompt?.created_at || b.timestamp
         ).getTime();
-        return dateB - dateA; // Changed to dateB - dateA for reverse chronological
+        return dateB - dateA;
       });
 
-      // Then flatten the images while maintaining order
       return sortedPrompts.flatMap((result) => result.data.prompt.images);
     }
     return images;
   }, [promptsResult, images]);
 
-  // console.log({
-  //   totalDisplayedImages: displayImages.length,
-  //   skeletonCount: hasDiscrepancy ? remainingSlots : 0,
-  //   totalVisibleItems:
-  //     displayImages.length + (hasDiscrepancy ? remainingSlots : 0),
-  //   loadingState: isLoading,
-  //   promptsResultLength: promptsResult.length,
-  //   imagesPerPrompt: promptsResult.map(
-  //     (result) => result.data.prompt.images.length
-  //   ),
-  //   originalImagesLength: images.length,
-  // });
+  // Update to only show skeletons for the difference
+  const uniqueImageCount = new Set(displayImages).size;
+  const hasDiscrepancy = isLoading && uniqueImageCount < planLimit;
+  const skeletonCount = planLimit - uniqueImageCount;
 
   return (
     <>
@@ -179,9 +212,9 @@ export default function ImageGallery({
           </div>
         ))}
 
-        {/* Only show skeleton cards if still loading and there's a discrepancy */}
+        {/* Only show skeleton cards for the images that are still generating */}
         {hasDiscrepancy &&
-          [...Array(remainingSlots)].map((_, index) => (
+          [...Array(skeletonCount)].map((_, index) => (
             <div
               key={`skeleton-${index}`}
               className="aspect-square relative overflow-hidden rounded-lg bg-mainBlack/5 animate-pulse"
@@ -196,7 +229,7 @@ export default function ImageGallery({
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <div className="w-8 h-8 border-2 border-mainBlack/20 border-t-mainOrange rounded-full animate-spin mb-3" />
                 <p className="text-mainBlack/70 text-sm font-medium px-4 text-center">
-                  This photo is still generating
+                  This photo is still generating, please come back in 1-2 hours.
                 </p>
               </div>
 
