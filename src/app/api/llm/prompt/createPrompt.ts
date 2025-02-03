@@ -1,7 +1,10 @@
 "use server"
 
-
 // Importing the getPromptsAttributes function from the prompts file
+// This function always returns 10 prompts (one per style), which determines total images:
+// - Basic Plan: 1 image × 10 prompts = 10 total images
+// - Professional Plan: 10 images × 10 prompts = 100 total images
+// - Executive Plan: 20 images × 10 prompts = 200 total images
 import { getPromptsAttributes } from './prompts';
 
 // API key and domain for the external service
@@ -33,12 +36,10 @@ async function fetchWithRetry(url: string, options: RequestInit, retries: number
   }
 }
 
-// More conservative delays
-const DELAY_BETWEEN_CALLS = 10000;    // 10 seconds between API calls
-const DELAY_BETWEEN_PROMPTS = 10000;  // 10 seconds between prompts
-const MAX_CONCURRENT_REQUESTS = 5;    // Limit concurrent requests
+// Single delay constant for rate limiting
+const DELAY = 1000; // 1 second between API calls
 
-// Function to create prompts
+/// Function to create prompts
 export async function createPrompt(userData: any) {
   const user = userData[0];
   const { id, planType } = user;
@@ -49,12 +50,13 @@ export async function createPrompt(userData: any) {
   const prompts = getPromptsAttributes(user);
   const results = [];
 
+  // Images per prompt based on plan type, will be multiplied by 10 prompts
   const targetImagesPerPrompt = planType === "basic" ? 1 
     : planType === "professional" ? 10 
     : planType === "executive" ? 20 
     : 1;
 
-  // Process prompts in smaller batches to avoid overwhelming Supabase
+  // Process prompts
   for (let promptIndex = 0; promptIndex < prompts.length; promptIndex++) {
     const prompt = prompts[promptIndex];
     try {
@@ -70,11 +72,8 @@ export async function createPrompt(userData: any) {
         
         const form = new FormData();
         form.append('prompt[text]', prompt.text);
-        form.append('prompt[callback]', `https://aifotomagia.vercel.app/api/llm/prompt-webhook?webhook_secret=${webhookSecret}&user_id=${id}`);
+        form.append('prompt[callback]', `https://www.aifotomagia.com/api/llm/prompt-webhook?webhook_secret=${webhookSecret}&user_id=${id}`);
         form.append('prompt[num_images]', imagesThisCall.toString());
-
-        console.log(`Making API call ${i + 1}/${numberOfCalls} for prompt with ${imagesThisCall} images`);
-        console.log('Form data:', Object.fromEntries(form.entries()));
 
         const response = await fetchWithRetry(API_URL, {
           method: 'POST',
@@ -85,25 +84,11 @@ export async function createPrompt(userData: any) {
         const result = await response.json();
         results.push(result);
 
-        // Add longer delay between calls for the same prompt
-        if (i < numberOfCalls - 1) {
-          console.log(`Waiting ${DELAY_BETWEEN_CALLS}ms before next call...`);
-          await sleep(DELAY_BETWEEN_CALLS);
+        // Simple 1s delay between any API calls
+        if (i < numberOfCalls - 1 || promptIndex < prompts.length - 1) {
+          await sleep(DELAY);
         }
       }
-
-      // Add longer delay between different prompts
-      if (promptIndex < prompts.length - 1) {
-        console.log(`Waiting ${DELAY_BETWEEN_PROMPTS}ms before next prompt...`);
-        await sleep(DELAY_BETWEEN_PROMPTS);
-      }
-
-      // If we've processed MAX_CONCURRENT_REQUESTS prompts, take a longer break
-      if ((promptIndex + 1) % MAX_CONCURRENT_REQUESTS === 0) {
-        console.log('Taking a longer break to respect rate limits...');
-        await sleep(DELAY_BETWEEN_PROMPTS * 2);
-      }
-
     } catch (error) {
       console.error(`Error processing prompt ${promptIndex + 1}:`, error);
       if (error instanceof Error) {
@@ -116,3 +101,4 @@ export async function createPrompt(userData: any) {
   console.log('All prompts initiated successfully:', results);
   return results;
 }
+
