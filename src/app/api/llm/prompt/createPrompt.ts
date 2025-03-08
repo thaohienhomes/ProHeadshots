@@ -72,7 +72,7 @@ export async function createPrompt(userData: any) {
         
         const form = new FormData();
         form.append('prompt[text]', prompt.text);
-        form.append('prompt[callback]', `https://www.aifotomagia.com/api/llm/prompt-webhook?webhook_secret=${webhookSecret}&user_id=${id}`);
+        form.append('prompt[callback]', `https://www.jobfoto.de/api/llm/prompt-webhook?webhook_secret=${webhookSecret}&user_id=${id}`);
         form.append('prompt[num_images]', imagesThisCall.toString());
 
         const response = await fetchWithRetry(API_URL, {

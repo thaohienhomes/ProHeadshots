@@ -8,7 +8,7 @@ const API_KEY = process.env.ASTRIA_API_KEY; // Use API key from .env.local
 const DOMAIN = 'https://api.astria.ai';
 
 // Define the domain for the callback URL
-const CALLBACK_DOMAIN = 'https://www.cvphoto.app';
+const CALLBACK_DOMAIN = 'https://www.jobfoto.de';
 
 export async function createTune(userData: any) {
   const supabase = createClient(); // Create Supabase client for database operations

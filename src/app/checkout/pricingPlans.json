@@ -6,7 +6,7 @@
     "headshots": 10,
     "time": 3,
     "isPopular": false,
-    "stripeUrl": "https://buy.stripe.com/test_aEU14A3kX6N97Is9AA"
+    "stripeUrl": "https://buy.stripe.com/8wM4hac1u2vv79m6op"
   },
   {
     "name": "Professional",
@@ -15,7 +15,7 @@
     "headshots": 100,
     "time": 2,
     "isPopular": true,
-    "stripeUrl": "https://buy.stripe.com/eVafZD4nV60xakg289"
+    "stripeUrl": "https://buy.stripe.com/4gwaFyd5yc65bpC28a"
   },
   {
     "name": "Executive",
@@ -24,6 +24,6 @@
     "headshots": 200,
     "time": 1,
     "isPopular": false,
-    "stripeUrl": "https://buy.stripe.com/9AQ3cR1bJagN8c8fZ0"
+    "stripeUrl": "https://buy.stripe.com/9AQcNGghK9XX9hu9AD"
   }
 ]
