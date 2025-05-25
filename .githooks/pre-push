@@ -1,0 +1,17 @@
+#!/bin/sh
+# Pre-push hook to ensure build passes before pushing to remote
+
+echo "🔍 Running pre-push checks..."
+
+# Run the build test
+npm run build
+
+# Check if build was successful
+if [ $? -ne 0 ]; then
+  echo "❌ Build failed! Push aborted."
+  echo "Please fix the build errors before pushing."
+  exit 1
+fi
+
+echo "✅ Build passed! Proceeding with push..."
+exit 0 

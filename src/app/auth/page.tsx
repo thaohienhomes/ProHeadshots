@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { PasswordInput, EmailInput, AuthButton } from "@/components/AuthForm";
@@ -8,7 +8,7 @@ import LeftAuth from "@/components/LeftAuth";
 import { signInAction, signUpAction } from "@/action/auth";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 
-export default function Auth() {
+function AuthContent() {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const searchParams = useSearchParams();
   const message = searchParams.get("message");
@@ -122,5 +122,13 @@ export default function Auth() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Auth() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthContent />
+    </Suspense>
   );
 }

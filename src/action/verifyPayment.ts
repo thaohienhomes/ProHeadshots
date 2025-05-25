@@ -8,7 +8,7 @@ const stripeKey = process.env.ENVIRONMENT === 'DEVELOPMENT'
   : process.env.STRIPE_SECRET_KEY!;
 
 const stripe = new Stripe(stripeKey, {
-  apiVersion: '2024-06-20',
+  apiVersion: '2025-02-24.acacia',
 });
 
 export async function verifyPayment(sessionId: string) {
