@@ -2,7 +2,6 @@
 
 // Importing the Supabase client utility for server-side operations
 import { createClient } from "@/utils/supabase/server";
-import { createPrompt } from "../prompt/createPrompt";
 import { getRequiredPhotoCount } from "@/utils/photoConfig";
 
 // API key and domain for the external service
@@ -29,9 +28,14 @@ export async function createTune(userData: any) {
     return;
   }
 
+  // 🛡️ STRONGEST PROTECTION - Exit early if ANY API call was ever made successfully
+  if (currentUser.apiStatus) {
+    console.log('❌ BLOCKED: API call already made for this user. ApiStatus exists:', currentUser.apiStatus);
+    return;
+  }
+
   // Exit early if already processed or in progress
-  if (currentUser.apiStatus || 
-      currentUser.tuneStatus === 'ongoing' || 
+  if (currentUser.tuneStatus === 'ongoing' || 
       currentUser.tuneStatus === 'completed' ||
       currentUser.workStatus !== 'ongoing') {
     console.log('Tune already in progress, completed, or user not in correct state');
@@ -39,7 +43,8 @@ export async function createTune(userData: any) {
   }
 
   // 🛡️ SUBMISSION DATE PROTECTION - Prevent multiple submissions within 24 hours
-  if (currentUser.submissionDate) {
+  // TEMPORARILY DISABLED FOR DEVELOPMENT TESTING
+  if (process.env.NODE_ENV === 'production' && currentUser.submissionDate) {
     const lastSubmission = new Date(currentUser.submissionDate);
     const now = new Date();
     const timeDifference = now.getTime() - lastSubmission.getTime();
@@ -94,6 +99,25 @@ export async function createTune(userData: any) {
 
   console.log('Successfully claimed tune creation for user:', userId);
 
+  // 🛡️ FINAL SAFETY CHECK - Double-check no API call was made while we were processing
+  const { data: finalCheck } = await supabase
+    .from('userTable')
+    .select('apiStatus')
+    .eq('id', userId)
+    .single();
+
+  if (finalCheck?.apiStatus) {
+    console.log('❌ FINAL BLOCK: API call detected during processing, aborting to prevent duplicate');
+    // Reset tuneStatus since we're not proceeding
+    await supabase
+      .from('userTable')
+      .update({ tuneStatus: null })
+      .eq('id', userId);
+    return;
+  }
+
+  console.log('🚀 PROCEEDING: Making Astria API call for user:', userId);
+
   const options = {
     method: 'POST',
     headers: { 
@@ -134,20 +158,8 @@ export async function createTune(userData: any) {
       console.log('API status updated successfully');
     }
 
-    // Start creating prompts immediately after tune creation
-    console.log('Starting prompt creation...');
-    try {
-      const promptResults = await createPrompt([user]);
-      if ('error' in promptResults && promptResults.error) {
-        console.error("Error creating prompts:", promptResults.message);
-        // Don't fail the entire operation, just log the error
-      } else {
-        console.log('Prompts initiated successfully');
-      }
-    } catch (promptError) {
-      console.error("Error initiating prompts:", promptError);
-      // Don't fail the entire operation
-    }
+    // Note: Prompts will be created after tune training is complete via tune-webhook
+    console.log('Tune creation completed. Prompts will be created when tune training finishes.');
 
     return result;
   } catch (error) {

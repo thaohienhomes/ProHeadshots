@@ -44,14 +44,14 @@ export async function createPrompt(userData: any) {
   const user = userData[0];
   const { id, planType, apiStatus } = user;
 
-  const API_URL = `https://api.astria.ai/tunes/1504944/prompts`;
-  const webhookSecret = process.env.APP_WEBHOOK_SECRET;
-
-  // Extract the custom tune ID from apiStatus
-  const customTuneId = apiStatus?.tune?.id;
+  // Extract the custom tune ID from apiStatus first
+  const customTuneId = apiStatus?.id;
   if (!customTuneId) {
     return { error: true, message: 'No custom tune ID found in user apiStatus' };
   }
+
+  const API_URL = `https://api.astria.ai/tunes/${customTuneId}/prompts`;
+  const webhookSecret = process.env.APP_WEBHOOK_SECRET;
 
   const basePrompts = getPromptsAttributes(user);
   
