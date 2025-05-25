@@ -21,7 +21,7 @@ export default function CheckoutPage({
     redirect("/forms");
   }
 
-  const selectedPlan = pricingPlans.find(
+  const selectedPlan = pricingPlans.plans.find(
     (p) => p.name.toLowerCase() === plan.toLowerCase()
   );
 

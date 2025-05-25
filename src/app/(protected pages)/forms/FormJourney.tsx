@@ -95,7 +95,7 @@ export default function Page() {
             {currentStep === 2 && (
               <>
                 <div className="space-y-3">
-                  {pricingPlans.map((plan, index) => (
+                  {pricingPlans.plans.map((plan, index) => (
                     <div
                       key={index}
                       className={`flex items-center justify-between p-3 rounded-lg border ${
