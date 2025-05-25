@@ -16,7 +16,7 @@ export async function updateStyles({
   userSelected: StyleObject[];
   preSelected: StyleObject[];
 }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   // Get the current authenticated user
   const { data: { user } } = await supabase.auth.getUser();

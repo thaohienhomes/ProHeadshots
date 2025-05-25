@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { AvatarGroupWithInfo } from "./AvatarGroup";
 import Image from "next/image";
-import ParallaxCards from './DemoCard';
+import ParallaxCards from "./DemoCard";
 
 const NumberOne = () => (
   <div className="mb-4 flex justify-center">
@@ -35,7 +35,7 @@ const Description = () => (
 
 const JoinButton = () => (
   <Button
-    href="/signup"
+    href="/auth?mode=signup"
     tracker="hero_cta_click"
     className="w-60 h-12 py-2 px-4 text-lg font-semibold flex items-center justify-center rounded-md"
   >

@@ -2,14 +2,14 @@
 import { createClient } from "@/utils/supabase/server";
 
 export default async function getUser() {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   // Get the current authenticated user
   const { data: { user } } = await supabase.auth.getUser();
   const userId = user?.id;
 
   if (!userId) {
-    console.error("No authenticated user found");
+    console.log("No authenticated user found");
     return null;
   }
 

@@ -127,7 +127,7 @@ export default function Pitch1() {
 
         <div className="text-center mb-12">
           <Link
-            href="/signup"
+            href="/auth?mode=signup"
             className="inline-block bg-gradient-to-br from-mainGreen to-[#91b34a] text-mainBlack px-8 py-3 rounded-full font-semibold animated-gradient"
           >
             Generate Your AI Headshots Now

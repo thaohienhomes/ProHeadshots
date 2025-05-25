@@ -3,10 +3,10 @@
 import LoginButton from "./LoginButton";
 import Link from "next/link";
 import NewsBadge from "./NewsBadge";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
 import Logo from "./Logo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface HeaderProps {
   userAuth?: boolean;
@@ -17,22 +17,77 @@ export default function Header({
   userAuth = false,
   backDashboard = false,
 }: HeaderProps) {
-  const supabase = createClientComponentClient();
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [signOutError, setSignOutError] = useState<string | null>(null);
+
+  // Auto-dismiss error message after 5 seconds
+  useEffect(() => {
+    if (signOutError) {
+      const timer = setTimeout(() => {
+        setSignOutError(null);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [signOutError]);
+
+  // Check if Supabase is configured
+  const hasSupabaseConfig =
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  const supabase = hasSupabaseConfig
+    ? createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
+    : null;
 
   const handleSignOut = async () => {
+    if (!supabase) return;
+
     setIsSigningOut(true);
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      router.push("/login");
-    } else {
+    setSignOutError(null); // Clear any previous errors
+
+    try {
+      console.log("🔓 Attempting to sign out user");
+
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        console.error("❌ Sign out error:", error);
+        setIsSigningOut(false);
+        setSignOutError(error.message);
+        return;
+      }
+
+      console.log("✅ Sign out successful, redirecting to login");
+      router.push("/auth");
+    } catch (error) {
+      console.error("❌ Unexpected error during sign out:", error);
       setIsSigningOut(false);
+      setSignOutError(
+        "An unexpected error occurred during sign out. Please try again."
+      );
     }
   };
 
   return (
     <div className="sticky top-0 z-50 w-full bg-mainBlack">
+      {signOutError && (
+        <div className="absolute top-12 right-4 z-60 p-3 bg-red-100 border border-red-200 text-red-700 text-sm rounded-md shadow-lg max-w-sm">
+          <div className="flex items-start justify-between">
+            <span>{signOutError}</span>
+            <button
+              onClick={() => setSignOutError(null)}
+              className="ml-2 text-red-500 hover:text-red-700"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
       <header className="flex h-12 w-full items-center justify-between px-section max-w-section mx-auto">
         {backDashboard ? (
           <Link
@@ -74,7 +129,7 @@ export default function Header({
           </div>
         ) : (
           <div className="ml-auto">
-            <LoginButton href="/login" tracker="header_loginCTA_click" />
+            <LoginButton href="/auth" tracker="header_loginCTA_click" />
           </div>
         )}
       </header>

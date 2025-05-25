@@ -19,7 +19,22 @@ const nextConfig = {
       },
     ],
   },
-  // ... other configurations
+  // Fix for HTTP 431 error - move external packages to new location
+  serverExternalPackages: ["@supabase/supabase-js"],
+  // Configure headers for larger cookie support
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

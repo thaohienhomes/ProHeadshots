@@ -147,27 +147,15 @@ export async function POST(request: Request) {
     // Log the user object received from Supabase
     console.log("User received from Supabase:", [userData]);
 
-    // Call createPrompt function
-    console.log("Attempting to create prompts...");
-    const promptResults = await createPrompt([userData]);
-
-    if ('error' in promptResults && promptResults.error) {
-      console.error("Error creating prompts:", promptResults.message);
-      return NextResponse.json(
-        {
-          message: "Error creating prompts",
-        },
-        { status: 500 }
-      );
-    }
-
-    console.log("Prompts created successfully:", promptResults);
+    // Note: createPrompt is called during tune creation, not here
+    // This webhook just confirms the model training is complete
+    console.log("Tune training completed, prompts should already be initiated");
 
     // Log success response
-    console.log("Success response:", { message: "success", userId: userData.id, modelUpdated, promptResults });
+    console.log("Success response:", { message: "success", userId: userData.id, modelUpdated });
     return NextResponse.json(
       {
-        message: `Webhook Callback Success! User ID: ${userData.id}, Model Updated: ${modelUpdated ? 'Yes' : 'No'}, Prompts Created: ${promptResults}`,
+        message: `Webhook Callback Success! User ID: ${userData.id}, Model Updated: ${modelUpdated ? 'Yes' : 'No'}, Tune Training Complete`,
       },
       { status: 200, statusText: "Success" }
     );

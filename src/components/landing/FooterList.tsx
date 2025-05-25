@@ -51,8 +51,7 @@ const FooterList: React.FC = () => {
     {
       title: "LINKS",
       links: [
-        { href: "/signup", text: "Newsletter" },
-        { href: "/contact", text: "Investor Relations" },
+        { href: "/contact", text: "Affiliate" },
         { href: "/contact", text: "Contact Us" },
       ],
     },
@@ -64,10 +63,32 @@ const FooterList: React.FC = () => {
       ],
     },
     {
-      title: "MORE",
+      title: "MAKER OF",
       links: [
-        { href: "/contact", text: "Country Partner" },
-        { href: "/contact", text: "Affiliate" },
+        {
+          href: "https://www.johnnytran.link/",
+          text: "Johnnytran.link",
+        },
+        {
+          href: "https://www.clonemysaas.com/",
+          text: "CloneMySaaS.com",
+        },
+        {
+          href: "https://www.hpappen.se/",
+          text: "HPappen.se",
+        },
+        {
+          href: "https://www.tweetviral.app/",
+          text: "TweetViral.app",
+        },
+        {
+          href: "https://www.growthack.dev/",
+          text: "Growthack.dev",
+        },
+        {
+          href: "https://www.free-youtube-transcript.com/",
+          text: "Free-YouTube-Transcript.com",
+        },
       ],
     },
   ];

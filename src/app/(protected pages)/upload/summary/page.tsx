@@ -28,7 +28,7 @@ function getEyeColorClass(color: string) {
 async function submitPhotos() {
   "use server";
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },
@@ -37,7 +37,48 @@ async function submitPhotos() {
 
   if (!userId) {
     console.error("No authenticated user found");
-    return { error: "User not authenticated" };
+    throw new Error("User not authenticated");
+  }
+
+  // Fetch current user data to validate completion
+  const { data: userData, error: fetchError } = await supabase
+    .from("userTable")
+    .select("*")
+    .eq("id", userId)
+    .single();
+
+  if (fetchError || !userData) {
+    console.error("Error fetching user data:", fetchError);
+    throw new Error("Failed to fetch user data");
+  }
+
+  // Validate that all required data is present
+  const hasPersonalInfo =
+    userData.name &&
+    userData.age &&
+    userData.bodyType &&
+    userData.height &&
+    userData.ethnicity &&
+    userData.gender &&
+    userData.eyeColor;
+  const hasPhotos =
+    userData.userPhotos?.userSelfies &&
+    userData.userPhotos.userSelfies.length >= 15;
+  const hasStyles =
+    userData.styles &&
+    Array.isArray(userData.styles) &&
+    userData.styles.length > 0;
+
+  if (!hasPersonalInfo) {
+    throw new Error("Personal information incomplete");
+  }
+
+  if (!hasPhotos) {
+    throw new Error("Photos incomplete - need at least 15 photos");
+  }
+
+  if (!hasStyles) {
+    throw new Error("Style selection incomplete");
   }
 
   const { data, error } = await supabase
@@ -50,7 +91,7 @@ async function submitPhotos() {
 
   if (error) {
     console.error("Error updating user data in Supabase:", error);
-    return { error: "Failed to update user data" };
+    throw new Error("Failed to update user data");
   }
 
   // Log success message
@@ -64,17 +105,46 @@ async function submitPhotos() {
 
 export default async function Page() {
   const userData = await getUser();
-  //console.log(userData);
   const user = userData?.[0]; // Assuming the first user in the array
 
   if (!user) {
     return <div>Error: User data not found</div>;
   }
 
-  const userSelectedStyles =
-    user.styles.find((s: any) => s.type === "userSelected")?.styles || [];
-  const preSelectedStyles =
-    user.styles.find((s: any) => s.type === "preSelected")?.styles || [];
+  // Validation: Check if user has completed all required steps
+  const hasPersonalInfo =
+    user.name &&
+    user.age &&
+    user.bodyType &&
+    user.height &&
+    user.ethnicity &&
+    user.gender &&
+    user.eyeColor;
+  const hasPhotos =
+    user.userPhotos?.userSelfies && user.userPhotos.userSelfies.length >= 15;
+  const hasStyles =
+    user.styles && Array.isArray(user.styles) && user.styles.length > 0;
+
+  // Redirect to appropriate step if data is missing (in correct flow order)
+  if (!hasPhotos) {
+    redirect("/upload/image");
+  }
+
+  if (!hasPersonalInfo) {
+    redirect("/upload/info");
+  }
+
+  if (!hasStyles) {
+    redirect("/upload/styles");
+  }
+
+  // Safe data extraction with fallbacks
+  const userSelectedStyles = hasStyles
+    ? user.styles.find((s: any) => s.type === "userSelected")?.styles || []
+    : [];
+  const preSelectedStyles = hasStyles
+    ? user.styles.find((s: any) => s.type === "preSelected")?.styles || []
+    : [];
 
   return (
     <div className="bg-mainWhite min-h-screen p-4 pt-8 md:pt-16 text-center">
@@ -169,7 +239,7 @@ export default async function Page() {
                           ) : item.clothingTitle ? (
                             item.clothingTitle
                           ) : (
-                            'N/A'
+                            "N/A"
                           )}
                         </li>
                       )
@@ -195,7 +265,7 @@ export default async function Page() {
                         ) : item.clothingTitle ? (
                           item.clothingTitle
                         ) : (
-                          'N/A'
+                          "N/A"
                         )}
                       </li>
                     ))}
@@ -211,28 +281,34 @@ export default async function Page() {
             Your photos
           </h2>
           <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-1">
-            {user.userPhotos?.userSelfies.map((photo: any, index: any) => (
-              <div
-                key={index}
-                className="w-full pt-[100%] relative bg-gray-200 rounded-md overflow-hidden"
-              >
-                <Suspense
-                  fallback={
-                    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md"></div>
-                  }
+            {user.userPhotos?.userSelfies?.length > 0 ? (
+              user.userPhotos.userSelfies.map((photo: any, index: any) => (
+                <div
+                  key={index}
+                  className="w-full pt-[100%] relative bg-gray-200 rounded-md overflow-hidden"
                 >
-                  <Image
-                    src={photo}
-                    alt={`User photo ${index + 1}`}
-                    fill
-                    className="object-cover rounded-md"
-                    loading="lazy"
-                    sizes="(max-width: 640px) 20vw, (max-width: 768px) 16.67vw, (max-width: 1024px) 12.5vw, 10vw"
-                    quality={80}
-                  />
-                </Suspense>
+                  <Suspense
+                    fallback={
+                      <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md"></div>
+                    }
+                  >
+                    <Image
+                      src={photo}
+                      alt={`User photo ${index + 1}`}
+                      fill
+                      className="object-cover rounded-md"
+                      loading="lazy"
+                      sizes="(max-width: 640px) 20vw, (max-width: 768px) 16.67vw, (max-width: 1024px) 12.5vw, 10vw"
+                      quality={80}
+                    />
+                  </Suspense>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-8">
+                <p className="text-gray-500">No photos uploaded yet</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
 

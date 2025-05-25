@@ -11,12 +11,9 @@ export default async function Page() {
   if (userData && userData.length > 0) {
     const { workStatus, apiStatus, tuneStatus, email } = userData[0];
 
-    if (
-      workStatus === "ongoing" &&
-      !apiStatus &&
-      tuneStatus !== "ongoing" &&
-      tuneStatus !== "completed"
-    ) {
+    // 🛡️ SIMPLIFIED - createTune now handles all race condition protection
+    // Note: Middleware ensures users only reach this page if they have complete data
+    if (workStatus === "ongoing" && !apiStatus) {
       await createTune(userData);
       // Send email - Message to users: "Done, please wait...""
       await sendEmail({

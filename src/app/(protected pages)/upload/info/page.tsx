@@ -32,8 +32,11 @@ export default function Page() {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    if (name === 'gender') {
-      setFormData((prev) => ({ ...prev, [name]: value === 'Male' ? 'man' : 'woman' }));
+    if (name === "gender") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value === "Male" ? "man" : "woman",
+      }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -50,11 +53,11 @@ export default function Page() {
 
   const getEyeColorClass = (color: string) => {
     const colorMap: { [key: string]: string } = {
-      "Hazel": "bg-amber-500",
-      "Gray": "bg-gray-400",
+      Hazel: "bg-amber-500",
+      Gray: "bg-gray-400",
       "Light brown": "bg-amber-600",
-      "Blue": "bg-blue-500",
-      "Green": "bg-green-500",
+      Blue: "bg-blue-500",
+      Green: "bg-green-500",
       "Dark brown": "bg-amber-900",
     };
     return colorMap[color] || "bg-gray-300";
@@ -69,18 +72,34 @@ export default function Page() {
     if (isFormValid && !isSubmitting) {
       setIsSubmitting(true);
       try {
+        console.log("Submitting form data:", formData);
         const result = await updateUser(formData);
+
+        // Check if there's an explicit error returned
         if (result && result.error) {
-          // Show error message to the user
-          alert("An error occurred. Please try again.");
+          console.error("Update user error:", result.error);
+          alert(`Error: ${result.error}`);
+          setIsSubmitting(false);
+          return;
         }
-        // No need for else case as updateUser will redirect on success
+
+        // If we reach here, the update was successful
+        // Note: The redirect will happen automatically from the server action
+        // so we don't need to handle navigation here
+        console.log("Form submitted successfully");
       } catch (error) {
         console.error("Error submitting form:", error);
-        alert("An unexpected error occurred. Please try again.");
-      } finally {
+        // Only show error alert for actual errors, not redirects
+        if (
+          error instanceof Error &&
+          !error.message.includes("NEXT_REDIRECT")
+        ) {
+          alert("An unexpected error occurred. Please try again.");
+        }
         setIsSubmitting(false);
       }
+      // Note: Don't set setIsSubmitting(false) here if redirect is successful
+      // as the page will be redirected anyway
     }
   };
 
@@ -305,7 +324,9 @@ export default function Page() {
                     name="gender"
                     value={gender}
                     required
-                    checked={formData.gender === (gender === 'Male' ? 'man' : 'woman')}
+                    checked={
+                      formData.gender === (gender === "Male" ? "man" : "woman")
+                    }
                     onChange={handleInputChange}
                     className="mr-2"
                   />

@@ -2,19 +2,95 @@
 
 // Importing the Supabase client utility for server-side operations
 import { createClient } from "@/utils/supabase/server";
+import { createPrompt } from "../prompt/createPrompt";
 
 // API key and domain for the external service
 const API_KEY = process.env.ASTRIA_API_KEY; // Use API key from .env.local
 const DOMAIN = 'https://api.astria.ai';
 
 // Define the domain for the callback URL
-const CALLBACK_DOMAIN = 'noreply@cvphoto.app';
+const CALLBACK_DOMAIN = 'https://www.cvphoto.app';
 
 export async function createTune(userData: any) {
-  const supabase = createClient(); // Create Supabase client for database operations
+  const supabase = await createClient(); // Create Supabase client for database operations
   const user = userData[0]; // Extract user information from the input array
   const userId = user.id; // Access the user ID for further processing
-  const { gender, userPhotos } = user; // Deconstruct gender and userPhotos
+
+  // 🛡️ RACE CONDITION PROTECTION - Check current state and claim the slot atomically
+  const { data: currentUser, error: fetchError } = await supabase
+    .from('userTable')
+    .select('apiStatus, tuneStatus, workStatus, submissionDate')
+    .eq('id', userId)
+    .single();
+
+  if (fetchError) {
+    console.error("Error fetching current user state:", fetchError);
+    return;
+  }
+
+  // Exit early if already processed or in progress
+  if (currentUser.apiStatus || 
+      currentUser.tuneStatus === 'ongoing' || 
+      currentUser.tuneStatus === 'completed' ||
+      currentUser.workStatus !== 'ongoing') {
+    console.log('Tune already in progress, completed, or user not in correct state');
+    return;
+  }
+
+  // 🛡️ SUBMISSION DATE PROTECTION - Prevent multiple submissions within 24 hours
+  if (currentUser.submissionDate) {
+    const lastSubmission = new Date(currentUser.submissionDate);
+    const now = new Date();
+    const timeDifference = now.getTime() - lastSubmission.getTime();
+    const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+    if (timeDifference < twentyFourHours) {
+      console.log('Submission blocked: Last submission was less than 24 hours ago');
+      return;
+    }
+  }
+
+  // 🛡️ DATA VALIDATION PROTECTION - Ensure all required data exists before expensive API call
+  const { name, age, bodyType, height, ethnicity, eyeColor, styles } = user;
+  const gender = user.gender;
+  const userPhotos = user.userPhotos;
+
+  // Validate personal information
+  const hasPersonalInfo = name && age && bodyType && height && ethnicity && gender && eyeColor;
+  if (!hasPersonalInfo) {
+    console.error('Personal information incomplete - blocking API call');
+    return;
+  }
+
+  // Validate photos
+  const hasPhotos = userPhotos?.userSelfies && Array.isArray(userPhotos.userSelfies) && userPhotos.userSelfies.length >= 15;
+  if (!hasPhotos) {
+    console.error('Photos incomplete - need at least 15 photos - blocking API call');
+    return;
+  }
+
+  // Validate styles
+  const hasStyles = styles && Array.isArray(styles) && styles.length > 0;
+  if (!hasStyles) {
+    console.error('Style selection incomplete - blocking API call');
+    return;
+  }
+
+  console.log('All data validation passed - proceeding with API call');
+
+  // 🔒 ATOMIC CLAIM - Only one process can successfully update tuneStatus from null to 'ongoing'
+  const { error: claimError } = await supabase
+    .from('userTable')
+    .update({ tuneStatus: 'ongoing' })
+    .eq('id', userId)
+    .is('tuneStatus', null); // Only succeed if tuneStatus is still null
+
+  if (claimError) {
+    console.log('Another process already claimed this tune creation');
+    return;
+  }
+
+  console.log('Successfully claimed tune creation for user:', userId);
 
   const options = {
     method: 'POST',
@@ -25,7 +101,7 @@ export async function createTune(userData: any) {
     body: JSON.stringify({
       tune: {
         "title": userId,
-        "branch": "flux1",
+        "base_tune_id": 1504944,
         "token": "ohwx",
         "model_type": "lora",
         "name": gender,
@@ -40,24 +116,47 @@ export async function createTune(userData: any) {
     const result = await response.json();
     console.log("Response from Astria:", result);
 
-    // Update user's API status and tuneStatus in Supabase
+    // Update user's API status in Supabase
     const { error } = await supabase
       .from('userTable')
       .update({ 
-        apiStatus: result,
-        tuneStatus: 'ongoing'
+        apiStatus: result
+        // tuneStatus already set to 'ongoing' above
+        // workStatus stays 'ongoing' until completion
       })
       .eq('id', userId);
 
     if (error) {
-      console.error("Error updating apiStatus and tuneStatus in Supabase:", error);
+      console.error("Error updating apiStatus in Supabase:", error);
     } else {
-      console.log('API status and tuneStatus updated successfully');
+      console.log('API status updated successfully');
+    }
+
+    // Start creating prompts immediately after tune creation
+    console.log('Starting prompt creation...');
+    try {
+      const promptResults = await createPrompt([user]);
+      if ('error' in promptResults && promptResults.error) {
+        console.error("Error creating prompts:", promptResults.message);
+        // Don't fail the entire operation, just log the error
+      } else {
+        console.log('Prompts initiated successfully');
+      }
+    } catch (promptError) {
+      console.error("Error initiating prompts:", promptError);
+      // Don't fail the entire operation
     }
 
     return result;
   } catch (error) {
     console.error("Error creating tune:", error);
+    
+    // Reset tuneStatus on API error so user can retry
+    await supabase
+      .from('userTable')
+      .update({ tuneStatus: null })
+      .eq('id', userId);
+      
     throw error;
   }
 }

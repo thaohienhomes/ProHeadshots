@@ -12,7 +12,7 @@ interface LoginButtonProps {
 
 const LoginButton: React.FC<LoginButtonProps> = ({
   className = "",
-  href = "/login",
+  href = "/auth",
   tracker,
 }) => {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -55,7 +55,7 @@ export default LoginButton;
 const Example: React.FC = () => {
   return (
     <div className="bg-black p-8 flex items-center justify-center h-screen">
-      <LoginButton href="/login" tracker="customEvent" />
+      <LoginButton href="/auth" tracker="customEvent" />
     </div>
   );
 };

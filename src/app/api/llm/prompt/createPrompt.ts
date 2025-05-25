@@ -42,12 +42,24 @@ const DELAY = 1000; // 1 second between API calls
 /// Function to create prompts
 export async function createPrompt(userData: any) {
   const user = userData[0];
-  const { id, planType } = user;
+  const { id, planType, apiStatus } = user;
 
   const API_URL = `https://api.astria.ai/tunes/1504944/prompts`;
   const webhookSecret = process.env.APP_WEBHOOK_SECRET;
 
-  const prompts = getPromptsAttributes(user);
+  // Extract the custom tune ID from apiStatus
+  const customTuneId = apiStatus?.tune?.id;
+  if (!customTuneId) {
+    return { error: true, message: 'No custom tune ID found in user apiStatus' };
+  }
+
+  const basePrompts = getPromptsAttributes(user);
+  
+  // Add the custom LoRA to each prompt
+  const prompts = basePrompts.map((prompt: any) => ({
+    ...prompt,
+    text: `<lora:${customTuneId}:1.0> ${prompt.text}`
+  }));
   const results = [];
 
   // Images per prompt based on plan type, will be multiplied by 10 prompts

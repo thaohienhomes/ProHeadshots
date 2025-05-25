@@ -1,7 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
+
+  const handleContinue = () => {
+    router.push("/upload/image");
+  };
+
   return (
     <div className="bg-mainWhite min-h-screen p-4 pt-8 md:pt-16 text-center">
       {/* 5-step progress bar */}
@@ -85,12 +94,12 @@ export default function Page() {
           ))}
         </div>
 
-        <Link
-          href="/upload/image"
+        <button
+          onClick={handleContinue}
           className="bg-mainBlack text-mainWhite py-3 px-6 rounded-full font-semibold hover:bg-opacity-90 transition-colors inline-block"
         >
           Ok, I am ready →
-        </Link>
+        </button>
       </div>
     </div>
   );

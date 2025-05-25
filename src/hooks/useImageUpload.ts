@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@/utils/supabase/client";
 import { updateUser } from '@/action/updateUser';
 
 export const useImageUpload = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const supabase = createClientComponentClient();
 
   const uploadImages = async (images: Array<{ file: File; pixels: number }>) => {
     if (images.length === 0) {
@@ -17,9 +16,38 @@ export const useImageUpload = () => {
     setError(null);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      const supabase = createClient();
+      
+      // First try to refresh the session
+      const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+      
+      if (refreshError) {
+        console.log("Session refresh failed:", refreshError.message);
+        // Continue with existing session check if refresh fails
+      }
+      
+      // Check authentication with better session handling
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) {
+        console.error("Session error:", sessionError);
+        throw new Error(`Session error: ${sessionError.message}`);
+      }
+      
+      if (!session) {
+        console.error("No session found - redirecting to login");
+        window.location.href = '/login';
+        throw new Error("Please log in to upload images");
+      }
 
+      const user = session.user;
+      if (!user) {
+        console.error("No user in session - redirecting to login");
+        window.location.href = '/login';
+        throw new Error("Please log in to upload images");
+      }
+
+      console.log("User authenticated:", user.id);
       const uploadedUrls: string[] = [];
 
       for (const { file } of images) {
@@ -49,7 +77,18 @@ export const useImageUpload = () => {
       return true;
     } catch (error: any) {
       console.error("Error uploading images:", error);
-      setError(`Failed to upload images: ${error.message || "Unknown error"}`);
+      
+      // Provide user-friendly error messages
+      let errorMessage = "Failed to upload images";
+      if (error.message.includes("Session error") || error.message.includes("Please log in")) {
+        errorMessage = "Your session has expired. Please log in again.";
+      } else if (error.message.includes("storage")) {
+        errorMessage = "Storage error. Please try again.";
+      } else {
+        errorMessage = `Upload failed: ${error.message || "Unknown error"}`;
+      }
+      
+      setError(errorMessage);
       return false;
     } finally {
       setIsUploading(false);

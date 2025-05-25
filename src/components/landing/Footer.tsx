@@ -1,8 +1,6 @@
 import React from "react";
-import dynamic from "next/dynamic";
 import Logo from "@/components/Logo";
-
-const FooterList = dynamic(() => import("./FooterList"), { ssr: false });
+import FooterList from "./FooterList";
 
 const FooterLogo: React.FC = () => (
   <div className="flex justify-center md:justify-start mt-4 md:mt-0">

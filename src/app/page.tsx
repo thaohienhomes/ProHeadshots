@@ -9,8 +9,9 @@ import Pitch2 from "@/components/landing/Pitch2";
 import Pricing from "@/components/landing/Pricing";
 import Faq from "@/components/landing/Faq";
 
-export default function Home() {
-  const getUtm = cookies().get("utm_source")?.value;
+export default async function Home() {
+  const cookieStore = await cookies();
+  const getUtm = cookieStore.get("utm_source")?.value;
   const utmSource = getUtm || "None";
   console.log("Home component - UTM Source:", utmSource);
 

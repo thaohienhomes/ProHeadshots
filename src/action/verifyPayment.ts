@@ -54,7 +54,7 @@ export async function verifyPayment(sessionId: string) {
 }
 
 async function updatePlan({paymentStatus, amount, planType}: { paymentStatus: string, amount: number, planType: string }) {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {

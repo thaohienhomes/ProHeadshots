@@ -18,7 +18,7 @@ interface UserFormData {
 }
 
 export async function updateUser(formData: UserFormData) {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   // Get the current authenticated user
   const { data: { user } } = await supabase.auth.getUser();
@@ -56,8 +56,12 @@ export async function updateUser(formData: UserFormData) {
     return { error: "Failed to update user data" };
   }
 
+  console.log("User data updated successfully:", data);
+
   // Only redirect if it's not an image upload or promptsResult update
   if (!formData.userPhotos && !formData.promptsResult) {
-    redirect('/upload/styles');
+    redirect('/upload/intro/styles');
   }
+
+  return { success: true };
 }

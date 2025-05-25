@@ -1,17 +1,18 @@
-'use client';
+"use client";
 import Image from "next/image";
 import Header from "@/components/Header";
 import { redirect } from "next/navigation";
 import pricingPlans from "./pricingPlans.json";
-import { useState } from 'react';
+import { useState, use } from "react";
 
 export default function CheckoutPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const [paymentMethod, setPaymentMethod] = useState('creditCard');
-  const plan = searchParams.plan as string;
+  const [paymentMethod, setPaymentMethod] = useState("creditCard");
+  const resolvedSearchParams = use(searchParams);
+  const plan = resolvedSearchParams.plan as string;
 
   if (
     !plan ||
@@ -28,7 +29,9 @@ export default function CheckoutPage({
     redirect("/forms");
   }
 
-  const handlePaymentMethodChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePaymentMethodChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setPaymentMethod(event.target.value);
   };
 
@@ -61,7 +64,7 @@ export default function CheckoutPage({
                 name="paymentMethod"
                 value="creditCard"
                 className="mr-3"
-                checked={paymentMethod === 'creditCard'}
+                checked={paymentMethod === "creditCard"}
                 onChange={handlePaymentMethodChange}
               />
               <label htmlFor="creditCard" className="flex-grow font-medium">
@@ -234,8 +237,8 @@ export default function CheckoutPage({
                 </p>
                 <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 p-2 bg-mainWhite border border-mainBlack rounded shadow-md text-xs text-mainBlack w-64 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                   If you&apos;re not satisfied with our service and haven&apos;t
-                  downloaded the generated images, we offer refund within
-                  30 days of your purchase.
+                  downloaded the generated images, we offer refund within 30
+                  days of your purchase.
                 </div>
               </div>
             </div>

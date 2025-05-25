@@ -9,7 +9,9 @@ const PricingCard = ({
 }) => (
   <div
     className={`bg-white p-6 rounded-lg shadow-md ${
-      isPopular ? "md:border-2 md:border-mainGreen md:scale-110 md:-mt-4 md:-mb-4 md:z-10" : ""
+      isPopular
+        ? "md:border-2 md:border-mainGreen md:scale-110 md:-mt-4 md:-mb-4 md:z-10"
+        : ""
     } flex flex-col relative`}
   >
     {isPopular && (
@@ -46,7 +48,7 @@ const PricingCard = ({
         </li>
       ))}
     </ul>
-    <Link href="/signup" passHref>
+    <Link href="/auth?mode=signup" passHref>
       <button
         className={`w-full py-2 rounded-md transition-colors ${
           isPopular
