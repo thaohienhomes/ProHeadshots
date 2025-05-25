@@ -1,29 +1,44 @@
-[
-  {
-    "name": "Basic",
-    "price": 29,
-    "originalPrice": 58,
-    "headshots": 10,
-    "time": 3,
-    "isPopular": false,
-    "stripeUrl": "https://buy.stripe.com/test_14kaFDd5a8AYeJi8ww"
+{
+  "_documentation": {
+    "description": "Pricing plans configuration for CV Photo app",
+    "fields": {
+      "name": "Plan name displayed to users",
+      "price": "Current price in USD",
+      "originalPrice": "Original price (crossed out) to show discount",
+      "headshots": "Number of headshots included in this plan",
+      "time": "Processing time in hours",
+      "isPopular": "Whether to show 'Most Popular' badge",
+      "stripeUrl": "Stripe checkout URL"
+    },
+    "IMPORTANT": "These are CVPhoto's Stripe links - replace with your own Stripe links"
   },
-  {
-    "name": "Professional",
-    "price": 39,
-    "originalPrice": 78,
-    "headshots": 100,
-    "time": 2,
-    "isPopular": true,
-    "stripeUrl": "https://buy.stripe.com/eVafZD4nV60xakg289"
-  },
-  {
-    "name": "Executive",
-    "price": 59,
-    "originalPrice": 118,
-    "headshots": 200,
-    "time": 1,
-    "isPopular": false,
-    "stripeUrl": "https://buy.stripe.com/9AQ3cR1bJagN8c8fZ0"
-  }
-]
+  "plans": [
+    {
+      "name": "Basic",
+      "price": 29,
+      "originalPrice": 58,
+      "headshots": 10,
+      "time": 3,
+      "isPopular": false,
+      "stripeUrl": "https://buy.stripe.com/dR6dRvdYvfB7akgdQQ"
+    },
+    {
+      "name": "Professional",
+      "price": 39,
+      "originalPrice": 78,
+      "headshots": 100,
+      "time": 2,
+      "isPopular": true,
+      "stripeUrl": "https://buy.stripe.com/eVafZD4nV60xakg289"
+    },
+    {
+      "name": "Executive",
+      "price": 59,
+      "originalPrice": 118,
+      "headshots": 200,
+      "time": 1,
+      "isPopular": false,
+      "stripeUrl": "https://buy.stripe.com/9AQ3cR1bJagN8c8fZ0"
+    }
+  ]
+}
