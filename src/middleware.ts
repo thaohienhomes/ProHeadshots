@@ -66,7 +66,10 @@ const handleRedirectBasedOnWorkStatus = (user: any, request: NextRequest): NextR
       break;
     case "completed":
     case "complete":
-      targetPath = "/dashboard";
+      // Allow users to navigate within dashboard area
+      if (!pathname.startsWith('/dashboard')) {
+        targetPath = "/dashboard";
+      }
       break;
     default:
       targetPath = "/forms";
