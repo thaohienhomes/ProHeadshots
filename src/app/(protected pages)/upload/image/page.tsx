@@ -6,13 +6,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useImageUpload } from "@/hooks/useImageUpload";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import { getRequiredPhotoCountClient } from "@/utils/photoConfig";
 
 export default function Page() {
   const router = useRouter();
   const [images, setImages] = useState<Array<{ file: File; pixels: number }>>(
     []
   );
-  const maxImages = 15;
+  const maxImages = getRequiredPhotoCountClient();
   const { uploadImages, isUploading, error: uploadError } = useImageUpload();
   const [isUploadingState, setIsUploading] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);

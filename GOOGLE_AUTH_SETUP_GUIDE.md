@@ -62,6 +62,21 @@ https://YOUR-SUPABASE-PROJECT-ID.supabase.co/auth/v1/callback
    - **Client Secret**: (from Step 1)
 6. Click **"Save"**
 
+### 2.2 Configure URL Settings
+1. Still in **Authentication**, go to: **URL Configuration**
+2. **Update Site URL**:
+   - Change from `http://localhost:3000` to your production domain
+   - For development: keep `http://localhost:3000`
+   - For production: use `https://yourdomain.com`
+3. **Add Redirect URLs**:
+   - Click **"Add URL"**
+   - Add: `http://localhost:3000` (for local development)
+   - Click **"Add URL"** again  
+   - Add: `https://yourdomain.com` (for production)
+4. Click **"Save changes"**
+
+**⚠️ Important**: Without these URL configurations, Google auth will fail in production!
+
 ---
 
 ## Step 3: Environment Variables (2 minutes)
@@ -140,12 +155,17 @@ When deploying to production:
    - Add your production domain to "Authorized JavaScript origins"
    - Keep the same Supabase redirect URI (it doesn't change)
 
-2. **Update Environment Variables**:
+2. **Update Supabase URL Configuration**:
+   - Go to: **Authentication** → **URL Configuration**
+   - Change **Site URL** from `http://localhost:3000` to `https://yourdomain.com`
+   - Ensure your production domain is in the **Redirect URLs** list
+
+3. **Update Environment Variables**:
    ```env
    NEXT_PUBLIC_SITE_URL=https://yourdomain.com
    ```
 
-3. **Test production**: Make sure Google auth works on your live site
+4. **Test production**: Make sure Google auth works on your live site
 
 ---
 

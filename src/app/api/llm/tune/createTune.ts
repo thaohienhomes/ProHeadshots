@@ -3,6 +3,7 @@
 // Importing the Supabase client utility for server-side operations
 import { createClient } from "@/utils/supabase/server";
 import { createPrompt } from "../prompt/createPrompt";
+import { getRequiredPhotoCount } from "@/utils/photoConfig";
 
 // API key and domain for the external service
 const API_KEY = process.env.ASTRIA_API_KEY; // Use API key from .env.local
@@ -62,10 +63,11 @@ export async function createTune(userData: any) {
     return;
   }
 
-  // Validate photos
-  const hasPhotos = userPhotos?.userSelfies && Array.isArray(userPhotos.userSelfies) && userPhotos.userSelfies.length >= 15;
+  // Validate photos - environment dependent
+  const requiredPhotoCount = getRequiredPhotoCount();
+  const hasPhotos = userPhotos?.userSelfies && Array.isArray(userPhotos.userSelfies) && userPhotos.userSelfies.length >= requiredPhotoCount;
   if (!hasPhotos) {
-    console.error('Photos incomplete - need at least 15 photos - blocking API call');
+    console.error(`Photos incomplete - need at least ${requiredPhotoCount} photos - blocking API call`);
     return;
   }
 

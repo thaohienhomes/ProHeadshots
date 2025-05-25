@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { getRequiredPhotoCount } from "@/utils/photoConfig";
 
 // Helper function to handle redirects based on user status
 const handleRedirectBasedOnWorkStatus = (user: any, request: NextRequest): NextResponse | null => {
@@ -165,6 +166,7 @@ export async function middleware(request: NextRequest) {
           // 🛡️ Enhanced logic for workStatus="ongoing" users
           if (userInfo.workStatus === "ongoing") {
             // Check data completeness for ongoing users
+            const requiredPhotoCount = getRequiredPhotoCount();
             const hasPersonalInfo =
               userInfo.name &&
               userInfo.age &&
@@ -176,7 +178,7 @@ export async function middleware(request: NextRequest) {
             const hasPhotos =
               userInfo.userPhotos?.userSelfies &&
               Array.isArray(userInfo.userPhotos.userSelfies) &&
-              userInfo.userPhotos.userSelfies.length >= 15;
+              userInfo.userPhotos.userSelfies.length >= requiredPhotoCount;
             const hasStyles =
               userInfo.styles && Array.isArray(userInfo.styles) && userInfo.styles.length > 0;
 

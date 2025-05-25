@@ -60,7 +60,7 @@ export async function updateUser(formData: UserFormData) {
 
   // Only redirect if it's not an image upload or promptsResult update
   if (!formData.userPhotos && !formData.promptsResult) {
-    redirect('/upload/intro/styles');
+    redirect('/upload/styles');
   }
 
   return { success: true };

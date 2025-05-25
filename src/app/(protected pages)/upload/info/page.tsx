@@ -84,9 +84,10 @@ export default function Page() {
         }
 
         // If we reach here, the update was successful
-        // Note: The redirect will happen automatically from the server action
-        // so we don't need to handle navigation here
         console.log("Form submitted successfully");
+
+        // Redirect to styles page
+        router.push("/upload/styles");
       } catch (error) {
         console.error("Error submitting form:", error);
         // Only show error alert for actual errors, not redirects

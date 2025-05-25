@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import SubmitButton from "./SubmitButton";
+import { getRequiredPhotoCount } from "@/utils/photoConfig";
 
 // Add this type definition
 type StyleItem = {
@@ -53,6 +54,7 @@ async function submitPhotos() {
   }
 
   // Validate that all required data is present
+  const requiredPhotoCount = getRequiredPhotoCount();
   const hasPersonalInfo =
     userData.name &&
     userData.age &&
@@ -63,7 +65,7 @@ async function submitPhotos() {
     userData.eyeColor;
   const hasPhotos =
     userData.userPhotos?.userSelfies &&
-    userData.userPhotos.userSelfies.length >= 15;
+    userData.userPhotos.userSelfies.length >= requiredPhotoCount;
   const hasStyles =
     userData.styles &&
     Array.isArray(userData.styles) &&
@@ -74,7 +76,9 @@ async function submitPhotos() {
   }
 
   if (!hasPhotos) {
-    throw new Error("Photos incomplete - need at least 15 photos");
+    throw new Error(
+      `Photos incomplete - need at least ${requiredPhotoCount} photos`
+    );
   }
 
   if (!hasStyles) {
@@ -112,6 +116,7 @@ export default async function Page() {
   }
 
   // Validation: Check if user has completed all required steps
+  const requiredPhotoCount = getRequiredPhotoCount();
   const hasPersonalInfo =
     user.name &&
     user.age &&
@@ -121,7 +126,8 @@ export default async function Page() {
     user.gender &&
     user.eyeColor;
   const hasPhotos =
-    user.userPhotos?.userSelfies && user.userPhotos.userSelfies.length >= 15;
+    user.userPhotos?.userSelfies &&
+    user.userPhotos.userSelfies.length >= requiredPhotoCount;
   const hasStyles =
     user.styles && Array.isArray(user.styles) && user.styles.length > 0;
 
