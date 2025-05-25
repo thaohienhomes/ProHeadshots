@@ -135,7 +135,7 @@ export default function ImageGallery({
       }
     }
     checkDiscrepancy();
-  }, []);
+  }, [images.length, planLimit, promptsResult, userData]);
 
   const displayImages = useMemo(() => {
     if (promptsResult.length > 0) {

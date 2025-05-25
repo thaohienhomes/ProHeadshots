@@ -1,13 +1,17 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Refund() {
   return (
     <div className="min-h-screen bg-[#f6f5ec] text-[#091E25] p-4">
       <div className="max-w-3xl mx-auto">
         <nav className="mb-6">
-          <a href="/" className="text-[#091E25] hover:underline cursor-pointer">
+          <Link
+            href="/"
+            className="text-[#091E25] hover:underline cursor-pointer"
+          >
             ← Back
-          </a>
+          </Link>
         </nav>
         <main className="bg-[#f6f5ec] p-8 border-2 border-[#091E25]">
           <h1 className="text-3xl font-bold text-center mb-8">Refund Policy</h1>
@@ -37,14 +41,14 @@ export default function Refund() {
             To initiate a refund for the Professional or Executive plan:
             <br />
             1. Visit our contact page at{" "}
-            <a
+            <Link
               href="/contact"
               className="text-[#091E25] hover:text-[#CEFF66] underline"
               target="_blank"
               rel="noopener noreferrer"
             >
               cvphoto.app/contact
-            </a>
+            </Link>
             .<br />
             2. Provide your order number, which can be found in your purchase
             confirmation email.
