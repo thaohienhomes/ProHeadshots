@@ -16,10 +16,29 @@ async function sendWelcomeEmail(email: string) {
 export async function signInWithGoogleAction(): Promise<never> {
   const supabase = await createClient();
 
+  // Get the redirect URL - prioritize production domain over localhost
+  const getRedirectUrl = () => {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    
+    // If we're in development, use localhost
+    if (process.env.NODE_ENV === 'development') {
+      return `${siteUrl || 'http://localhost:3000'}/auth/callback`;
+    }
+    
+    // For production, never use localhost
+    if (siteUrl && !siteUrl.includes('localhost')) {
+      return `${siteUrl}/auth/callback`;
+    }
+    
+    // Fallback: construct from environment or use your known domain
+    // Replace 'cvphoto.app' with your actual domain
+    return 'https://cvphoto.app/auth/callback';
+  };
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      redirectTo: getRedirectUrl(),
     },
   });
 
