@@ -43,15 +43,17 @@ export async function createTune(userData: any) {
   }
 
   // 🛡️ SUBMISSION DATE PROTECTION - Prevent multiple submissions within 24 hours
-  // TEMPORARILY DISABLED FOR DEVELOPMENT TESTING
-  if (((process.env.NODE_ENV as string) === 'production' || (process.env.NODE_ENV as string) === 'LIVE') && currentUser.submissionDate) {
+  // Only apply this protection if the user has already made a successful API call (has apiStatus)
+  // This prevents blocking the current submission flow while still preventing duplicate submissions
+  if (((process.env.NODE_ENV as string) === 'production' || (process.env.NODE_ENV as string) === 'LIVE') && 
+      currentUser.submissionDate && currentUser.apiStatus) {
     const lastSubmission = new Date(currentUser.submissionDate);
     const now = new Date();
     const timeDifference = now.getTime() - lastSubmission.getTime();
     const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
     if (timeDifference < twentyFourHours) {
-      console.log('Submission blocked: Last submission was less than 24 hours ago');
+      console.log('Submission blocked: Last submission was less than 24 hours ago and API call was already made');
       return;
     }
   }
