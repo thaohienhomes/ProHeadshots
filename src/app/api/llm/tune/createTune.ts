@@ -44,7 +44,7 @@ export async function createTune(userData: any) {
 
   // 🛡️ SUBMISSION DATE PROTECTION - Prevent multiple submissions within 24 hours
   // TEMPORARILY DISABLED FOR DEVELOPMENT TESTING
-  if (process.env.NODE_ENV === 'production' && currentUser.submissionDate) {
+  if (((process.env.NODE_ENV as string) === 'production' || (process.env.NODE_ENV as string) === 'LIVE') && currentUser.submissionDate) {
     const lastSubmission = new Date(currentUser.submissionDate);
     const now = new Date();
     const timeDifference = now.getTime() - lastSubmission.getTime();

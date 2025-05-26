@@ -28,7 +28,7 @@ export async function GET(request: Request) {
       if (!existingUser) {
         // For new Google OAuth users, redirect to forms (same as email signup)
         const forwardedHost = request.headers.get('x-forwarded-host')
-        const isLocalEnv = process.env.NODE_ENV === 'development'
+        const isLocalEnv = (process.env.NODE_ENV as string) === 'development' || (process.env.NODE_ENV as string) === 'DEVELOPMENT'
         
         if (isLocalEnv) {
           return NextResponse.redirect(`${origin}/forms?signupCompleted`)
@@ -41,7 +41,7 @@ export async function GET(request: Request) {
       
       // Existing user - redirect to their appropriate destination
       const forwardedHost = request.headers.get('x-forwarded-host')
-      const isLocalEnv = process.env.NODE_ENV === 'development'
+      const isLocalEnv = (process.env.NODE_ENV as string) === 'development' || (process.env.NODE_ENV as string) === 'DEVELOPMENT'
       
       if (isLocalEnv) {
         return NextResponse.redirect(`${origin}${next}`)

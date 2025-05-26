@@ -4,7 +4,7 @@
  * - Production: 15 photos
  */
 export function getRequiredPhotoCount(): number {
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isDevelopment = (process.env.NODE_ENV as string) === 'development' || (process.env.NODE_ENV as string) === 'DEVELOPMENT';
   return isDevelopment ? 4 : 15;
 }
 

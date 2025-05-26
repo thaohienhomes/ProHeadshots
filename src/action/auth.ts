@@ -21,7 +21,7 @@ export async function signInWithGoogleAction(): Promise<never> {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
     
     // If we're in development, use localhost
-    if (process.env.NODE_ENV === 'development') {
+    if ((process.env.NODE_ENV as string) === 'development' || (process.env.NODE_ENV as string) === 'DEVELOPMENT') {
       return `${siteUrl || 'http://localhost:3000'}/auth/callback`;
     }
     
