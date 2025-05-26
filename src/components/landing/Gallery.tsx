@@ -41,9 +41,9 @@ const ImageGallery = () => {
         <h2 className="text-3xl font-semibold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-center mb-8 text-mainBlack">
           Our Customers Trust Us
         </h2>
-        <div className="flex items-center justify-center mb-16">
+        <div className="flex items-center justify-center mb-8 sm:mb-16 px-4">
           <svg
-            className="w-6 h-6 mr-2 text-mainBlack"
+            className="w-5 h-5 sm:w-6 sm:h-6 mr-2 flex-shrink-0 text-mainBlack"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -56,7 +56,7 @@ const ImageGallery = () => {
               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <p className="text-xl text-center text-mainBlack">
+          <p className="text-base sm:text-xl text-center text-mainBlack leading-tight">
             Money Back Guarantee If Not Satisfied
           </p>
         </div>
