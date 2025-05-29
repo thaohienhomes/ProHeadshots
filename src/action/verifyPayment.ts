@@ -2,6 +2,7 @@
 'use server'
 import { createClient } from "@/utils/supabase/server";
 import Stripe from 'stripe';
+import { sendSimpleEmail } from "./sendEmail";
 
 export async function verifyPayment(sessionId: string) {
   if (!sessionId) {
@@ -54,6 +55,42 @@ export async function verifyPayment(sessionId: string) {
         planType: planType ?? 'default'
       });
       console.log('Payment successful', session.payment_status);
+
+      // Send admin notification email
+      if (process.env.ADMIN_EMAIL) {
+        const adminEmailHtml = `
+          <h2>🎉 New Payment Received!</h2>
+          <p><strong>Payment Details:</strong></p>
+          <ul>
+            <li><strong>Session ID:</strong> ${sessionId}</li>
+            <li><strong>Environment:</strong> ${isTestSession ? 'TEST' : 'LIVE'}</li>
+            <li><strong>Amount:</strong> $${((session.amount_total ?? 0) / 100).toFixed(2)} ${session.currency?.toUpperCase()}</li>
+            <li><strong>Plan Type:</strong> ${planType || 'default'}</li>
+            <li><strong>Customer Email:</strong> ${session.customer_details?.email || 'N/A'}</li>
+            <li><strong>Customer Name:</strong> ${session.customer_details?.name || 'N/A'}</li>
+            <li><strong>Payment Time:</strong> ${new Date().toLocaleString()}</li>
+          </ul>
+          <p><strong>Customer Details:</strong></p>
+          <ul>
+            <li><strong>Phone:</strong> ${session.customer_details?.phone || 'N/A'}</li>
+          </ul>
+        `;
+
+        try {
+          await sendSimpleEmail({
+            to: process.env.ADMIN_EMAIL,
+            from: process.env.NOREPLY_EMAIL || 'noreply@cvphoto.app',
+            subject: `💰 New Payment: $${((session.amount_total ?? 0) / 100).toFixed(2)} - ${planType || 'default'} Plan`,
+            html: adminEmailHtml,
+          });
+          console.log('Admin notification email sent successfully');
+        } catch (emailError) {
+          console.error('Failed to send admin notification email:', emailError);
+          // Don't throw error here to avoid affecting payment verification
+        }
+      } else {
+        console.warn('ADMIN_EMAIL environment variable not set - skipping admin notification');
+      }
     }
 
     return { 
