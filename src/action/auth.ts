@@ -108,7 +108,7 @@ export async function signUpAction(formData: FormData): Promise<never> {
     return redirect(
       `/auth?message=${encodeURIComponent(
         "Please enter both email and password"
-      )}`
+      )}&mode=signup`
     );
   }
 
@@ -133,7 +133,7 @@ export async function signUpAction(formData: FormData): Promise<never> {
           errorMessage = error.message;
       }
     }
-    return redirect(`/auth?message=${encodeURIComponent(errorMessage)}`);
+    return redirect(`/auth?message=${encodeURIComponent(errorMessage)}&mode=signup`);
   }
 
   if (signUpData.user) {
@@ -142,5 +142,5 @@ export async function signUpAction(formData: FormData): Promise<never> {
     return redirect("/forms?signupCompleted");
   }
 
-  return redirect("/auth?message=Something went wrong during signup. Please try again.");
+  return redirect(`/auth?message=${encodeURIComponent("Something went wrong during signup. Please try again.")}&mode=signup`);
 } 

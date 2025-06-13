@@ -13,32 +13,36 @@ const handleRedirectBasedOnWorkStatus = (user: any, request: NextRequest): NextR
   }
 
   // If user is on auth pages but already logged in, redirect them to appropriate page
-  if (pathname.startsWith('/login') || pathname.startsWith('/signup')) {
-    // Determine where they should go based on their status
-    if (!user.paymentStatus || user.paymentStatus === "NULL") {
-      return NextResponse.redirect(new URL('/forms', request.url));
+  if (pathname.startsWith('/auth') || pathname.startsWith('/signup')) {
+    // Only redirect if user is authenticated
+    if (user) {
+      // Determine where they should go based on their status
+      if (!user.paymentStatus || user.paymentStatus === "NULL") {
+        return NextResponse.redirect(new URL('/forms', request.url));
+      }
+
+      const workStatus = (user.workStatus || "").toLowerCase();
+      let targetPath: string;
+
+      switch (workStatus) {
+        case "":
+        case "null":
+          targetPath = "/upload/intro";
+          break;
+        case "ongoing":
+          targetPath = "/wait";
+          break;
+        case "completed":
+        case "complete":
+          targetPath = "/dashboard";
+          break;
+        default:
+          targetPath = "/forms";
+      }
+
+      return NextResponse.redirect(new URL(targetPath, request.url));
     }
-
-    const workStatus = (user.workStatus || "").toLowerCase();
-    let targetPath: string;
-
-    switch (workStatus) {
-      case "":
-      case "null":
-        targetPath = "/upload/intro";
-        break;
-      case "ongoing":
-        targetPath = "/wait";
-        break;
-      case "completed":
-      case "complete":
-        targetPath = "/dashboard";
-        break;
-      default:
-        targetPath = "/forms";
-    }
-
-    return NextResponse.redirect(new URL(targetPath, request.url));
+    return null;  // Allow access to login/signup pages if not authenticated
   }
 
   // For other pages, check if user needs to be redirected
@@ -152,6 +156,59 @@ export async function middleware(request: NextRequest) {
 
     // This will refresh session if expired - required for Server Components
     const { data: { user } } = await supabase.auth.getUser();
+    const { pathname } = new URL(request.url);
+
+    // Check if the path is a protected route
+    const isProtectedRoute = pathname.startsWith('/wait') || 
+                           pathname.startsWith('/upload/') || 
+                           pathname.startsWith('/dashboard');
+
+    // Redirect to auth if trying to access protected routes while not authenticated
+    if (isProtectedRoute && !user) {
+      return NextResponse.redirect(new URL('/auth', request.url));
+    }
+
+    // If user is on auth pages but already logged in, redirect them to appropriate page
+    if (pathname.startsWith('/auth') || pathname.startsWith('/signup')) {
+      // Only redirect if user is authenticated
+      if (user) {
+        // Get user data from userTable
+        const { data: userData, error } = await supabase
+          .from('userTable')
+          .select('paymentStatus, workStatus')
+          .eq('id', user.id)
+          .single();
+
+        if (!error && userData) {
+          // Determine where they should go based on their status
+          if (!userData.paymentStatus || userData.paymentStatus === "NULL") {
+            return NextResponse.redirect(new URL('/forms', request.url));
+          }
+
+          const workStatus = (userData.workStatus || "").toLowerCase();
+          let targetPath: string;
+
+          switch (workStatus) {
+            case "":
+            case "null":
+              targetPath = "/upload/intro";
+              break;
+            case "ongoing":
+              targetPath = "/wait";
+              break;
+            case "completed":
+            case "complete":
+              targetPath = "/dashboard";
+              break;
+            default:
+              targetPath = "/forms";
+          }
+
+          return NextResponse.redirect(new URL(targetPath, request.url));
+        }
+      }
+      return null;  // Allow access to login/signup pages if not authenticated
+    }
 
     // If user is authenticated, check their status and redirect accordingly
     if (user) {

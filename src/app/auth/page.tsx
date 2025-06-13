@@ -2,24 +2,40 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { PasswordInput, EmailInput, AuthButton } from "@/components/AuthForm";
 import LeftAuth from "@/components/LeftAuth";
 import { signInAction, signUpAction } from "@/action/auth";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 
 function AuthContent() {
-  const [mode, setMode] = useState<"login" | "signup">("login");
   const searchParams = useSearchParams();
+  const router = useRouter();
   const message = searchParams.get("message");
+  const modeParam = searchParams.get("mode");
 
-  // Set initial mode based on URL parameter
+  // Determine mode from URL parameter, default to login
+  const mode = modeParam === "signup" ? "signup" : "login";
+  const [localMode, setLocalMode] = useState<"login" | "signup">(mode);
+
+  // Update local mode when URL changes
   useEffect(() => {
-    const modeParam = searchParams.get("mode");
     if (modeParam === "signup") {
-      setMode("signup");
+      setLocalMode("signup");
+    } else if (modeParam === "login") {
+      setLocalMode("login");
     }
-  }, [searchParams]);
+  }, [modeParam]);
+
+  // Use localMode for the UI, but respect URL parameter
+  const currentMode = modeParam ? mode : localMode;
+
+  // Function to handle mode switching with navigation
+  const handleModeSwitch = (newMode: "login" | "signup") => {
+    setLocalMode(newMode);
+    // Clear URL parameters when manually switching modes
+    router.push("/auth");
+  };
 
   return (
     <div className="flex h-screen">
@@ -29,10 +45,10 @@ function AuthContent() {
           <div className="bg-[#FCFBF7] p-8 rounded-lg border border-gray-200 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]">
             {/* Dynamic Header */}
             <h2 className="text-3xl font-bold text-mainBlack mb-2 text-center">
-              {mode === "login" ? "Welcome back!" : "Sign Up"}
+              {currentMode === "login" ? "Welcome back!" : "Sign Up"}
             </h2>
             <p className="text-gray-600 mb-8 text-center">
-              {mode === "login"
+              {currentMode === "login"
                 ? "Sign in to your account"
                 : "Create your account to get started."}
             </p>
@@ -52,12 +68,14 @@ function AuthContent() {
                 type="password"
               />
               <AuthButton
-                formAction={mode === "login" ? signInAction : signUpAction}
+                formAction={
+                  currentMode === "login" ? signInAction : signUpAction
+                }
                 pendingText={
-                  mode === "login" ? "Signing In..." : "Signing Up..."
+                  currentMode === "login" ? "Signing In..." : "Signing Up..."
                 }
               >
-                {mode === "login" ? "Sign In" : "Sign Up"}
+                {currentMode === "login" ? "Sign In" : "Sign Up"}
               </AuthButton>
             </form>
 
@@ -81,12 +99,12 @@ function AuthContent() {
 
             {/* Toggle link at bottom */}
             <p className="text-sm text-gray-600 text-center mt-4">
-              {mode === "login" ? (
+              {currentMode === "login" ? (
                 <>
                   Don&apos;t have an account?{" "}
                   <button
                     type="button"
-                    onClick={() => setMode("signup")}
+                    onClick={() => handleModeSwitch("signup")}
                     className="text-mainBlack font-semibold hover:text-gray-700 transition-colors"
                   >
                     Sign Up
@@ -97,7 +115,7 @@ function AuthContent() {
                   Already a member?{" "}
                   <button
                     type="button"
-                    onClick={() => setMode("login")}
+                    onClick={() => handleModeSwitch("login")}
                     className="text-mainBlack font-semibold hover:text-gray-700 transition-colors"
                   >
                     Sign In
@@ -107,7 +125,7 @@ function AuthContent() {
             </p>
 
             {/* Terms and conditions for signup */}
-            {mode === "signup" && (
+            {currentMode === "signup" && (
               <p className="text-xs text-gray-500 text-center mt-4">
                 By registering, you agree to the CVPHOTO{" "}
                 <Link
