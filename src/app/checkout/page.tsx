@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
 import Header from "@/components/Header";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import pricingPlans from "./pricingPlans.json";
 import { useState, use } from "react";
+import { createClient } from "@/utils/supabase/client";
 
 export default function CheckoutPage({
   searchParams,
@@ -11,8 +12,11 @@ export default function CheckoutPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const [paymentMethod, setPaymentMethod] = useState("creditCard");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const router = useRouter();
   const resolvedSearchParams = use(searchParams);
   const plan = resolvedSearchParams.plan as string;
+  const supabase = createClient();
 
   if (
     !plan ||
@@ -33,6 +37,35 @@ export default function CheckoutPage({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setPaymentMethod(event.target.value);
+  };
+
+  const handlePayment = async () => {
+    setIsProcessing(true);
+
+    try {
+      // Get the authenticated user
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        // User not authenticated - redirect to login
+        router.push("/auth");
+        return;
+      }
+
+      // Append user ID to the payment link as client_reference_id
+      const paymentLinkWithUserId = `${selectedPlan.stripeUrl}?client_reference_id=${user.id}`;
+
+      // Redirect to Stripe
+      window.location.href = paymentLinkWithUserId;
+    } catch (error) {
+      console.error("Error processing payment:", error);
+      setIsProcessing(false);
+      // Handle error - maybe show a toast or alert
+      alert("There was an error processing your payment. Please try again.");
+    }
   };
 
   return (
@@ -225,11 +258,13 @@ export default function CheckoutPage({
                 </span>
               </div>
 
-              <a href={selectedPlan.stripeUrl} className="block w-full">
-                <button className="w-full bg-mainBlack text-mainWhite py-3 rounded-md font-medium hover:bg-mainBlack/90 transition-colors mb-4">
-                  Pay now
-                </button>
-              </a>
+              <button
+                onClick={handlePayment}
+                disabled={isProcessing}
+                className="w-full bg-mainBlack text-mainWhite py-3 rounded-md font-medium hover:bg-mainBlack/90 transition-colors mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isProcessing ? "Processing..." : "Pay now"}
+              </button>
 
               <div className="relative group">
                 <p className="text-center text-sm text-mainBlack font-medium mb-2 cursor-help">

@@ -43,16 +43,24 @@ export async function verifyPayment(sessionId: string) {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     console.log('Session retrieved successfully');
     
-    // Extract planType from metadata
+    // Extract planType from metadata and userId from client_reference_id
     const planType: string | undefined = session.metadata?.planType;
+    const userId: string | null = session.client_reference_id;
+    
     console.log('Plan Type:', planType);
+    console.log('User ID from client_reference_id:', userId);
+
+    if (!userId) {
+      throw new Error('Missing user ID in payment session. User ID must be provided as client_reference_id.');
+    }
 
     if (session.payment_status === 'paid') { 
       // Update user's plan in the database
       await updatePlan({ 
         paymentStatus: session.payment_status, 
         amount: session.amount_total ?? 0,
-        planType: planType ?? 'default'
+        planType: planType ?? 'default',
+        userId: userId
       });
       console.log('Payment successful', session.payment_status);
 
@@ -63,6 +71,7 @@ export async function verifyPayment(sessionId: string) {
           <p><strong>Payment Details:</strong></p>
           <ul>
             <li><strong>Session ID:</strong> ${sessionId}</li>
+            <li><strong>User ID:</strong> ${userId}</li>
             <li><strong>Environment:</strong> ${isTestSession ? 'TEST' : 'LIVE'}</li>
             <li><strong>Amount:</strong> $${((session.amount_total ?? 0) / 100).toFixed(2)} ${session.currency?.toUpperCase()}</li>
             <li><strong>Plan Type:</strong> ${planType || 'default'}</li>
@@ -110,13 +119,8 @@ export async function verifyPayment(sessionId: string) {
   }
 }
 
-async function updatePlan({paymentStatus, amount, planType}: { paymentStatus: string, amount: number, planType: string }) {
+async function updatePlan({paymentStatus, amount, planType, userId}: { paymentStatus: string, amount: number, planType: string, userId: string }) {
     const supabase = await createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-        throw new Error("User not authenticated");
-    }
 
     const updateObject = { 
         paymentStatus, 
@@ -128,7 +132,7 @@ async function updatePlan({paymentStatus, amount, planType}: { paymentStatus: st
     const { data, error } = await supabase
       .from("userTable")
       .update(updateObject)
-      .eq('id', user.id)
+      .eq('id', userId)
       .select();
 
     if (error) {
