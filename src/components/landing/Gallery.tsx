@@ -8,14 +8,14 @@ const people = [
     name: "Karin",
     review:
       "What a fun experience! Turned out amazing and saved me money from expensive photographer",
-    selfieUrl: "/democard/demo2-selfie.webp",
-    aiImages: "/democard/demo2-ai.webp",
+    selfieUrl: "/sampleslanding/karinbeforee.png",
+    aiImages: "/sampleslanding/karin.jpeg",
   },
   {
     name: "Rasmus",
     review: "Loved the variety and styling. Very happy with the images!",
-    selfieUrl: "/democard/demo6-selfie.webp",
-    aiImages: "/democard/demo6-ai.webp",
+    selfieUrl: "/sampleslanding/rasmusbefore.png",
+    aiImages: "/sampleslanding/rasmus.jpg",
   },
   // Add more people as needed
 ];

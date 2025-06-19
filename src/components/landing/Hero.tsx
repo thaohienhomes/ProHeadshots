@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { AvatarGroupWithInfo } from "./AvatarGroup";
 import Image from "next/image";
-import ParallaxCards from "./DemoCard";
+// import ParallaxCards from "./DemoCard";
 
 const NumberOne = () => (
   <div className="mb-4 flex justify-center">
@@ -69,6 +69,42 @@ const HeroImage = () => (
   </div>
 );
 
+const SimpleImageComparison = () => (
+  <div className="max-w-4xl mx-auto px-4">
+    <div
+      className="grid grid-cols-1 md:grid-cols-2"
+      style={{ gridTemplateRows: "min-content" }}
+    >
+      <div className="relative flex">
+        <Image
+          src="/sampleslanding/before0001.png"
+          alt="Before photo"
+          width={500}
+          height={600}
+          className="w-full h-full object-cover"
+          style={{ maxHeight: "min(60vh, 600px)" }}
+        />
+        <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-mainWhite px-3 py-1 rounded-md text-sm font-semibold">
+          Before
+        </div>
+      </div>
+      <div className="relative flex">
+        <Image
+          src="/sampleslanding/example0001.png"
+          alt="Professional headshot result"
+          width={500}
+          height={600}
+          className="w-full h-full object-cover"
+          style={{ maxHeight: "min(60vh, 600px)" }}
+        />
+        <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-mainWhite px-3 py-1 rounded-md text-sm font-semibold">
+          After
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const Hero = () => {
   return (
     <section className="w-full bg-mainBlack py-6 lg:py-12">
@@ -86,7 +122,8 @@ const Hero = () => {
         </div>
       </div>
       <div className="w-full mt-8">
-        <ParallaxCards />
+        <SimpleImageComparison />
+        {/* <ParallaxCards /> */}
       </div>
     </section>
   );

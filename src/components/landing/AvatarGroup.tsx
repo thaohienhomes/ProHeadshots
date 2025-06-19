@@ -4,18 +4,18 @@ import { AvatarFallback, Avatar } from "@/components/ui/avatar";
 
 // Member data
 const memberData = [
-  { initials: "EAS", imagePath: "/democard/demo2-selfie.webp" },
-  { initials: "YUS", imagePath: "/democard/demo5-selfie.webp" },
-  { initials: "RO", imagePath: "/democard/demo6-selfie.webp" },
-  { initials: "BE", imagePath: "/democard/demo8-selfie.webp" },
-  { initials: "ST", imagePath: "/democard/demo3-selfie.webp" },
+  { initials: "MB1", imagePath: "/groupBadge/1.jpeg" },
+  { initials: "MB2", imagePath: "/groupBadge/2.jpg" },
+  { initials: "MB3", imagePath: "/groupBadge/3.jpeg" },
+  { initials: "MB4", imagePath: "/groupBadge/4.png" },
+  { initials: "MB5", imagePath: "/groupBadge/5.png" },
 ];
 
 // AvatarGroup component
 export const AvatarGroup = () => (
   <div className="flex items-center -space-x-4">
     {memberData.map(({ initials, imagePath }) => (
-      <Avatar key={initials} className="border-4 border-mainBlack">
+      <Avatar key={initials} className="border-[5px] border-mainBlack">
         <Image
           src={imagePath}
           alt={initials}
