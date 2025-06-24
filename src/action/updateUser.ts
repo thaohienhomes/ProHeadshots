@@ -15,6 +15,7 @@ interface UserFormData {
     userSelfies?: string[];
   };
   promptsResult?: any[];
+  workStatus?: string;
 }
 
 export async function updateUser(formData: UserFormData) {

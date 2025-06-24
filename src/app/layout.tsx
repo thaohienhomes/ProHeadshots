@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 const BG = DM_Sans({ subsets: ["latin"] });
 
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={BG.className}>
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
         <Analytics />
       </body>
     </html>

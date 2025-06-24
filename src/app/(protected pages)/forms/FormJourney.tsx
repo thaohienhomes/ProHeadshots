@@ -16,17 +16,17 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-mainWhite">
+    <div className="min-h-screen bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800">
       <Header userAuth={true} />
 
-      <div className="max-w-2xl mx-auto mt-8">
+      <div className="max-w-2xl mx-auto pt-8 px-4">
         <div className="max-w-lg mx-auto text-center">
           {currentStep === 1 && (
             <>
-              <h1 className="text-3xl font-bold text-mainBlack mb-4">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-primary-400 bg-clip-text text-transparent mb-4">
                 How it works
               </h1>
-              <p className="text-gray-600 mb-8">
+              <p className="text-slate-300 mb-8">
                 Creating your professional headshots is easy. All you need to do
                 is upload some photos of yourself. We&apos;ll take care of the
                 rest!
@@ -36,16 +36,16 @@ export default function Page() {
 
           {currentStep === 2 && (
             <>
-              <h1 className="text-3xl font-bold text-mainBlack mb-4">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-primary-400 bg-clip-text text-transparent mb-4">
                 Select a package
               </h1>
-              <p className="text-gray-600 mb-4">
+              <p className="text-slate-300 mb-4">
                 Pay once, no subscriptions or hidden fees. We offer no trial due
                 to high costs, but we will refund you if you&apos;re
                 unsatisfied.
               </p>
               <p className="font-bold mb-8 flex items-center justify-center">
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-gradient-to-r from-mainGreen to-mainOrange text-mainBlack animate-gradient">
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-cyan-500 to-primary-500 text-white shadow-lg animate-gradient">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4 mr-1"
@@ -62,7 +62,7 @@ export default function Page() {
                   </svg>
                   50% off
                 </span>
-                <span className="text-mainBlack ml-2">
+                <span className="text-white ml-2">
                   {" "}
                   for the first 150 customers (2 left)
                 </span>
@@ -70,23 +70,23 @@ export default function Page() {
             </>
           )}
 
-          <div className="bg-white p-5 rounded-lg shadow-md">
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-xl shadow-2xl">
             {currentStep === 1 && (
               <>
                 <button
                   onClick={handleNext}
-                  className="w-full bg-mainBlack text-mainWhite py-2.5 rounded-md mb-5 hover:bg-opacity-90 transition-colors"
+                  className="w-full bg-gradient-to-r from-cyan-500 to-primary-600 hover:from-cyan-400 hover:to-primary-500 text-white py-3 rounded-xl mb-6 font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
                 >
                   Click here to start!
                 </button>
 
-                <div className="mt-5">
+                <div className="mt-6">
                   <Image
                     src="/Form1.png"
                     alt="How it works illustration"
                     width={500}
                     height={333}
-                    className="w-full h-auto rounded-lg"
+                    className="w-full h-auto rounded-xl shadow-lg"
                   />
                 </div>
               </>
@@ -94,32 +94,34 @@ export default function Page() {
 
             {currentStep === 2 && (
               <>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {pricingPlans.plans.map((plan, index) => (
                     <div
                       key={index}
-                      className={`flex items-center justify-between p-3 rounded-lg border ${
-                        plan.isPopular ? "border-mainOrange" : "border-gray-200"
+                      className={`flex items-center justify-between p-4 rounded-xl border backdrop-blur-sm transition-all duration-300 hover:scale-105 ${
+                        plan.isPopular
+                          ? "border-cyan-400/50 bg-gradient-to-r from-cyan-500/10 to-primary-500/10 shadow-lg shadow-cyan-500/20"
+                          : "border-white/20 bg-white/5 hover:bg-white/10"
                       }`}
                     >
                       <div className="flex-grow text-left">
-                        <div className="flex items-baseline mb-1">
-                          <span className="text-xl font-bold text-mainBlack mr-2">
+                        <div className="flex items-baseline mb-2">
+                          <span className="text-xl font-bold text-white mr-2">
                             ${plan.price}
                           </span>
-                          <span className="text-sm font-medium text-gray-600 line-through">
+                          <span className="text-sm font-medium text-slate-400 line-through">
                             ${plan.originalPrice}
                           </span>
                           {plan.name === "Professional" && (
-                            <span className="ml-2 px-2 py-0.5 text-xs font-medium rounded-full bg-gradient-to-r from-mainOrange to-mainGreen text-mainBlack animate-gradient">
+                            <span className="ml-2 px-2 py-1 text-xs font-medium rounded-full bg-gradient-to-r from-cyan-500 to-primary-500 text-white shadow-lg animate-gradient">
                               82% recommends this
                             </span>
                           )}
                         </div>
-                        <p className="text-sm font-medium text-mainBlack">
+                        <p className="text-sm font-medium text-white mb-1">
                           {plan.name}
                         </p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-slate-300">
                           Get {plan.headshots} headshots with unique backgrounds
                           and outfits. Done in {plan.time} hour
                           {plan.time > 1 ? "s" : ""}
@@ -130,11 +132,11 @@ export default function Page() {
                         passHref
                       >
                         <button
-                          className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ml-4 flex-shrink-0 flex items-center
+                          className={`px-4 py-2 text-sm font-medium rounded-xl transition-all duration-300 ml-4 flex-shrink-0 flex items-center shadow-lg hover:shadow-xl hover:scale-105
                             ${
                               plan.isPopular
-                                ? "text-mainWhite bg-mainBlack hover:bg-opacity-90"
-                                : "text-mainBlack bg-mainWhite border border-mainBlack hover:bg-gray-100"
+                                ? "text-white bg-gradient-to-r from-cyan-500 to-primary-600 hover:from-cyan-400 hover:to-primary-500"
+                                : "text-white bg-white/10 border border-white/20 hover:bg-white/20 backdrop-blur-sm"
                             }`}
                         >
                           <span>Select</span>

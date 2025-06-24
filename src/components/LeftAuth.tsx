@@ -4,34 +4,48 @@ import Image from "next/image";
 import Logo from "@/components/Logo";
 
 const NumberOne = () => (
-  <div className="mb-4">
-    <Image
-      src="/NumberOne.svg"
-      alt="The #1 AI Headshot Generator in Sweden"
-      width={200}
-      height={50}
-      priority
-    />
+  <div className="mb-6">
+    <div className="relative">
+      <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-primary-500 rounded-full blur-lg opacity-30 animate-pulse" />
+      <div className="relative bg-gradient-to-r from-cyan-400 to-primary-500 text-navy-900 px-6 py-3 rounded-full font-bold text-sm tracking-wide">
+        #1 AI HEADSHOT GENERATOR
+      </div>
+    </div>
   </div>
 );
 
 const LeftAuth: React.FC = () => {
   return (
-    <div className="hidden md:flex md:w-1/2 bg-mainBlack flex-col justify-center items-center text-center p-12">
-      <div className="flex flex-col items-center mb-20">
+    <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 flex-col justify-center items-center text-center p-12 relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-cyan-400/10 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-primary-500/10 to-transparent rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 flex flex-col items-center">
         <NumberOne />
-        <h1 className="text-xl font-bold mt-4 mb-6 text-center text-mainWhite">
-          Studio Quality Photos at Home.
+        <h1 className="text-3xl font-bold mt-6 mb-8 text-center">
+          <span className="bg-gradient-to-r from-white via-cyan-100 to-primary-200 bg-clip-text text-transparent">
+            Studio Quality AI Headshots
+          </span>
+          <span className="block mt-2 text-white text-xl">
+            at Home
+          </span>
         </h1>
         <AvatarGroupWithInfo />
-        <div className="flex items-center gap-2 mt-10">
-          <Logo className="w-7 h-7" />
-          <span className="font-sans font-light tracking-wider text-mainWhite text-xl uppercase">
-            cvphoto
+        <div className="flex items-center gap-3 mt-12">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-primary-500 rounded-lg blur-lg opacity-30" />
+            <div className="relative p-2 bg-gradient-to-r from-cyan-500 to-primary-600 rounded-lg">
+              <Logo className="w-7 h-7 text-white" />
+            </div>
+          </div>
+          <span className="font-bold tracking-wide text-white text-2xl bg-gradient-to-r from-cyan-100 to-primary-200 bg-clip-text text-transparent">
+            CVPHOTO
           </span>
         </div>
       </div>
-      <div className="flex justify-center w-full"></div>
     </div>
   );
 };

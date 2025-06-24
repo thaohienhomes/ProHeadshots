@@ -112,28 +112,33 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
           JPEG and PNG formats, up to 50MB
         </p>
         <button
-          className="mt-4 px-4 py-2 border border-mainBlack rounded-md text-sm font-medium text-mainBlack hover:bg-mainOrange hover:text-mainWhite hover:border-mainOrange transition-colors duration-300"
+          className="mt-4 px-6 py-3 border border-cyan-400/30 rounded-xl text-sm font-medium text-white bg-navy-700/50 hover:bg-cyan-400 hover:text-navy-900 hover:border-cyan-400 transition-all duration-300"
           onClick={(e) => {
             e.stopPropagation();
             document.getElementById("file-upload")?.click();
           }}
         >
-          Browse file
+          Browse Files
         </button>
       </div>
 
       {/* Error message for maximum images */}
       {error && images.length >= maxImages && (
-        <div className="mt-4 p-3 bg-mainOrange/20 border border-mainOrange text-mainBlack rounded-lg">
-          {error}
+        <div className="mt-4 p-4 bg-red-500/20 border border-red-400/30 text-white rounded-xl backdrop-blur-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-red-400">⚠️</span>
+            <span>{error}</span>
+          </div>
         </div>
       )}
 
       {/* Warning for low-resolution images */}
       {hasLowResImage && (
-        <div className="mt-4 p-3 bg-red-100 border border-red-500 text-mainBlack rounded-lg">
-          Red marked images have lower resolution. For best AI results, use
-          higher resolution images.
+        <div className="mt-4 p-4 bg-yellow-500/20 border border-yellow-400/30 text-white rounded-xl backdrop-blur-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-yellow-400">⚠️</span>
+            <span>Red marked images have lower resolution. For best AI results, use higher resolution images.</span>
+          </div>
         </div>
       )}
 

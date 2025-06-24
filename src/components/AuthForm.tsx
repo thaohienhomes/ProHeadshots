@@ -13,11 +13,11 @@ interface InputProps {
 const EmailInput: React.FC<InputProps> = ({ label, name, placeholder }) => {
   return (
     <div className="mb-4">
-      <label className="text-md" htmlFor={name}>
+      <label className="text-sm font-medium text-white" htmlFor={name}>
         {label}
       </label>
       <input
-        className="rounded-md px-4 py-2 bg-gray-100 border border-gray-300 text-gray-800 w-full mt-1"
+        className="rounded-lg px-4 py-3 bg-navy-700/50 backdrop-blur-sm border border-cyan-400/20 text-white w-full mt-2 placeholder-navy-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300"
         type="email"
         name={name}
         placeholder={placeholder}
@@ -35,12 +35,12 @@ const PasswordInput: React.FC<InputProps> = ({ label, name, placeholder }) => {
 
   return (
     <div className="mb-4">
-      <label className="text-md" htmlFor={name}>
+      <label className="text-sm font-medium text-white" htmlFor={name}>
         {label}
       </label>
-      <div className="relative mt-1">
+      <div className="relative mt-2">
         <input
-          className="rounded-md px-4 py-2 bg-gray-100 border border-gray-300 text-gray-800 w-full pr-10"
+          className="rounded-lg px-4 py-3 bg-navy-700/50 backdrop-blur-sm border border-cyan-400/20 text-white w-full pr-12 placeholder-navy-400 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300"
           type={showPassword ? "text" : "password"}
           name={name}
           placeholder={placeholder}
@@ -48,7 +48,7 @@ const PasswordInput: React.FC<InputProps> = ({ label, name, placeholder }) => {
         />
         <button
           type="button"
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-navy-400 hover:text-cyan-400 transition-colors duration-300"
           onClick={togglePasswordVisibility}
         >
           {showPassword ? (
@@ -107,8 +107,8 @@ const AuthButton: React.FC<AuthButtonProps> = ({
   const isPending = pending && action === props.formAction;
 
   const defaultClasses =
-    "rounded-md px-4 py-2 text-white mb-2 transition-colors";
-  const defaultColors = "bg-mainBlack hover:bg-opacity-80";
+    "rounded-lg px-6 py-3 text-white mb-4 font-medium transition-all duration-300 w-full";
+  const defaultColors = "bg-gradient-to-r from-cyan-500 to-primary-600 hover:from-cyan-400 hover:to-primary-500 shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100";
 
   const buttonClasses = className
     ? `${defaultClasses} ${className}`
@@ -121,7 +121,17 @@ const AuthButton: React.FC<AuthButtonProps> = ({
       type="submit"
       disabled={pending}
     >
-      {isPending ? pendingText : children}
+      {isPending ? (
+        <div className="flex items-center justify-center gap-2">
+          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          {pendingText}
+        </div>
+      ) : (
+        children
+      )}
     </button>
   );
 };

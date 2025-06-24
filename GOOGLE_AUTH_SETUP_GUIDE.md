@@ -38,17 +38,19 @@
 **Authorized JavaScript origins:**
 ```
 http://localhost:3000
+http://localhost:3001
 ```
 
 **Authorized redirect URIs:**
 ```
-https://YOUR-SUPABASE-PROJECT-ID.supabase.co/auth/v1/callback
+https://dfcpphcozngsbtvslrkf.supabase.co/auth/v1/callback
 ```
 
 5. Click **"Create"**
 6. **📋 COPY AND SAVE**: Client ID and Client Secret (you'll need these next!)
 
 ---
+**Note**: Copy your actual Client ID and Client Secret from Google Console
 
 ## Step 2: Supabase Configuration (5 minutes)
 
@@ -130,6 +132,13 @@ NEXT_PUBLIC_SITE_URL=https://yourdomain.com
 ### "OAuth Error" Messages
 - **Problem**: Google provider not enabled in Supabase
 - **Fix**: Complete Step 2 - enable Google in Supabase and add your credentials
+
+### Port Mismatch Issues
+- **Problem**: App running on different port (e.g., 3001 instead of 3000)
+- **Fix**:
+  1. Update `NEXT_PUBLIC_SITE_URL` in `.env.local` to match the actual port
+  2. Update Supabase site URL in Authentication → URL Configuration
+  3. Add the new port to Google Console Authorized JavaScript origins
 
 ---
 

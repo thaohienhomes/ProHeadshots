@@ -22,13 +22,13 @@ const FooterSection: React.FC<FooterSectionProps> = ({
   children,
 }) => (
   <div className="flex flex-col items-center md:items-start">
-    <h3 className="text-gray-500 font-semibold">{title}</h3>
-    <ul className="mt-4 space-y-2 flex flex-col items-center md:items-start">
+    <h3 className="text-cyan-400 font-semibold text-sm tracking-wide">{title}</h3>
+    <ul className="mt-4 space-y-3 flex flex-col items-center md:items-start">
       {links.map((link, index) => (
         <li key={index}>
           <Link
             href={link.href}
-            className="text-white hover:text-gray-300"
+            className="text-navy-300 hover:text-white transition-colors duration-300 text-sm"
             prefetch={false}
           >
             {link.text}

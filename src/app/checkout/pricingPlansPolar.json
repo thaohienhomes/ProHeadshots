@@ -1,0 +1,48 @@
+{
+  "_documentation": {
+    "description": "Pricing plans configuration for CV Photo app using Polar Payment",
+    "fields": {
+      "name": "Plan name displayed to users",
+      "price": "Current price in USD",
+      "originalPrice": "Original price (crossed out) to show discount",
+      "headshots": "Number of headshots included in this plan",
+      "time": "Processing time in hours",
+      "isPopular": "Whether to show 'Most Popular' badge",
+      "polarProductId": "Polar Product ID for this plan",
+      "polarCheckoutUrl": "Polar checkout URL (will be generated dynamically)"
+    },
+    "IMPORTANT": "These are placeholder Polar Product IDs - replace with your actual Polar Product IDs from your dashboard"
+  },
+  "plans": [
+    {
+      "name": "Basic",
+      "price": 29,
+      "originalPrice": 58,
+      "headshots": 10,
+      "time": 3,
+      "isPopular": false,
+      "polarProductId": "28d871b5-be69-4594-af59-737fa189d5df",
+      "polarCheckoutUrl": "https://polar.sh/checkout/basic"
+    },
+    {
+      "name": "Professional",
+      "price": 39,
+      "originalPrice": 78,
+      "headshots": 100,
+      "time": 2,
+      "isPopular": true,
+      "polarProductId": "aff54590-b4c6-4e24-a966-8945f2ae2e19",
+      "polarCheckoutUrl": "https://polar.sh/checkout/professional"
+    },
+    {
+      "name": "Executive",
+      "price": 59,
+      "originalPrice": 118,
+      "headshots": 200,
+      "time": 1,
+      "isPopular": false,
+      "polarProductId": "e2696f0f-213f-4b15-9c78-e8b4e7d83116",
+      "polarCheckoutUrl": "https://polar.sh/checkout/executive"
+    }
+  ]
+}

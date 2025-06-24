@@ -2,8 +2,18 @@
 
 import sgMail from '@sendgrid/mail';
 import { MailDataRequired } from '@sendgrid/mail';
+import { logger } from '@/utils/logger';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
+// Check if SendGrid is properly configured
+const isEmailConfigured = () => {
+  const apiKey = process.env.SENDGRID_API_KEY;
+  return apiKey && apiKey !== 'YOUR_SENDGRID_API_KEY' && apiKey.startsWith('SG.');
+};
+
+// Only set API key if it's properly configured
+if (isEmailConfigured()) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
+}
 
 interface EmailData {
   to: string;
@@ -21,6 +31,20 @@ interface SimpleEmailData {
 
 //Template ID
 export async function sendEmail({ to, from, templateId, sendAt }: EmailData) {
+  // Check if email is configured
+  if (!isEmailConfigured()) {
+    logger.warn('Email not configured - skipping email send', 'EMAIL', {
+      to,
+      templateId,
+      reason: 'SendGrid API key not configured or invalid'
+    });
+    return {
+      success: true,
+      message: 'Email skipped - not configured',
+      skipped: true
+    };
+  }
+
   try {
     const msg: MailDataRequired = {
       to,
@@ -30,22 +54,42 @@ export async function sendEmail({ to, from, templateId, sendAt }: EmailData) {
     };
 
     await sgMail.send(msg);
+    logger.info('Template email sent successfully', 'EMAIL', {
+      to,
+      templateId,
+      hasScheduledSend: !!sendAt
+    });
     return { success: true, message: 'Email sent successfully' };
   } catch (error: any) {
-    console.error('Error sending email:', error);
-    if (error.response && error.response.body && error.response.body.errors) {
-      console.error('SendGrid errors:', error.response.body.errors);
-    }
-    return { 
-      success: false, 
-      error: error.message, 
-      details: error.response?.body?.errors 
+    logger.error('Error sending template email', error, 'EMAIL', {
+      to,
+      templateId,
+      sendGridErrors: error.response?.body?.errors
+    });
+    return {
+      success: false,
+      error: error.message,
+      details: error.response?.body?.errors
     };
   }
 }
 
 // Simple email function for admin notifications
 export async function sendSimpleEmail({ to, from, subject, html }: SimpleEmailData) {
+  // Check if email is configured
+  if (!isEmailConfigured()) {
+    logger.warn('Email not configured - skipping email send', 'EMAIL', {
+      to,
+      subject,
+      reason: 'SendGrid API key not configured or invalid'
+    });
+    return {
+      success: true,
+      message: 'Email skipped - not configured',
+      skipped: true
+    };
+  }
+
   try {
     const msg: MailDataRequired = {
       to,
@@ -55,16 +99,22 @@ export async function sendSimpleEmail({ to, from, subject, html }: SimpleEmailDa
     };
 
     await sgMail.send(msg);
+    logger.info('Simple email sent successfully', 'EMAIL', {
+      to,
+      subject,
+      hasHtmlContent: !!html
+    });
     return { success: true, message: 'Email sent successfully' };
   } catch (error: any) {
-    console.error('Error sending email:', error);
-    if (error.response && error.response.body && error.response.body.errors) {
-      console.error('SendGrid errors:', error.response.body.errors);
-    }
-    return { 
-      success: false, 
-      error: error.message, 
-      details: error.response?.body?.errors 
+    logger.error('Error sending simple email', error, 'EMAIL', {
+      to,
+      subject,
+      sendGridErrors: error.response?.body?.errors
+    });
+    return {
+      success: false,
+      error: error.message,
+      details: error.response?.body?.errors
     };
   }
 }

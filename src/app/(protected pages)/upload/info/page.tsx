@@ -105,251 +105,264 @@ export default function Page() {
   };
 
   return (
-    <div className="bg-mainWhite min-h-screen p-4 pt-8 md:pt-16 text-center">
+    <div className="bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 min-h-screen p-4 pt-8 md:pt-16 text-center">
       {/* 5-step progress bar */}
-      <div className="max-w-[240px] mx-auto mb-5">
-        <div className="flex justify-between items-center gap-2">
+      <div className="max-w-[280px] mx-auto mb-8">
+        <div className="flex justify-between items-center gap-3">
           {[1, 2, 3, 4, 5].map((step) => (
             <div key={step} className="flex-1">
               <div
-                className={`h-2 rounded-full ${
+                className={`h-3 rounded-full transition-all duration-300 ${
                   step <= 3
-                    ? "bg-gradient-to-r from-mainOrange to-mainGreen animate-gradient bg-[length:200%_200%]"
-                    : "bg-gray-200"
+                    ? "bg-gradient-to-r from-cyan-400 to-primary-500 shadow-lg shadow-cyan-400/25"
+                    : "bg-navy-700/50 border border-navy-600/30"
                 }`}
               ></div>
             </div>
           ))}
         </div>
-        <p className="text-[11px] text-mainBlack mt-2">Step 3 of 5</p>
+        <p className="text-sm text-navy-300 mt-3 font-medium">Step 3 of 5 - Personal Information</p>
       </div>
 
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-mainBlack mb-2 max-w-2xl mx-auto">
-          Add your personal info
-        </h1>
-        <p className="text-md text-mainBlack mb-8 max-w-xl mx-auto">
-          This information will help guide our AI towards creating headshots
-          that look like you. It will be deleted after your headshots are
-          completed.
-        </p>
+        <div className="mb-10">
+          <h1 className="text-4xl font-bold mb-4 max-w-2xl mx-auto">
+            <span className="bg-gradient-to-r from-white via-cyan-100 to-primary-200 bg-clip-text text-transparent">
+              Add Your Personal Info
+            </span>
+          </h1>
+          <p className="text-lg text-navy-300 max-w-2xl mx-auto leading-relaxed">
+            This information will help guide our AI towards creating headshots
+            that look like you. All data is securely deleted after your headshots are
+            completed.
+          </p>
+        </div>
 
-        <form className="max-w-md mx-auto text-left">
-          {/* Name input */}
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-mainBlack mb-2">
-              Name *
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              value={formData.name}
-              onChange={handleInputChange}
-              className="w-full p-2 border border-mainBlack rounded bg-mainWhite text-mainBlack"
-            />
-          </div>
+        <div className="max-w-lg mx-auto bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 rounded-2xl p-8">
+          <form className="text-left space-y-6">
+            {/* Name input */}
+            <div>
+              <label htmlFor="name" className="block text-white font-medium mb-3">
+                Name *
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                value={formData.name}
+                onChange={handleInputChange}
+                className="w-full p-4 border border-cyan-400/30 rounded-xl bg-navy-700/50 text-white placeholder-navy-400 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300"
+                placeholder="Enter your name"
+              />
+            </div>
 
-          {/* Age select */}
-          <div className="mb-4">
-            <label htmlFor="age" className="block text-mainBlack mb-2">
-              Age *
-            </label>
-            <select
-              id="age"
-              name="age"
-              required
-              value={formData.age}
-              onChange={handleSelectChange}
-              className="w-full p-2 border border-mainBlack rounded bg-mainWhite text-mainBlack"
-            >
-              <option value="">Select your age</option>
-              {[
-                "12-18 years",
-                "19-25 years",
-                "26-29 years",
-                "30-35 years",
-                "36-45 years",
-                "46-55 years",
-                "56-65 years",
-                "66-75 years",
-                "76+ years",
-              ].map((age) => (
-                <option key={age} value={age}>
-                  {age}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Age select */}
+            <div>
+              <label htmlFor="age" className="block text-white font-medium mb-3">
+                Age *
+              </label>
+              <select
+                id="age"
+                name="age"
+                required
+                value={formData.age}
+                onChange={handleSelectChange}
+                className="w-full p-4 border border-cyan-400/30 rounded-xl bg-navy-700/50 text-white focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300"
+              >
+                <option value="" className="bg-navy-800 text-navy-400">Select your age</option>
+                {[
+                  "12-18 years",
+                  "19-25 years",
+                  "26-29 years",
+                  "30-35 years",
+                  "36-45 years",
+                  "46-55 years",
+                  "56-65 years",
+                  "66-75 years",
+                  "76+ years",
+                ].map((age) => (
+                  <option key={age} value={age} className="bg-navy-800 text-white">
+                    {age}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Ethnicity select */}
-          <div className="mb-4">
-            <label htmlFor="ethnicity" className="block text-mainBlack mb-2">
-              Ethnicity *
-            </label>
-            <select
-              id="ethnicity"
-              name="ethnicity"
-              required
-              value={formData.ethnicity}
-              onChange={handleSelectChange}
-              className="w-full p-2 border border-mainBlack rounded bg-mainWhite text-mainBlack"
-            >
-              <option value="">Select your ethnicity</option>
-              {[
-                "African",
-                "Arabic",
-                "Asian",
-                "Black or African American",
-                "Caribbean",
-                "Indian",
-                "Melanesian",
-                "Polynesian",
-                "European",
-                "Caucasian",
-                "Latin American",
-                "Hispanic",
-                "Other",
-              ].map((ethnicity) => (
-                <option key={ethnicity} value={ethnicity}>
-                  {ethnicity}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Ethnicity select */}
+            <div>
+              <label htmlFor="ethnicity" className="block text-white font-medium mb-3">
+                Ethnicity *
+              </label>
+              <select
+                id="ethnicity"
+                name="ethnicity"
+                required
+                value={formData.ethnicity}
+                onChange={handleSelectChange}
+                className="w-full p-4 border border-cyan-400/30 rounded-xl bg-navy-700/50 text-white focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300"
+              >
+                <option value="" className="bg-navy-800 text-navy-400">Select your ethnicity</option>
+                {[
+                  "African",
+                  "Arabic",
+                  "Asian",
+                  "Black or African American",
+                  "Caribbean",
+                  "Indian",
+                  "Melanesian",
+                  "Polynesian",
+                  "European",
+                  "Caucasian",
+                  "Latin American",
+                  "Hispanic",
+                  "Other",
+                ].map((ethnicity) => (
+                  <option key={ethnicity} value={ethnicity} className="bg-navy-800 text-white">
+                    {ethnicity}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Height select */}
-          <div className="mb-4">
-            <label htmlFor="height" className="block text-mainBlack mb-2">
-              Height *
-            </label>
-            <select
-              id="height"
-              name="height"
-              required
-              value={formData.height}
-              onChange={handleSelectChange}
-              className="w-full p-2 border border-mainBlack rounded bg-mainWhite text-mainBlack"
-            >
-              <option value="">Select your height</option>
-              {[
-                "< 150 cm (4'11\")",
-                "150 - 160 cm (4'11\" - 5'3\")",
-                "161 - 170 cm (5'3\" - 5'7\")",
-                "171 - 180 cm (5'7\" - 5'11\")",
-                "181 - 190 cm (5'11\" - 6'3\")",
-                "≥ 190 cm (6'3\"+)",
-              ].map((height) => (
-                <option key={height} value={height}>
-                  {height}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Height select */}
+            <div>
+              <label htmlFor="height" className="block text-white font-medium mb-3">
+                Height *
+              </label>
+              <select
+                id="height"
+                name="height"
+                required
+                value={formData.height}
+                onChange={handleSelectChange}
+                className="w-full p-4 border border-cyan-400/30 rounded-xl bg-navy-700/50 text-white focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300"
+              >
+                <option value="" className="bg-navy-800 text-navy-400">Select your height</option>
+                {[
+                  "< 150 cm (4'11\")",
+                  "150 - 160 cm (4'11\" - 5'3\")",
+                  "161 - 170 cm (5'3\" - 5'7\")",
+                  "171 - 180 cm (5'7\" - 5'11\")",
+                  "181 - 190 cm (5'11\" - 6'3\")",
+                  "≥ 190 cm (6'3\"+)",
+                ].map((height) => (
+                  <option key={height} value={height} className="bg-navy-800 text-white">
+                    {height}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Body Type select */}
-          <div className="mb-4">
-            <label htmlFor="bodyType" className="block text-mainBlack mb-2">
-              Body Type *
-            </label>
-            <select
-              id="bodyType"
-              name="bodyType"
-              required
-              value={formData.bodyType}
-              onChange={handleSelectChange}
-              className="w-full p-2 border border-mainBlack rounded bg-mainWhite text-mainBlack"
-            >
-              <option value="">Select your body type</option>
-              {[
-                "Ectomorph (Slim)",
-                "Mesomorph (Athletic)",
-                "Endomorph (Full)",
-              ].map((bodyType) => (
-                <option key={bodyType} value={bodyType}>
-                  {bodyType}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Body Type select */}
+            <div>
+              <label htmlFor="bodyType" className="block text-white font-medium mb-3">
+                Body Type *
+              </label>
+              <select
+                id="bodyType"
+                name="bodyType"
+                required
+                value={formData.bodyType}
+                onChange={handleSelectChange}
+                className="w-full p-4 border border-cyan-400/30 rounded-xl bg-navy-700/50 text-white focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all duration-300"
+              >
+                <option value="" className="bg-navy-800 text-navy-400">Select your body type</option>
+                {[
+                  "Ectomorph (Slim)",
+                  "Mesomorph (Athletic)",
+                  "Endomorph (Full)",
+                ].map((bodyType) => (
+                  <option key={bodyType} value={bodyType} className="bg-navy-800 text-white">
+                    {bodyType}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Eye Color buttons */}
-          <div className="mb-4">
-            <label className="block text-mainBlack mb-2">Eye Color *</label>
-            <div className="grid grid-cols-3 gap-2">
-              {[
-                "Hazel",
-                "Gray",
-                "Light brown",
-                "Blue",
-                "Green",
-                "Dark brown",
-              ].map((eyeColor) => (
-                <button
-                  key={eyeColor}
-                  type="button"
-                  onClick={() => handleEyeColorChange(eyeColor)}
-                  className={`flex items-center justify-start p-2 border ${
-                    formData.eyeColor === eyeColor
-                      ? "border-mainOrange bg-mainOrange/10"
-                      : "border-mainBlack bg-mainWhite"
-                  } rounded text-mainBlack hover:bg-opacity-90 transition-colors`}
-                >
-                  <div
-                    className={`w-6 h-6 rounded-full mr-2 ${getEyeColorClass(
-                      eyeColor
-                    )} ${
+            {/* Eye Color buttons */}
+            <div>
+              <label className="block text-white font-medium mb-3">Eye Color *</label>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  "Hazel",
+                  "Gray",
+                  "Light brown",
+                  "Blue",
+                  "Green",
+                  "Dark brown",
+                ].map((eyeColor) => (
+                  <button
+                    key={eyeColor}
+                    type="button"
+                    onClick={() => handleEyeColorChange(eyeColor)}
+                    className={`flex items-center justify-start p-4 border rounded-xl transition-all duration-300 ${
                       formData.eyeColor === eyeColor
-                        ? "ring-2 ring-mainOrange"
-                        : ""
+                        ? "border-cyan-400 bg-cyan-400/10 shadow-lg shadow-cyan-400/25"
+                        : "border-cyan-400/30 bg-navy-700/30 hover:border-cyan-400/50 hover:bg-navy-700/50"
                     }`}
-                  ></div>
-                  <span>{eyeColor}</span>
-                </button>
-              ))}
+                  >
+                    <div
+                      className={`w-6 h-6 rounded-full mr-3 ${getEyeColorClass(
+                        eyeColor
+                      )} ${
+                        formData.eyeColor === eyeColor
+                          ? "ring-2 ring-cyan-400"
+                          : ""
+                      }`}
+                    ></div>
+                    <span className="text-white font-medium">{eyeColor}</span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Gender radio buttons */}
-          <div className="mb-4">
-            <label className="block text-mainBlack mb-2">Gender *</label>
-            <div className="flex gap-4">
-              {["Male", "Female"].map((gender) => (
-                <label
-                  key={gender}
-                  className="flex items-center text-mainBlack"
-                >
-                  <input
-                    type="radio"
-                    name="gender"
-                    value={gender}
-                    required
-                    checked={
+            {/* Gender radio buttons */}
+            <div>
+              <label className="block text-white font-medium mb-3">Gender *</label>
+              <div className="grid grid-cols-2 gap-3">
+                {["Male", "Female"].map((gender) => (
+                  <label
+                    key={gender}
+                    className={`flex items-center justify-center p-4 border rounded-xl cursor-pointer transition-all duration-300 ${
                       formData.gender === (gender === "Male" ? "man" : "woman")
-                    }
-                    onChange={handleInputChange}
-                    className="mr-2"
-                  />
-                  {gender}
-                </label>
-              ))}
+                        ? "border-cyan-400 bg-cyan-400/10 shadow-lg shadow-cyan-400/25"
+                        : "border-cyan-400/30 bg-navy-700/30 hover:border-cyan-400/50 hover:bg-navy-700/50"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="gender"
+                      value={gender}
+                      required
+                      checked={
+                        formData.gender === (gender === "Male" ? "man" : "woman")
+                      }
+                      onChange={handleInputChange}
+                      className="sr-only"
+                    />
+                    <span className="text-white font-medium">{gender}</span>
+                  </label>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className={`bg-mainOrange text-mainBlack py-3 px-6 rounded-full font-semibold transition-colors inline-block ${
-              isFormValid && !isSubmitting
-                ? "hover:bg-opacity-90"
-                : "opacity-50 cursor-not-allowed"
-            }`}
-            disabled={!isFormValid || isSubmitting}
-          >
-            {isSubmitting ? "Processing..." : "Next →"}
-          </button>
-        </form>
+            <div className="pt-4">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className={`w-full py-4 px-8 rounded-xl font-semibold transition-all duration-300 ${
+                  isFormValid && !isSubmitting
+                    ? "bg-gradient-to-r from-cyan-500 to-primary-600 text-white hover:from-cyan-400 hover:to-primary-500 hover:scale-105 shadow-lg hover:shadow-xl"
+                    : "bg-navy-700/50 text-navy-400 cursor-not-allowed border border-navy-600/30"
+                }`}
+                disabled={!isFormValid || isSubmitting}
+              >
+                {isSubmitting ? "Processing..." : "Continue to Styles →"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

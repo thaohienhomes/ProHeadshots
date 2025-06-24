@@ -19,27 +19,49 @@ export async function signInWithGoogleAction(): Promise<never> {
   // Get the redirect URL - prioritize production domain over localhost
   const getRedirectUrl = () => {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-    
-    // If we're in development, use localhost
-    if ((process.env.NODE_ENV as string) === 'development' || (process.env.NODE_ENV as string) === 'DEVELOPMENT') {
-      return `${siteUrl || 'http://localhost:3000'}/auth/callback`;
+
+    console.log('🔍 OAuth redirect URL debug:', {
+      siteUrl,
+      nodeEnv: process.env.NODE_ENV,
+      environment: process.env.ENVIRONMENT
+    });
+
+    // If we're in development, use the configured site URL or fallback to localhost:3000
+    if ((process.env.NODE_ENV as string) === 'development' || (process.env.ENVIRONMENT as string) === 'DEVELOPMENT') {
+      const redirectUrl = `${siteUrl || 'http://localhost:3000'}/auth/callback`;
+      console.log('🔄 Development redirect URL:', redirectUrl);
+      return redirectUrl;
     }
-    
+
     // For production, never use localhost
     if (siteUrl && !siteUrl.includes('localhost')) {
-      return `${siteUrl}/auth/callback`;
+      const redirectUrl = `${siteUrl}/auth/callback`;
+      console.log('🚀 Production redirect URL:', redirectUrl);
+      return redirectUrl;
     }
-    
+
     // Fallback: construct from environment or use your known domain
-    // Replace 'cvphoto.app' with your actual domain
-    return 'https://cvphoto.app/auth/callback';
+    const fallbackUrl = 'https://cvphoto.app/auth/callback';
+    console.log('⚠️ Fallback redirect URL:', fallbackUrl);
+    return fallbackUrl;
   };
+
+  const redirectUrl = getRedirectUrl();
+  console.log('🔐 Starting Google OAuth with redirect URL:', redirectUrl);
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: getRedirectUrl(),
+      redirectTo: redirectUrl,
+      skipBrowserRedirect: false,
     },
+  });
+
+  console.log('📊 OAuth response:', {
+    hasData: !!data,
+    hasUrl: !!data?.url,
+    hasError: !!error,
+    errorMessage: error?.message
   });
 
   if (error) {
@@ -57,12 +79,14 @@ export async function signInWithGoogleAction(): Promise<never> {
 export async function signInAction(formData: FormData): Promise<never> {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const next = formData.get("next") as string;
 
   if (!email || !password) {
+    const nextParam = next ? `&next=${encodeURIComponent(next)}` : '';
     return redirect(
       `/auth?message=${encodeURIComponent(
         "Please enter both email and password"
-      )}`
+      )}${nextParam}`
     );
   }
 
@@ -94,7 +118,20 @@ export async function signInAction(formData: FormData): Promise<never> {
       errorMessage = `Unexpected error: ${error}`;
     }
 
-    return redirect(`/auth?message=${encodeURIComponent(errorMessage)}`);
+    const nextParam = next ? `&next=${encodeURIComponent(next)}` : '';
+    return redirect(`/auth?message=${encodeURIComponent(errorMessage)}${nextParam}`);
+  }
+
+  // Check if user has completed onboarding and redirect accordingly
+  const { data: userData } = await supabase
+    .from('userTable')
+    .select('paymentStatus, workStatus')
+    .eq('id', (await supabase.auth.getUser()).data.user?.id)
+    .single();
+
+  // If there's a next URL and user has paid, honor it
+  if (next && userData?.paymentStatus && userData.paymentStatus !== "NULL") {
+    return redirect(next);
   }
 
   return redirect("/dashboard");

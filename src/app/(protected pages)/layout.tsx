@@ -19,7 +19,7 @@ export default async function ProtectedLayout({
 
     // If we have either a session or a user, allow access
     if (!session && !user) {
-      redirect("/login");
+      redirect("/auth");
     }
 
     return <>{children}</>;

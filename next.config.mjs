@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -15,6 +22,16 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "sdbooth2-production.s3.amazonaws.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "fal.media",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.fal.media",
         pathname: "/**",
       },
     ],

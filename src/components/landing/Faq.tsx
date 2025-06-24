@@ -7,38 +7,48 @@ const FaqItem = ({
   question: string;
   answer: string;
 }) => (
-  <div className="bg-mainWhite p-4 rounded-lg shadow-md">
-    <h3 className="text-lg font-semibold text-mainBlack mb-1">{question}</h3>
-    <p className="text-sm text-mainBlack">{answer}</p>
+  <div className="group relative">
+    <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/5 to-primary-500/5 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    <div className="relative bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 p-6 rounded-xl shadow-md hover:border-cyan-400/40 transition-all duration-300">
+      <h3 className="text-lg font-semibold text-white mb-3">{question}</h3>
+      <p className="text-navy-300 text-sm leading-relaxed">{answer}</p>
+    </div>
   </div>
 );
 
 export default function Faq() {
   return (
-    <section className="w-full py-8 md:py-16 lg:py-24 bg-mainBlack" id="faq">
-      <div className="max-w-section mx-auto px-section">
+    <section className="relative w-full py-16 md:py-24 lg:py-32 bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 overflow-hidden" id="faq">
+      {/* Background decorations */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-cyan-400/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-tl from-primary-500/5 to-transparent rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 max-w-section mx-auto px-section">
         {/* Header Section */}
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3 leading-tight text-mainWhite">
-            Frequently Asked Questions
-          </h2>
-          <div className="flex items-center justify-center">
-            <span className="text-mainOrange text-xl mr-2 hidden sm:inline">
-              📷
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            <span className="bg-gradient-to-r from-white via-cyan-100 to-primary-200 bg-clip-text text-transparent">
+              Frequently Asked Questions
             </span>
-            <p className="text-mainWhite text-base">
-              Full commercial rights and ownership of your AI-generated
-              headshots
-            </p>
+          </h2>
+          <div className="flex items-center justify-center mb-4">
+            <div className="flex items-center gap-3 bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 rounded-full px-6 py-3">
+              <span className="text-cyan-400 text-xl">📷</span>
+              <p className="text-white text-base font-medium">
+                Full commercial rights and ownership of your AI-generated headshots
+              </p>
+            </div>
           </div>
-          <p className="text-mainWhite text-base mt-3">
+          <p className="text-navy-300 text-lg max-w-3xl mx-auto">
             Get answers to common questions about our professional AI-generated
-            headshot service for individuals and remote teams.
+            headshot service powered by Flux Pro Ultra, Imagen4, and Recraft V3.
           </p>
         </div>
 
         {/* FAQ Items Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <FaqItem
             question="What kind of photos do I need to upload?"
             answer="Make variety a priority. Varied facial expressions and varied backgrounds, taken at various times of the day, are the keys to high quality input photos. Oh, and minimal makeup and accessories, please!"

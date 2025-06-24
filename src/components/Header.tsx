@@ -74,7 +74,7 @@ export default function Header({
   };
 
   return (
-    <div className="sticky top-0 z-50 w-full bg-mainBlack">
+    <div className="sticky top-0 z-50 w-full bg-gradient-to-r from-navy-950 via-navy-900 to-navy-800 border-b border-cyan-400/10">
       {signOutError && (
         <div className="absolute top-12 right-4 z-60 p-3 bg-red-100 border border-red-200 text-red-700 text-sm rounded-md shadow-lg max-w-sm">
           <div className="flex items-start justify-between">
@@ -88,12 +88,15 @@ export default function Header({
           </div>
         </div>
       )}
-      <header className="flex h-12 w-full items-center justify-between px-section max-w-section mx-auto">
+      <header className="flex h-16 w-full items-center justify-between px-section max-w-section mx-auto">
         {backDashboard ? (
           <Link
             href="/dashboard"
-            className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-mainWhite bg-opacity-20 bg-mainWhite rounded hover:bg-opacity-30 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 rounded-lg hover:border-cyan-400/40 hover:bg-navy-700/50 transition-all duration-300"
           >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
             Back to Dashboard
           </Link>
         ) : (
@@ -105,13 +108,18 @@ export default function Header({
         )}
 
         <Link
-          className="flex items-center absolute left-1/2 transform -translate-x-1/2"
+          className="flex items-center absolute left-1/2 transform -translate-x-1/2 group"
           href="/"
         >
-          <div className="flex items-center gap-2 sm:gap-2.5">
-            <Logo className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
-            <span className="font-sans font-light tracking-wider text-mainWhite text-base sm:text-lg md:text-xl uppercase">
-              cvphoto
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-primary-500 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
+              <div className="relative p-2 bg-gradient-to-r from-cyan-500 to-primary-600 rounded-lg">
+                <Logo className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+              </div>
+            </div>
+            <span className="font-bold tracking-wide text-white text-lg sm:text-xl md:text-2xl bg-gradient-to-r from-cyan-100 to-primary-200 bg-clip-text text-transparent">
+              CVPHOTO
             </span>
           </div>
           <span className="sr-only">CVPHOTO - AI Headshot Studio</span>
@@ -122,7 +130,7 @@ export default function Header({
             <button
               onClick={handleSignOut}
               disabled={isSigningOut}
-              className="px-3 py-1.5 text-sm font-medium text-mainWhite opacity-70 hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity border border-mainWhite border-opacity-30 rounded-md"
+              className="px-4 py-2 text-sm font-medium text-white bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 rounded-lg hover:border-cyan-400/40 hover:bg-navy-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
             >
               {isSigningOut ? "Signing out..." : "Sign Out"}
             </button>
@@ -133,7 +141,7 @@ export default function Header({
           </div>
         )}
       </header>
-      <div className="h-px w-full bg-mainWhite opacity-20"></div>
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent"></div>
     </div>
   );
 }

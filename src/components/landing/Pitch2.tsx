@@ -2,7 +2,7 @@ import { User, Twitter, Users, Camera } from "lucide-react";
 
 const LinkedInIcon = () => (
   <svg
-    className="w-8 h-8 text-mainOrange mr-3"
+    className="w-8 h-8 text-cyan-400 mr-3"
     viewBox="0 0 24 24"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -20,29 +20,43 @@ const FeatureCard = ({
   description: string;
   icon: React.ElementType;
 }) => (
-  <div className="bg-mainWhite p-6 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105">
-    <div className="flex items-center mb-4">
-      <Icon className="w-8 h-8 text-mainOrange mr-3" />
-      <h3 className="text-xl font-bold text-mainBlack">{title}</h3>
+  <div className="group relative">
+    <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-primary-500/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    <div className="relative bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 p-6 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105 hover:border-cyan-400/40">
+      <div className="flex items-center mb-4">
+        <Icon className="w-8 h-8 text-cyan-400 mr-3" />
+        <h3 className="text-xl font-bold text-white">{title}</h3>
+      </div>
+      <p className="text-navy-300 text-sm leading-relaxed">{description}</p>
     </div>
-    <p className="text-mainBlack text-sm leading-relaxed">{description}</p>
   </div>
 );
 
 export default function Pitch2() {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-mainBlack">
-      <div className="max-w-section mx-auto px-section">
+    <section className="relative w-full py-16 md:py-24 lg:py-32 bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-gradient-to-br from-cyan-400/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-gradient-to-tl from-primary-500/5 to-transparent rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 max-w-section mx-auto px-section">
         {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-3xl font-semibold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl mb-4 leading-tight text-mainWhite">
-            Fix Your Professional Branding Overnight
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl mb-6 leading-tight">
+            <span className="bg-gradient-to-r from-white via-cyan-100 to-primary-200 bg-clip-text text-transparent">
+              Fix Your Professional Branding
+            </span>
+            <span className="block mt-2 text-white">Overnight</span>
           </h1>
           <div className="flex items-center justify-center">
-            <span className="text-mainOrange text-2xl mr-2 hidden sm:inline">✨</span>
-            <p className="text-mainWhite text-lg">
-              Used by individuals, small teams and professional photographers
-            </p>
+            <div className="flex items-center gap-3 bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 rounded-full px-6 py-3">
+              <span className="text-cyan-400 text-2xl">✨</span>
+              <p className="text-white text-lg font-medium">
+                Used by individuals, small teams and professional photographers
+              </p>
+            </div>
           </div>
         </div>
 
@@ -72,24 +86,26 @@ export default function Pitch2() {
 
         {/* Updated Testimonial Section */}
         <div className="text-center max-w-xl mx-auto">
-          <div className="flex justify-center items-center mb-2">
-            {[...Array(5)].map((_, i) => (
-              <svg
-                key={i}
-                className="w-6 h-6 text-mainOrange"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-              </svg>
-            ))}
-          </div>
-          <p className="italic mb-2 text-mainWhite text-lg">
-            &ldquo;I needed a business photo with a 24 hour turnaround - you
-            beat it by 22 hours!&rdquo;
-          </p>
-          <div className="flex items-center justify-center">
-            <span className="font-semibold text-mainWhite">Tobias Sjöblom</span>
+          <div className="bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 rounded-2xl p-8">
+            <div className="flex justify-center items-center mb-4">
+              {[...Array(5)].map((_, i) => (
+                <svg
+                  key={i}
+                  className="w-6 h-6 text-cyan-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              ))}
+            </div>
+            <p className="italic mb-4 text-white text-lg leading-relaxed">
+              &ldquo;I needed a business photo with a 24 hour turnaround - you
+              beat it by 22 hours!&rdquo;
+            </p>
+            <div className="flex items-center justify-center">
+              <span className="font-semibold text-cyan-400">Tobias Sjöblom</span>
+            </div>
           </div>
         </div>
       </div>

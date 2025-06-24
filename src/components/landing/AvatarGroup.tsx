@@ -13,9 +13,9 @@ const memberData = [
 
 // AvatarGroup component
 export const AvatarGroup = () => (
-  <div className="flex items-center -space-x-4">
+  <div className="flex items-center -space-x-3">
     {memberData.map(({ initials, imagePath }) => (
-      <Avatar key={initials} className="border-[5px] border-mainBlack">
+      <Avatar key={initials} className="border-[3px] border-cyan-400/50 hover:border-cyan-400 transition-colors duration-300 shadow-lg">
         <Image
           src={imagePath}
           alt={initials}
@@ -32,11 +32,10 @@ export const AvatarGroup = () => (
 // MembershipInfo component
 export const MembershipInfo = () => (
   <div className="text-left">
-    <p className="text-m font-semibold text-mainWhite">
-      {" "}
+    <p className="text-base font-semibold text-white">
       92% of customers recommend us
     </p>
-    <p className="text-sm font-semibold text-opacity-80 text-mainWhite">
+    <p className="text-sm font-medium text-navy-300">
       Trusted by 100+ satisfied customers
     </p>
   </div>
@@ -44,7 +43,7 @@ export const MembershipInfo = () => (
 
 // Combined AvatarGroupWithInfo component
 export const AvatarGroupWithInfo = () => (
-  <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-start space-y-4 lg:space-y-0 lg:space-x-4">
+  <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-start space-y-4 lg:space-y-0 lg:space-x-6 bg-navy-800/30 backdrop-blur-sm border border-cyan-400/20 rounded-full px-6 py-4">
     <AvatarGroup />
     <MembershipInfo />
   </div>

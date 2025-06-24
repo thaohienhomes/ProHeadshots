@@ -6,29 +6,46 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { track } from "@vercel/analytics";
+import { logger } from "@/utils/logger";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ring-offset-gray-950 focus-visible:ring-gray-300",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium ring-offset-white transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
+        // Primary design system variants
         default:
-          "bg-mainWhite text-gray-50 hover:bg-gray-900/90 bg-mainWhite text-mainBlack hover:bg-gray-50/90",
+          "bg-gradient-to-r from-cyan-500 to-primary-600 text-white hover:from-cyan-400 hover:to-primary-500 shadow-lg hover:shadow-xl hover:scale-105 focus-visible:ring-cyan-400",
+        primary:
+          "bg-gradient-to-r from-cyan-500 to-primary-600 text-white hover:from-cyan-400 hover:to-primary-500 shadow-lg hover:shadow-xl hover:scale-105 focus-visible:ring-cyan-400",
+        primaryOutline:
+          "border-2 border-cyan-400 text-cyan-400 bg-transparent hover:bg-cyan-400 hover:text-navy-900 focus-visible:ring-cyan-400",
+        navy:
+          "bg-navy-800 text-white hover:bg-navy-700 border border-navy-600 hover:border-navy-500 focus-visible:ring-navy-400",
+        glass:
+          "bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 text-white hover:border-cyan-400/40 hover:bg-navy-700/50 focus-visible:ring-cyan-400",
+        accent:
+          "bg-gradient-to-r from-accent-500 to-cyan-500 text-white hover:from-accent-400 hover:to-cyan-400 shadow-lg hover:shadow-xl hover:scale-105 focus-visible:ring-accent-400",
+
+        // Utility variants
         destructive:
-          "bg-red-500 text-gray-50 hover:bg-red-500/90 bg-red-900 text-gray-50 hover:bg-red-900/90",
+          "bg-red-500 text-white hover:bg-red-600 shadow-lg hover:shadow-xl focus-visible:ring-red-400",
         outline:
-          "border border-gray-200 bg-white hover:bg-gray-100 hover:text-gray-900 border-gray-800 bg-gray-950 hover:bg-gray-800 hover:text-gray-50",
+          "border-2 border-navy-600 bg-transparent text-white hover:bg-navy-800 hover:border-navy-500 focus-visible:ring-navy-400",
         secondary:
-          "bg-gray-100 text-gray-900 hover:bg-gray-100/80 bg-gray-800 text-gray-50 hover:bg-gray-800/80",
+          "bg-navy-700 text-white hover:bg-navy-600 border border-navy-600 hover:border-navy-500 focus-visible:ring-navy-400",
         ghost:
-          "hover:bg-gray-100 hover:text-gray-900 hover:bg-gray-800 hover:text-gray-50",
-        link: "text-gray-900 underline-offset-4 hover:underline text-gray-50",
+          "text-white hover:bg-navy-800/50 hover:backdrop-blur-sm focus-visible:ring-cyan-400",
+        link:
+          "text-cyan-400 underline-offset-4 hover:underline hover:text-cyan-300 focus-visible:ring-cyan-400",
+
+        // Legacy variants (deprecated - use new variants instead)
         mainOrange:
-          "bg-mainOrange text-[#1A1A1A] hover:bg-mainOrange/90 focus-visible:ring-mainOrange",
+          "bg-gradient-to-r from-cyan-500 to-primary-600 text-white hover:from-cyan-400 hover:to-primary-500 shadow-lg hover:shadow-xl hover:scale-105 focus-visible:ring-cyan-400",
         transparent:
-          "bg-transparent text-mainBlack border border-mainBlack hover:bg-mainBlack hover:text-white hover:bg-mainBlack hover:text-white",
+          "border-2 border-cyan-400 text-cyan-400 bg-transparent hover:bg-cyan-400 hover:text-navy-900 focus-visible:ring-cyan-400",
         mainBlack:
-          "bg-mainBlack text-mainWhite hover:bg-mainBlack/80 focus-visible:ring-mainWhite",
+          "bg-navy-800 text-white hover:bg-navy-700 border border-navy-600 hover:border-navy-500 focus-visible:ring-navy-400",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -62,10 +79,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       if (tracker) {
-        // Here you would implement your tracking logic
-        //console.log(`Tracked: ${tracker}`);
+        // Track with both Vercel Analytics and our logger
         track(`${tracker}`);
-        console.log("button click, tracker value:", tracker);
+        logger.user('Button clicked', undefined, {
+          tracker,
+          href,
+          variant,
+          size
+        });
       }
 
       if (href) {

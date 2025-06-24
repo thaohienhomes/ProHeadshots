@@ -4,8 +4,8 @@
 @tailwind utilities;
 
 body {
-  color: #f6f5ec;
-  background-color: #091e25;
+  color: #f8fafc;
+  background-color: #0f172a;
 }
 
 /* USP icons*/
@@ -30,8 +30,8 @@ body {
 }
 
 .loader {
-  border: 5px solid #091e25; /* mainBlack */
-  border-top: 5px solid #ff914e; /* mainGreen */
+  border: 5px solid #0f172a; /* navy-900 */
+  border-top: 5px solid #22d3ee; /* cyan-400 */
   border-radius: 50%;
   width: 50px;
   height: 50px;
