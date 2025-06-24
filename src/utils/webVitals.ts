@@ -1,5 +1,5 @@
 // Enhanced Web Vitals and performance monitoring
-import { getCLS, getFID, getFCP, getLCP, getTTFB, Metric } from 'web-vitals';
+import { onCLS, onINP, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals';
 import { trackPerformanceMetric } from './performanceMonitoring';
 import { trackPerformance } from './googleAnalytics';
 import { trackPerformanceIssue } from './errorTracking';
@@ -8,7 +8,7 @@ import { logger } from './logger';
 // Performance thresholds (in milliseconds)
 const PERFORMANCE_THRESHOLDS = {
   LCP: 2500,    // Largest Contentful Paint
-  FID: 100,     // First Input Delay
+  INP: 200,     // Interaction to Next Paint (replaced FID)
   CLS: 0.1,     // Cumulative Layout Shift (unitless)
   FCP: 1800,    // First Contentful Paint
   TTFB: 800,    // Time to First Byte
@@ -57,11 +57,11 @@ class WebVitalsMonitor {
 
     try {
       // Monitor Core Web Vitals
-      getCLS(this.handleMetric.bind(this));
-      getFID(this.handleMetric.bind(this));
-      getFCP(this.handleMetric.bind(this));
-      getLCP(this.handleMetric.bind(this));
-      getTTFB(this.handleMetric.bind(this));
+      onCLS(this.handleMetric.bind(this));
+      onINP(this.handleMetric.bind(this)); // INP replaced FID in web-vitals v3
+      onFCP(this.handleMetric.bind(this));
+      onLCP(this.handleMetric.bind(this));
+      onTTFB(this.handleMetric.bind(this));
 
       // Monitor custom performance metrics
       this.monitorCustomMetrics();
@@ -313,7 +313,7 @@ class WebVitalsMonitor {
       case 'CLS':
         return 'score';
       case 'LCP':
-      case 'FID':
+      case 'INP':
       case 'FCP':
       case 'TTFB':
         return 'ms';
