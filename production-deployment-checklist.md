@@ -53,8 +53,8 @@ GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID_HERE
 GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET_HERE
 
 # Site Configuration
-NEXT_PUBLIC_SITE_URL=https://cvphoto.app
-APP_WEBHOOK_SECRET=CVPHOTO_PRODUCTION_WEBHOOK_SECRET_2024
+NEXT_PUBLIC_SITE_URL=https://coolpix.me
+APP_WEBHOOK_SECRET=COOLPIX_PRODUCTION_WEBHOOK_SECRET_2024
 
 # Service Toggles
 AI_ENABLED=true
@@ -64,8 +64,8 @@ PAYMENT_ENABLED=true
 ## 🌐 DOMAIN & DNS SETUP
 
 ### Domain Configuration
-- **Primary Domain**: cvphoto.app
-- **Redirect**: www.cvphoto.app → cvphoto.app
+- **Primary Domain**: coolpix.me
+- **Redirect**: www.coolpix.me → coolpix.me
 
 ### DNS Records Needed
 ```
