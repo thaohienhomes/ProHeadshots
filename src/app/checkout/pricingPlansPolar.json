@@ -11,7 +11,7 @@
       "polarProductId": "Polar Product ID for this plan",
       "polarCheckoutUrl": "Polar checkout URL (will be generated dynamically)"
     },
-    "IMPORTANT": "These are placeholder Polar Product IDs - replace with your actual Polar Product IDs from your dashboard"
+    "IMPORTANT": "These are the actual Polar Product IDs from the dashboard - verified on 2025-06-24"
   },
   "plans": [
     {
@@ -21,7 +21,7 @@
       "headshots": 10,
       "time": 3,
       "isPopular": false,
-      "polarProductId": "28d871b5-be69-4594-af59-737fa189d5df",
+      "polarProductId": "5b26fbdf-87ee-4002-aecf-82f6278a4831",
       "polarCheckoutUrl": "https://polar.sh/checkout/basic"
     },
     {
@@ -31,7 +31,7 @@
       "headshots": 100,
       "time": 2,
       "isPopular": true,
-      "polarProductId": "aff54590-b4c6-4e24-a966-8945f2ae2e19",
+      "polarProductId": "2e38da8b-460f-4bb6-b7ab-e6e0056d99f5",
       "polarCheckoutUrl": "https://polar.sh/checkout/professional"
     },
     {
@@ -41,7 +41,7 @@
       "headshots": 200,
       "time": 1,
       "isPopular": false,
-      "polarProductId": "e2696f0f-213f-4b15-9c78-e8b4e7d83116",
+      "polarProductId": "4fb38fdf-ebd1-484e-9f42-07781504af78",
       "polarCheckoutUrl": "https://polar.sh/checkout/executive"
     }
   ]

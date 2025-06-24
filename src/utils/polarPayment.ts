@@ -1,8 +1,6 @@
 // Polar Payment utility functions
-// Use sandbox API for development/testing
-const POLAR_API_BASE = process.env.NODE_ENV === 'production'
-  ? 'https://api.polar.sh'
-  : 'https://sandbox-api.polar.sh'; // Use sandbox API for development
+// Use production API since we have production access token and products
+const POLAR_API_BASE = 'https://api.polar.sh';
 
 export interface PolarCheckoutSession {
   id: string;
@@ -249,11 +247,16 @@ export function verifyPolarWebhook(payload: string, signature: string, secret: s
 }
 
 /**
- * Extract plan type from Polar product ID
+ * Extract plan type from Polar product ID using proper mapping
+ * Product IDs are UUIDs, so we need to map them to plan types
  */
 export function extractPlanTypeFromProductId(productId: string): string {
-  if (productId.includes('basic')) return 'Basic';
-  if (productId.includes('professional')) return 'Professional';
-  if (productId.includes('executive')) return 'Executive';
-  return 'Basic'; // Default fallback
+  // Product ID to Plan Type mapping (verified 2025-06-24)
+  const productIdMapping: Record<string, string> = {
+    '5b26fbdf-87ee-4002-aecf-82f6278a4831': 'Basic',      // $29
+    '2e38da8b-460f-4bb6-b7ab-e6e0056d99f5': 'Professional', // $39
+    '4fb38fdf-ebd1-484e-9f42-07781504af78': 'Executive',   // $59
+  };
+
+  return productIdMapping[productId] || 'Basic'; // Default fallback
 }
