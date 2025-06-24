@@ -1,5 +1,7 @@
 // Polar Payment utility functions
 // Use production API since we have production access token and products
+import crypto from 'crypto';
+
 const POLAR_API_BASE = 'https://api.polar.sh';
 
 export interface PolarCheckoutSession {
@@ -238,12 +240,43 @@ export async function getPolarCustomerByEmail(email: string): Promise<PolarCusto
 }
 
 /**
- * Verify webhook signature (if Polar provides webhook signatures)
+ * Verify Polar webhook signature using HMAC-SHA256
+ * Based on Polar's webhook security documentation
  */
 export function verifyPolarWebhook(payload: string, signature: string, secret: string): boolean {
-  // This is a placeholder - implement actual signature verification based on Polar's webhook documentation
-  // For now, we'll just check if the secret matches
-  return signature === secret;
+  if (!signature || !secret || !payload) {
+    console.error('Missing required parameters for webhook verification');
+    return false;
+  }
+
+  try {
+    // Polar uses HMAC-SHA256 for webhook signatures
+    // The signature format is typically: sha256=<hash>
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(payload, 'utf8')
+      .digest('hex');
+
+    // Handle different signature formats
+    let receivedSignature = signature;
+    if (signature.startsWith('sha256=')) {
+      receivedSignature = signature.substring(7);
+    }
+
+    // Use timing-safe comparison to prevent timing attacks
+    // Ensure both buffers have the same length to avoid errors
+    if (expectedSignature.length !== receivedSignature.length) {
+      return false;
+    }
+
+    return crypto.timingSafeEqual(
+      Buffer.from(expectedSignature, 'hex'),
+      Buffer.from(receivedSignature, 'hex')
+    );
+  } catch (error) {
+    console.error('Error verifying Polar webhook signature:', error);
+    return false;
+  }
 }
 
 /**
