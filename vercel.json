@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "name": "cvphoto-app",
-  "alias": ["cvphoto.app", "www.cvphoto.app"],
-  "regions": ["iad1", "fra1"],
+  "name": "coolpix-me",
+  "alias": ["coolpix.me", "www.coolpix.me"],
+  "regions": ["iad1"],
   "build": {
     "env": {
       "NEXT_TELEMETRY_DISABLED": "1"
@@ -10,7 +10,7 @@
   },
   "env": {
     "ENVIRONMENT": "PRODUCTION",
-    "NEXT_PUBLIC_SITE_URL": "https://cvphoto.app"
+    "NEXT_PUBLIC_SITE_URL": "https://coolpix.me"
   },
   "headers": [
     {
@@ -43,7 +43,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://cvphoto.app"
+          "value": "https://coolpix.me"
         },
         {
           "key": "Access-Control-Allow-Methods",
@@ -59,7 +59,7 @@
   "redirects": [
     {
       "source": "/www/(.*)",
-      "destination": "https://cvphoto.app/$1",
+      "destination": "https://coolpix.me/$1",
       "permanent": true
     }
   ],
