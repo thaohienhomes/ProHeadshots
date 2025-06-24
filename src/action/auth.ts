@@ -41,7 +41,7 @@ export async function signInWithGoogleAction(): Promise<never> {
     }
 
     // Fallback: construct from environment or use your known domain
-    const fallbackUrl = 'https://cvphoto.app/auth/callback';
+    const fallbackUrl = 'https://coolpix.me/auth/callback';
     console.log('⚠️ Fallback redirect URL:', fallbackUrl);
     return fallbackUrl;
   };

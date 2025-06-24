@@ -104,9 +104,28 @@ class Logger {
   }
 
   private sendToMonitoring(entry: LogEntry): void {
-    // Placeholder for error monitoring service integration
-    // You could integrate with services like Sentry, LogRocket, etc.
-    // For now, we'll just ensure the error is properly logged
+    // Enhanced error monitoring integration
+    try {
+      // Import error tracking dynamically to avoid circular dependencies
+      import('./errorTracking').then(({ errorTracking }) => {
+        if (entry.error) {
+          errorTracking.captureError(entry.error, {
+            tags: { context: entry.context || 'unknown' },
+            extra: entry.data,
+            level: 'error',
+          });
+        } else {
+          errorTracking.captureMessage(entry.message, 'error', {
+            tags: { context: entry.context || 'unknown' },
+            extra: entry.data,
+          });
+        }
+      }).catch(err => {
+        console.error('Error sending to monitoring:', err);
+      });
+    } catch (error) {
+      console.error('Error in sendToMonitoring:', error);
+    }
   }
 
   // Specialized logging methods for common use cases

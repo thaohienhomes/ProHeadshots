@@ -1,0 +1,73 @@
+# Monitoring & Analytics Environment Variables for Production
+# Add these to your Vercel dashboard: Project Settings → Environment Variables
+
+# Error Tracking (Sentry)
+SENTRY_DSN=your_sentry_dsn_here
+SENTRY_ORG=your_sentry_org
+SENTRY_PROJECT=proheadshots
+
+# Google Analytics
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+
+# Performance Monitoring
+PERFORMANCE_MONITORING_ENABLED=true
+PERFORMANCE_SAMPLE_RATE=0.1
+WEB_VITALS_ENABLED=true
+
+# Uptime Monitoring
+UPTIME_MONITORING_ENABLED=true
+UPTIME_CHECK_INTERVAL=60000
+HEALTH_CHECK_TIMEOUT=10000
+
+# Logging Configuration
+LOG_LEVEL=info
+ENABLE_CONSOLE_LOGGING=true
+ENABLE_ERROR_TRACKING=true
+
+# Monitoring API Keys (if using external services)
+DATADOG_API_KEY=your_datadog_api_key_here
+NEW_RELIC_LICENSE_KEY=your_newrelic_license_key_here
+
+# Alert Configuration
+ALERT_EMAIL=alerts@coolpix.me
+SLACK_WEBHOOK_URL=your_slack_webhook_url_here
+
+# Monitoring Dashboard
+MONITORING_DASHBOARD_ENABLED=true
+HEALTH_CHECK_API_ENABLED=true
+
+# Analytics Configuration
+ANALYTICS_ENABLED=true
+CONVERSION_TRACKING_ENABLED=true
+BUSINESS_METRICS_ENABLED=true
+
+# Performance Thresholds
+PERFORMANCE_LCP_THRESHOLD=2500
+PERFORMANCE_FID_THRESHOLD=100
+PERFORMANCE_CLS_THRESHOLD=0.1
+PERFORMANCE_FCP_THRESHOLD=1800
+PERFORMANCE_TTFB_THRESHOLD=800
+
+# Error Tracking Configuration
+ERROR_TRACKING_SAMPLE_RATE=1.0
+ERROR_TRACKING_BREADCRUMBS_ENABLED=true
+ERROR_TRACKING_USER_CONTEXT_ENABLED=true
+
+# Uptime Monitoring Endpoints
+UPTIME_CHECK_MAIN_SITE=https://coolpix.me
+UPTIME_CHECK_API_HEALTH=https://coolpix.me/api/monitoring/health
+UPTIME_CHECK_AUTH=https://coolpix.me/api/auth/session
+
+# External Service Monitoring
+MONITOR_SUPABASE=true
+MONITOR_FAL_AI=true
+MONITOR_POLAR_PAYMENT=true
+
+# Monitoring Data Retention
+MONITORING_DATA_RETENTION_DAYS=30
+PERFORMANCE_DATA_RETENTION_DAYS=7
+ERROR_DATA_RETENTION_DAYS=90
+
+# Development/Testing
+MONITORING_DEBUG_MODE=false
+MONITORING_VERBOSE_LOGGING=false
