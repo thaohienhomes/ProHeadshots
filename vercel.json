@@ -1,16 +1,9 @@
 {
   "version": 2,
-  "name": "coolpix-me",
-  "alias": ["coolpix.me", "www.coolpix.me"],
-  "regions": ["iad1"],
   "build": {
     "env": {
       "NEXT_TELEMETRY_DISABLED": "1"
     }
-  },
-  "env": {
-    "ENVIRONMENT": "PRODUCTION",
-    "NEXT_PUBLIC_SITE_URL": "https://coolpix.me"
   },
   "headers": [
     {
