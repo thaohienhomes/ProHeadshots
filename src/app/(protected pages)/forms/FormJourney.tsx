@@ -1,13 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Link from "next/link";
 import pricingPlans from "@/app/checkout/pricingPlans.json";
 
 export default function Page() {
+  const searchParams = useSearchParams();
+  const signupCompleted = searchParams.get("signupCompleted");
   const [currentStep, setCurrentStep] = useState(1);
+  const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
+
+  // Handle signup completion
+  useEffect(() => {
+    if (signupCompleted !== null) {
+      setShowWelcomeMessage(true);
+      // Auto-hide welcome message after 5 seconds
+      const timer = setTimeout(() => {
+        setShowWelcomeMessage(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [signupCompleted]);
 
   const handleNext = () => {
     if (currentStep < 3) {
@@ -18,6 +34,25 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800">
       <Header userAuth={true} />
+
+      {/* Welcome Message for New Signups */}
+      {showWelcomeMessage && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-top duration-500">
+          <div className="bg-gradient-to-r from-green-500/90 to-emerald-500/90 backdrop-blur-sm border border-green-400/30 text-white px-6 py-4 rounded-xl shadow-2xl max-w-md mx-auto">
+            <div className="flex items-center space-x-3">
+              <div className="flex-shrink-0">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold">Welcome to CoolPix!</h3>
+                <p className="text-sm text-green-100">Your account has been created successfully. Let's get started!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-2xl mx-auto pt-8 px-4">
         <div className="max-w-lg mx-auto text-center">

@@ -177,7 +177,12 @@ export async function signUpAction(formData: FormData): Promise<never> {
 
   if (signUpData.user) {
     // Send welcome email
-    await sendWelcomeEmail(email);
+    try {
+      await sendWelcomeEmailToUser(email);
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+      // Don't fail the signup if email fails
+    }
     return redirect("/forms?signupCompleted");
   }
 

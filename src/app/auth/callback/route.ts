@@ -24,62 +24,23 @@ export async function GET(request: Request) {
   if (code) {
     console.log('Code found, attempting to exchange for session...')
 
-    // Try direct API call to Supabase Auth
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/token?grant_type=authorization_code`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        },
-        body: JSON.stringify({
-          auth_code: code,
-          redirect_to: `${origin}/auth/callback`,
-        }),
-      })
+    const supabase = await createClient()
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
-      const authData = await response.json()
-      console.log('Direct API response:', authData)
+    console.log('Exchange result:', {
+      hasData: !!data,
+      hasUser: !!data?.user,
+      hasError: !!error,
+      errorMessage: error?.message
+    })
 
-      if (authData.access_token) {
-        // Success - create session
-        const supabase = await createClient()
-        const { data, error } = await supabase.auth.setSession({
-          access_token: authData.access_token,
-          refresh_token: authData.refresh_token,
-        })
+    if (!error && data.user) {
+      console.log('User authenticated successfully:', data.user.id)
 
-        if (!error && data.user) {
-          console.log('Session created successfully:', data.user.id)
-          // Continue with existing logic...
-        } else {
-          console.log('Session creation failed:', error?.message)
-          throw new Error(error?.message || 'Session creation failed')
-        }
-      } else {
-        throw new Error(authData.error_description || 'Token exchange failed')
-      }
-    } catch (directApiError) {
-      console.log('Direct API failed, trying original method:', directApiError)
+      // Ensure the session is properly set by refreshing it
+      await supabase.auth.refreshSession()
 
-      // Fallback to original method
-      const supabase = await createClient()
-      const { data, error } = await supabase.auth.exchangeCodeForSession(code)
-
-      console.log('Exchange result:', {
-        hasData: !!data,
-        hasUser: !!data?.user,
-        hasError: !!error,
-        errorMessage: error?.message
-      })
-
-      if (!error && data.user) {
-        console.log('User authenticated successfully:', data.user.id)
-
-        // Ensure the session is properly set by refreshing it
-        await supabase.auth.refreshSession()
-
-        // Check if this is a new user by looking in userTable
+      // Check if this is a new user by looking in userTable
       const { data: existingUser } = await supabase
         .from('userTable')
         .select('id, paymentStatus, workStatus')
@@ -102,7 +63,7 @@ export async function GET(request: Request) {
         console.log('Redirecting new user to:', redirectUrl)
         return NextResponse.redirect(redirectUrl)
       }
-      
+
       // Existing user - determine where they should go based on their status
       console.log('Existing user detected, checking status...')
       console.log('User status:', { paymentStatus: existingUser.paymentStatus, workStatus: existingUser.workStatus })
@@ -150,11 +111,10 @@ export async function GET(request: Request) {
                          forwardedHost ? `https://${forwardedHost}${targetPath}` :
                          `${origin}${targetPath}`
 
-        console.log('Redirecting existing user to:', redirectUrl)
-        return NextResponse.redirect(redirectUrl)
-      } else {
-        console.log('Authentication error or no user:', error?.message)
-      }
+      console.log('Redirecting existing user to:', redirectUrl)
+      return NextResponse.redirect(redirectUrl)
+    } else {
+      console.log('Authentication error or no user:', error?.message)
     }
   } else {
     console.log('No code parameter found')
