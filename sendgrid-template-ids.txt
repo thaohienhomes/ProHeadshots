@@ -1,0 +1,10 @@
+export const SENDGRID_TEMPLATE_IDS = {
+  welcome: 'd-709841e3498344fba8a981d8be9666ba',
+  order_confirmation: 'd-85b5b99d09684408ba908abfe98537f5',
+  processing_started: 'd-db27d729c9ef4a2ebb176451e3ab266a',
+  processing_complete: 'd-ee3bde9d6dec4c928eec5422300840f6',
+  payment_confirmation: 'd-7dcd6ecde3dc4a1c990d388c283e38f0',
+  password_reset: 'd-1b85a5df63c94e23ac388415916c1598',
+  promotional: 'd-3aafb72ab3474fcfb9a7da04b3afb2a1',
+  support_response: 'd-266b25ccb7ec4ff4a19135d64a50b66f'
+} as const;

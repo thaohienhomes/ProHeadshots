@@ -119,6 +119,8 @@ export default function Header({
                 variant="horizontal"
                 theme="dark"
                 size="sm"
+                effects="shimmer"
+                animated={true}
                 className="transition-transform duration-300 group-hover:scale-105"
               />
             </div>

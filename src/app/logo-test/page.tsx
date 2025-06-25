@@ -149,32 +149,137 @@ export default function LogoTestPage() {
           </div>
         </section>
 
+        {/* Visual Effects Testing */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-6 text-slate-700">Visual Effects Testing</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-4 text-slate-600">No Effects</h3>
+              <div className="bg-white p-8 rounded-lg shadow-sm border">
+                <CoolPixLogo
+                  variant="horizontal"
+                  theme="light"
+                  size="md"
+                  effects="none"
+                />
+                <p className="text-xs text-slate-500 mt-2">Standard logo</p>
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-4 text-slate-600">Shimmer Effect</h3>
+              <div className="bg-white p-8 rounded-lg shadow-sm border">
+                <CoolPixLogo
+                  variant="horizontal"
+                  theme="light"
+                  size="md"
+                  effects="shimmer"
+                  animated={true}
+                />
+                <p className="text-xs text-slate-500 mt-2">Animated shimmer</p>
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-4 text-slate-600">Neon Glow</h3>
+              <div className="bg-slate-900 p-8 rounded-lg shadow-sm border">
+                <CoolPixLogo
+                  variant="horizontal"
+                  theme="dark"
+                  size="md"
+                  effects="neon"
+                  animated={true}
+                />
+                <p className="text-xs text-slate-300 mt-2">Neon pulse effect</p>
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-4 text-slate-600">Pulse Effect</h3>
+              <div className="bg-white p-8 rounded-lg shadow-sm border">
+                <CoolPixLogo
+                  variant="horizontal"
+                  theme="light"
+                  size="md"
+                  effects="pulse"
+                  animated={true}
+                />
+                <p className="text-xs text-slate-500 mt-2">Scale pulse</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Effects on Different Variants */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-6 text-slate-700">Effects on All Variants</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-4 text-slate-600">Horizontal with Shimmer</h3>
+              <div className="bg-slate-900 p-6 rounded-lg shadow-sm border">
+                <CoolPixLogo
+                  variant="horizontal"
+                  theme="dark"
+                  size="md"
+                  effects="shimmer"
+                  animated={true}
+                />
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-4 text-slate-600">Stacked with Neon</h3>
+              <div className="bg-slate-900 p-6 rounded-lg shadow-sm border">
+                <CoolPixLogo
+                  variant="stacked"
+                  theme="dark"
+                  size="md"
+                  effects="neon"
+                  animated={true}
+                />
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-4 text-slate-600">Icon with Pulse</h3>
+              <div className="bg-white p-6 rounded-lg shadow-sm border flex justify-center">
+                <CoolPixLogo
+                  variant="icon-only"
+                  theme="light"
+                  size="xl"
+                  effects="pulse"
+                  animated={true}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Animation Testing */}
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-6 text-slate-700">Animation & Interaction Testing</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="text-center">
-              <h3 className="text-sm font-medium mb-4 text-slate-600">Hover Effects</h3>
+              <h3 className="text-sm font-medium mb-4 text-slate-600">Hover + Shimmer Effects</h3>
               <div className="bg-white p-8 rounded-lg shadow-sm border">
-                <CoolPixLogo 
-                  variant="horizontal" 
-                  theme="light" 
+                <CoolPixLogo
+                  variant="horizontal"
+                  theme="light"
                   size="lg"
-                  className="transition-all duration-300 hover:scale-110 hover:drop-shadow-lg cursor-pointer" 
+                  effects="shimmer"
+                  animated={true}
+                  className="transition-all duration-300 hover:scale-110 hover:drop-shadow-lg cursor-pointer"
                 />
-                <p className="text-xs text-slate-500 mt-2">Hover to test</p>
+                <p className="text-xs text-slate-500 mt-2">Hover to test combined effects</p>
               </div>
             </div>
             <div className="text-center">
-              <h3 className="text-sm font-medium mb-4 text-slate-600">Loading Animation</h3>
+              <h3 className="text-sm font-medium mb-4 text-slate-600">Neon + Scale Animation</h3>
               <div className="bg-slate-900 p-8 rounded-lg shadow-sm border">
-                <CoolPixLogo 
-                  variant="icon-only" 
-                  theme="dark" 
+                <CoolPixLogo
+                  variant="icon-only"
+                  theme="dark"
                   size="xl"
-                  className="animate-pulse" 
+                  effects="neon"
+                  animated={true}
+                  className="hover:scale-125 transition-transform duration-300 cursor-pointer"
                 />
-                <p className="text-xs text-slate-300 mt-2">Pulse animation</p>
+                <p className="text-xs text-slate-300 mt-2">Neon glow with hover scale</p>
               </div>
             </div>
           </div>
@@ -193,9 +298,42 @@ export default function LogoTestPage() {
           </div>
         </section>
 
+        {/* Accessibility Testing */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-6 text-slate-700">Accessibility & Performance Testing</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-4 text-slate-600">Reduced Motion Respect</h3>
+              <div className="bg-white p-8 rounded-lg shadow-sm border">
+                <CoolPixLogo
+                  variant="horizontal"
+                  theme="light"
+                  size="lg"
+                  effects="shimmer"
+                  animated={true}
+                />
+                <p className="text-xs text-slate-500 mt-2">Animations disabled if user prefers reduced motion</p>
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-4 text-slate-600">Animation Disabled</h3>
+              <div className="bg-white p-8 rounded-lg shadow-sm border">
+                <CoolPixLogo
+                  variant="horizontal"
+                  theme="light"
+                  size="lg"
+                  effects="neon"
+                  animated={false}
+                />
+                <p className="text-xs text-slate-500 mt-2">Effects disabled via props</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Testing Instructions */}
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-6 text-slate-700">Testing Checklist</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-slate-700">Enhanced Testing Checklist</h2>
           <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
             <h3 className="font-semibold mb-4 text-blue-900">Manual Testing Steps:</h3>
             <ul className="space-y-2 text-blue-800">
@@ -208,6 +346,11 @@ export default function LogoTestPage() {
               <li>✓ Verify accessibility (screen readers, keyboard navigation)</li>
               <li>✓ Test print styles</li>
               <li>✓ Check loading performance</li>
+              <li>✓ <strong>NEW:</strong> Test visual effects (shimmer, neon, pulse)</li>
+              <li>✓ <strong>NEW:</strong> Verify effects work on all variants</li>
+              <li>✓ <strong>NEW:</strong> Test prefers-reduced-motion compliance</li>
+              <li>✓ <strong>NEW:</strong> Check animation performance (no jank)</li>
+              <li>✓ <strong>NEW:</strong> Verify effects don't impact accessibility</li>
             </ul>
           </div>
         </section>
