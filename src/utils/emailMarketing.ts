@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { logger } from '@/utils/logger';
 import { sendEmail, sendSimpleEmail } from '@/action/sendEmail';
+import { sendWelcomeEmail } from '../action/emailActions';
 
 export interface EmailSubscriber {
   id: string;
@@ -143,29 +144,30 @@ export async function unsubscribeFromNewsletter(
 }
 
 /**
- * Send welcome email to new subscriber
+ * Send welcome email to new subscriber using new template system
  */
-async function sendWelcomeEmail(email: string): Promise<void> {
+export async function sendWelcomeEmailToSubscriber(email: string, firstName: string = 'there'): Promise<void> {
   try {
-    const welcomeTemplate = await getEmailTemplate('welcome');
-    
-    if (welcomeTemplate) {
-      await sendEmail({
-        to: email,
-        from: process.env.NOREPLY_EMAIL || 'noreply@cvphoto.app',
-        templateId: welcomeTemplate.id
-      });
-    } else {
-      // Fallback to simple email
+    const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://coolpix.me'}/dashboard`;
+
+    // Use the new template system
+    const result = await sendWelcomeEmail({
+      firstName,
+      email,
+      dashboardUrl
+    });
+
+    if (!result.success) {
+      // Fallback to simple email if template fails
       await sendSimpleEmail({
         to: email,
-        from: process.env.NOREPLY_EMAIL || 'noreply@cvphoto.app',
-        subject: 'Welcome to CVPhoto!',
+        from: process.env.NOREPLY_EMAIL || 'noreply@coolpix.me',
+        subject: 'Welcome to ProHeadshots!',
         html: `
-          <h1>Welcome to CVPhoto!</h1>
+          <h1>Welcome to ProHeadshots!</h1>
           <p>Thank you for subscribing to our newsletter. We're excited to help you create amazing professional headshots!</p>
-          <p>Get started by visiting <a href="${process.env.NEXT_PUBLIC_SITE_URL}">CVPhoto.app</a></p>
-          <p>Best regards,<br>The CVPhoto Team</p>
+          <p>Get started by visiting <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://coolpix.me'}">coolpix.me</a></p>
+          <p>Best regards,<br>The ProHeadshots Team</p>
         `
       });
     }

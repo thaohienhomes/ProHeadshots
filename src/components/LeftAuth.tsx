@@ -2,6 +2,7 @@ import React from "react";
 import { AvatarGroupWithInfo } from "@/components/landing/AvatarGroup";
 import Image from "next/image";
 import Logo from "@/components/Logo";
+import CoolPixLogo from "@/components/CoolPixLogo";
 
 const NumberOne = () => (
   <div className="mb-6">
@@ -34,16 +35,18 @@ const LeftAuth: React.FC = () => {
           </span>
         </h1>
         <AvatarGroupWithInfo />
-        <div className="flex items-center gap-3 mt-12">
+        <div className="flex justify-center mt-12">
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-primary-500 rounded-lg blur-lg opacity-30" />
-            <div className="relative p-2 bg-gradient-to-r from-cyan-500 to-primary-600 rounded-lg">
-              <Logo className="w-7 h-7 text-white" />
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-primary-500/20 rounded-lg blur-lg opacity-50" />
+            <div className="relative">
+              <CoolPixLogo
+                variant="horizontal"
+                theme="dark"
+                size="md"
+                className="transition-transform duration-300 hover:scale-105"
+              />
             </div>
           </div>
-          <span className="font-bold tracking-wide text-white text-2xl bg-gradient-to-r from-cyan-100 to-primary-200 bg-clip-text text-transparent">
-            CVPHOTO
-          </span>
         </div>
       </div>
     </div>

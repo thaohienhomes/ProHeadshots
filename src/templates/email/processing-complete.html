@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Headshots Are Ready! - coolpix</title>
+    <style>
+        /* Reset styles */
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        /* Main styles */
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .header-subtitle {
+            color: #d1fae5;
+            font-size: 16px;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 24px;
+            color: #1a202c;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+        
+        .success-section {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounce 1s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .success-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+        
+        .success-subtext {
+            font-size: 14px;
+            color: #047857;
+        }
+        
+        .download-info {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .download-info h3 {
+            color: #92400e;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .download-info p {
+            color: #78350f;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 18px 36px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 18px;
+            margin: 20px 0;
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+        }
+        
+        .usage-tips {
+            background-color: #f0f9ff;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .usage-tips h3 {
+            color: #0c4a6e;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .tip-item {
+            color: #075985;
+            font-size: 14px;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .tip-item:before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #10b981;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .footer {
+            background-color: #2d3748;
+            color: #a0aec0;
+            padding: 30px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .footer a {
+            color: #10b981;
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+            }
+            .content {
+                padding: 30px 20px !important;
+            }
+            .header {
+                padding: 30px 20px !important;
+            }
+            .greeting {
+                font-size: 20px !important;
+            }
+            .success-section {
+                padding: 20px !important;
+            }
+            .stats-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <a href="https://coolpix.me" class="logo">coolpix</a>
+            <p class="header-subtitle">Your Headshots Are Ready!</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <h1 class="greeting">🎉 Congratulations, {{firstName}}!</h1>
+            
+            <div class="message">
+                <p>Your professional headshots have been successfully generated and are now ready for download! Our AI has created stunning, professional-quality images that are perfect for your LinkedIn profile, resume, business cards, and more.</p>
+            </div>
+            
+            <!-- Success Section -->
+            <div class="success-section">
+                <div class="success-icon">
+                    <span style="color: white; font-size: 32px;">✓</span>
+                </div>
+                <div class="success-text">Processing Complete!</div>
+                <div class="success-subtext">{{imageCount}} professional headshots ready for download</div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="stat-number">{{imageCount}}</div>
+                    <div class="stat-label">Images Generated</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4K</div>
+                    <div class="stat-label">Resolution</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">{{expiryDate}}</div>
+                    <div class="stat-label">Download Until</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="{{downloadUrl}}" class="cta-button">Download Your Headshots</a>
+            </div>
+            
+            <!-- Download Info -->
+            <div class="download-info">
+                <h3>📥 Download Information</h3>
+                <p><strong>File Format:</strong> High-resolution JPEG (4K quality)</p>
+                <p><strong>Download Expires:</strong> {{expiryDate}}</p>
+                <p><strong>File Size:</strong> Approximately 2-4 MB per image</p>
+                <p><strong>Usage Rights:</strong> Full commercial and personal use included</p>
+            </div>
+            
+            <!-- Usage Tips -->
+            <div class="usage-tips">
+                <h3>💡 How to Use Your New Headshots</h3>
+                <div class="tip-item">Update your LinkedIn profile for maximum professional impact</div>
+                <div class="tip-item">Use for business cards, email signatures, and company websites</div>
+                <div class="tip-item">Perfect for resumes, cover letters, and job applications</div>
+                <div class="tip-item">Great for speaker bios, conference materials, and press releases</div>
+                <div class="tip-item">Share on professional social media platforms</div>
+            </div>
+            
+            <div class="message">
+                <p>We hope you love your new professional headshots! If you need any adjustments or have questions about using your images, our support team is here to help.</p>
+                
+                <p>Don't forget to share your new headshots and tag us on social media - we'd love to see how you're using them!</p>
+                
+                <p>Thank you for choosing coolpix. We look forward to helping you make a great first impression!</p>
+                
+                <p>Best regards,<br>The coolpix Team</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="{{dashboardUrl}}" style="color: #10b981; text-decoration: none; font-weight: 500;">Visit Your Dashboard →</a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2024 coolpix. All rights reserved.</p>
+            <p>
+                <a href="https://coolpix.me/privacy">Privacy Policy</a> | 
+                <a href="https://coolpix.me/terms">Terms of Service</a> | 
+                <a href="mailto:support@coolpix.me">Support</a>
+            </p>
+            <p>coolpix, coolpix.me</p>
+        </div>
+    </div>
+</body>
+</html>

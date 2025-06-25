@@ -16,8 +16,8 @@ interface SocialSharingProps {
 export default function SocialSharing({
   imageUrl,
   title = "Check out my new AI-generated headshot!",
-  description = "Created with CVPHOTO - Professional AI headshots in minutes",
-  hashtags = ['AIHeadshots', 'CVPHOTO', 'ProfessionalPhotos'],
+  description = "Created with CoolPix - Professional AI headshots in minutes",
+  hashtags = ['AIHeadshots', 'CoolPix', 'ProfessionalPhotos'],
   showDownload = true,
   showCopyLink = true,
   customMessage,

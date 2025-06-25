@@ -52,7 +52,7 @@ function AuthContent() {
           <div className="bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 p-8 rounded-2xl shadow-2xl">
             {/* Dynamic Header */}
             <h2 className="text-3xl font-bold text-white mb-2 text-center">
-              {currentMode === "login" ? "Welcome back!" : "Join CVPHOTO"}
+              {currentMode === "login" ? "Welcome back!" : "Join CoolPix"}
             </h2>
             <p className="text-navy-300 mb-8 text-center">
               {next?.includes('checkout')
@@ -138,7 +138,7 @@ function AuthContent() {
             {/* Terms and conditions for signup */}
             {currentMode === "signup" && (
               <p className="text-xs text-navy-400 text-center mt-4">
-                By registering, you agree to the CVPHOTO{" "}
+                By registering, you agree to the CoolPix{" "}
                 <Link
                   href="/terms"
                   className="text-cyan-400 hover:text-cyan-300 transition-colors"

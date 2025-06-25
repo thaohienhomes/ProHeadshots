@@ -1,19 +1,20 @@
 import React from "react";
 import Logo from "@/components/Logo";
+import CoolPixLogo from "@/components/CoolPixLogo";
 import FooterList from "./FooterList";
 
 const FooterLogo: React.FC = () => (
   <div className="flex justify-center md:justify-start mt-4 md:mt-0">
-    <div className="flex items-center gap-3">
+    <div className="relative">
+      <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-primary-500/20 rounded-lg blur-lg opacity-50" />
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-primary-500 rounded-lg blur-lg opacity-30" />
-        <div className="relative p-2 bg-gradient-to-r from-cyan-500 to-primary-600 rounded-lg">
-          <Logo className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-        </div>
+        <CoolPixLogo
+          variant="horizontal"
+          theme="dark"
+          size="sm"
+          className="transition-transform duration-300 hover:scale-105"
+        />
       </div>
-      <span className="font-bold tracking-wide text-white text-lg sm:text-xl md:text-2xl bg-gradient-to-r from-cyan-100 to-primary-200 bg-clip-text text-transparent">
-        CVPHOTO
-      </span>
     </div>
   </div>
 );
@@ -21,13 +22,13 @@ const FooterLogo: React.FC = () => (
 const FooterContent: React.FC = () => (
   <div className="text-center md:text-left">
     <p className="mt-4 text-white text-sm leading-relaxed">
-      #1 AI Photo Generator in Sweden. Professional headshots powered by Flux Pro Ultra, Imagen4 & Recraft V3
+      Professional AI-generated headshots powered by cutting-edge technology. Create stunning headshots in minutes.
     </p>
     <p className="mt-3 text-navy-300 text-xs">
-      Trusted by individuals, teams, and photographers worldwide
+      Trusted by professionals, teams, and businesses worldwide
     </p>
     <p className="mt-4 text-navy-400 text-xs">
-      © 2024 CVPHOTO - All rights reserved
+      © 2024 coolpix - All rights reserved
     </p>
   </div>
 );
@@ -60,7 +61,7 @@ const Footer: React.FC<FooterProps> = ({ className = "" }) => {
         <div className="mt-12 pt-8 border-t border-cyan-400/20">
           <div className="text-center">
             <p className="text-navy-400 text-sm">
-              Powered by advanced AI models • Fal.ai Integration • Professional Results
+              Powered by Fal AI • Polar Payments • SendGrid Email • Professional Results
             </p>
           </div>
         </div>

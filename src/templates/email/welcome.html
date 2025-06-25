@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to coolpix</title>
+    <style>
+        /* Reset styles */
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        /* Main styles */
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .header-subtitle {
+            color: #e2e8f0;
+            font-size: 16px;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 24px;
+            color: #1a202c;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0;
+            transition: transform 0.2s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .features {
+            background-color: #f7fafc;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #667eea;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: inline-block;
+        }
+        
+        .feature-text {
+            color: #4a5568;
+            font-size: 14px;
+        }
+        
+        .footer {
+            background-color: #2d3748;
+            color: #a0aec0;
+            padding: 30px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+            }
+            .content {
+                padding: 30px 20px !important;
+            }
+            .header {
+                padding: 30px 20px !important;
+            }
+            .greeting {
+                font-size: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <a href="https://coolpix.me" class="logo">coolpix</a>
+            <p class="header-subtitle">Professional AI-Generated Headshots</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <h1 class="greeting">Welcome to coolpix, {{firstName}}!</h1>
+            
+            <div class="message">
+                <p>Thank you for joining coolpix! We're excited to help you create stunning, professional headshots using cutting-edge AI technology.</p>
+                
+                <p>With coolpix, you can:</p>
+            </div>
+            
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon"></span>
+                    <span class="feature-text">Generate professional headshots in minutes, not hours</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon"></span>
+                    <span class="feature-text">Choose from multiple professional styles and backgrounds</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon"></span>
+                    <span class="feature-text">Download high-resolution images perfect for LinkedIn, resumes, and more</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon"></span>
+                    <span class="feature-text">Get results that look natural and professional</span>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="{{dashboardUrl}}" class="cta-button">Get Started Now</a>
+            </div>
+            
+            <div class="message">
+                <p>Ready to create your first set of professional headshots? Click the button above to access your dashboard and begin the process.</p>
+                
+                <p>If you have any questions, our support team is here to help at <a href="mailto:support@coolpix.me" style="color: #667eea;">support@coolpix.me</a></p>
+                
+                <p>Best regards,<br>The coolpix Team</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="social-links">
+                <a href="https://twitter.com/proheadshots">Twitter</a>
+                <a href="https://linkedin.com/company/proheadshots">LinkedIn</a>
+                <a href="https://instagram.com/proheadshots">Instagram</a>
+            </div>
+            
+            <p>&copy; 2024 coolpix. All rights reserved.</p>
+            <p>
+                <a href="https://coolpix.me/privacy">Privacy Policy</a> | 
+                <a href="https://coolpix.me/terms">Terms of Service</a> | 
+                <a href="{{unsubscribeUrl}}">Unsubscribe</a>
+            </p>
+            <p>coolpix, coolpix.me</p>
+        </div>
+    </div>
+</body>
+</html>

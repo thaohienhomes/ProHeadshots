@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Confirmation - coolpix</title>
+    <style>
+        /* Reset styles */
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        /* Main styles */
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .header-subtitle {
+            color: #dbeafe;
+            font-size: 16px;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 24px;
+            color: #1a202c;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+        
+        .payment-summary {
+            background-color: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .payment-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .payment-header:before {
+            content: "💳";
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .payment-row:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 18px;
+            color: #2d3748;
+            background-color: #edf2f7;
+            margin: 10px -15px -15px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .payment-label {
+            color: #4a5568;
+        }
+        
+        .payment-value {
+            color: #2d3748;
+            font-weight: 500;
+        }
+        
+        .success-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0;
+            transition: transform 0.2s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .receipt-section {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .receipt-section h3 {
+            color: #92400e;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .receipt-section p {
+            color: #78350f;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .security-info {
+            background-color: #f0f9ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .security-info h3 {
+            color: #0c4a6e;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .security-info h3:before {
+            content: "🔒";
+            margin-right: 8px;
+        }
+        
+        .security-info p {
+            color: #075985;
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background-color: #2d3748;
+            color: #a0aec0;
+            padding: 30px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .footer a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+            }
+            .content {
+                padding: 30px 20px !important;
+            }
+            .header {
+                padding: 30px 20px !important;
+            }
+            .greeting {
+                font-size: 20px !important;
+            }
+            .payment-summary {
+                padding: 20px !important;
+            }
+            .payment-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <a href="https://coolpix.me" class="logo">coolpix</a>
+            <p class="header-subtitle">Payment Confirmation</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <div class="success-badge">✓ Payment Successful</div>
+            
+            <h1 class="greeting">Payment Confirmed, {{firstName}}!</h1>
+            
+            <div class="message">
+                <p>Thank you for your payment! We've successfully processed your transaction and your order is now confirmed. Here are the details of your payment:</p>
+            </div>
+            
+            <!-- Payment Summary -->
+            <div class="payment-summary">
+                <div class="payment-header">Payment Receipt</div>
+                
+                <div class="payment-row">
+                    <span class="payment-label">Order ID:</span>
+                    <span class="payment-value">{{orderId}}</span>
+                </div>
+                
+                <div class="payment-row">
+                    <span class="payment-label">Transaction ID:</span>
+                    <span class="payment-value">{{transactionId}}</span>
+                </div>
+                
+                <div class="payment-row">
+                    <span class="payment-label">Payment Method:</span>
+                    <span class="payment-value">{{paymentMethod}}</span>
+                </div>
+                
+                <div class="payment-row">
+                    <span class="payment-label">Amount Paid:</span>
+                    <span class="payment-value">{{currency}}{{amount}}</span>
+                </div>
+            </div>
+            
+            <!-- Receipt Section -->
+            <div class="receipt-section">
+                <h3>📄 Receipt & Records</h3>
+                <p>A detailed receipt has been sent to your email address.</p>
+                <p>You can also download your receipt anytime from your dashboard.</p>
+                <p>Keep this for your records and tax purposes if applicable.</p>
+            </div>
+            
+            <!-- Security Info -->
+            <div class="security-info">
+                <h3>Payment Security</h3>
+                <p>Your payment was processed securely through Polar Payment. We use industry-standard encryption and security measures to protect your financial information. Your payment details are never stored on our servers.</p>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="{{receiptUrl}}" class="cta-button">Download Receipt</a>
+                <br>
+                <a href="{{dashboardUrl}}" style="color: #3b82f6; text-decoration: none; font-weight: 500; margin-top: 15px; display: inline-block;">Go to Dashboard →</a>
+            </div>
+            
+            <div class="message">
+                <p>Your order is now being processed and you'll receive updates via email as we progress through each step. You can also track your order status in your dashboard.</p>
+                
+                <p>If you have any questions about your payment or need assistance, please contact our support team at <a href="mailto:support@coolpix.me" style="color: #3b82f6;">support@coolpix.me</a></p>
+                
+                <p>Thank you for choosing coolpix!</p>
+                
+                <p>Best regards,<br>The coolpix Team</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2024 coolpix. All rights reserved.</p>
+            <p>
+                <a href="https://coolpix.me/privacy">Privacy Policy</a> | 
+                <a href="https://coolpix.me/terms">Terms of Service</a> | 
+                <a href="mailto:support@coolpix.me">Support</a>
+            </p>
+            <p>coolpix, coolpix.me</p>
+        </div>
+    </div>
+</body>
+</html>

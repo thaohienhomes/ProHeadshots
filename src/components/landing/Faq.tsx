@@ -67,11 +67,11 @@ export default function Faq() {
           />
           <FaqItem
             question="How long does an AI headshot take?"
-            answer="We don't cut corners when it comes to generating photorealistic AI headshots. We're not the fastest, but you'll always get same-day results with CVPHOTO. Our Executive package is delivered in 1 hour or less."
+            answer="We don't cut corners when it comes to generating photorealistic AI headshots. We're not the fastest, but you'll always get same-day results with CoolPix. Our Executive package is delivered in 1 hour or less."
           />
           <FaqItem
             question="What do people misunderstand about AI headshots?"
-            answer="Not every photo is perfect. Due to the nature of AI, you might see some strange photos. CVPHOTO tries to make this clear from the start: not every photo is perfect, but we promise you'll find a profile-worthy headshot in every order to make it all worth it."
+            answer="Not every photo is perfect. Due to the nature of AI, you might see some strange photos. CoolPix tries to make this clear from the start: not every photo is perfect, but we promise you'll find a profile-worthy headshot in every order to make it all worth it."
           />
           <FaqItem
             question="How many good photos can I expect?"
@@ -79,23 +79,23 @@ export default function Faq() {
           />
           <FaqItem
             question="Is there a free AI headshot generator?"
-            answer="Yes, CVPHOTO has a 100% free AI headshot generator for simple photos. No email is required and no credit card is required. It is completely free."
+            answer="Yes, CoolPix has a 100% free AI headshot generator for simple photos. No email is required and no credit card is required. It is completely free."
           />
           <FaqItem
             question="What is the most realistic headshot AI?"
-            answer="CVPHOTO is the most realistic headshot AI with the most reviews in Sweden. It's the only major AI headshot generator using Flux to generate realistic AI headshots. CVPHOTO is regularly used by professionals, companies and photographers."
+            answer="CoolPix is the most realistic headshot AI with excellent reviews. It's the only major AI headshot generator using Flux to generate realistic AI headshots. CoolPix is regularly used by professionals, companies and photographers."
           />
           <FaqItem
             question="Can I use AI headshots on LinkedIn?"
-            answer="25% of CVPHOTO customers use their AI headshots on LinkedIn. It's totally okay to use AI headshots on LinkedIn."
+            answer="25% of CoolPix customers use their AI headshots on LinkedIn. It's totally okay to use AI headshots on LinkedIn."
           />
           <FaqItem
             question="Can ChatGPT generate headshots?"
-            answer="Yes, ChatGPT can generate very basic headshots. These headshots aren't realistic enough to use professionally, but they can be fun to play around with. Use CVPHOTO for AI headshots you can use professionally."
+            answer="Yes, ChatGPT can generate very basic headshots. These headshots aren't realistic enough to use professionally, but they can be fun to play around with. Use CoolPix for AI headshots you can use professionally."
           />
           <FaqItem
             question="What AI should I use for headshots?"
-            answer="The best AI headshot generators are using Flux to maximize realism. Right now, CVPHOTO is the only major headshot AI powered by Flux. You can get up to 200 professional AI headshots within 2 hours"
+            answer="The best AI headshot generators are using Flux to maximize realism. Right now, CoolPix is the only major headshot AI powered by Flux. You can get up to 200 professional AI headshots within 2 hours"
           />
         </div>
       </div>

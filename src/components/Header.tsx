@@ -6,6 +6,7 @@ import NewsBadge from "./NewsBadge";
 import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
 import Logo from "./Logo";
+import CoolPixLogo from "./CoolPixLogo";
 import { useState, useEffect } from "react";
 
 interface HeaderProps {
@@ -111,18 +112,18 @@ export default function Header({
           className="flex items-center absolute left-1/2 transform -translate-x-1/2 group"
           href="/"
         >
-          <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-primary-500/20 rounded-lg blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-primary-500 rounded-lg blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
-              <div className="relative p-2 bg-gradient-to-r from-cyan-500 to-primary-600 rounded-lg">
-                <Logo className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-              </div>
+              <CoolPixLogo
+                variant="horizontal"
+                theme="dark"
+                size="sm"
+                className="transition-transform duration-300 group-hover:scale-105"
+              />
             </div>
-            <span className="font-bold tracking-wide text-white text-lg sm:text-xl md:text-2xl bg-gradient-to-r from-cyan-100 to-primary-200 bg-clip-text text-transparent">
-              CVPHOTO
-            </span>
           </div>
-          <span className="sr-only">CVPHOTO - AI Headshot Studio</span>
+          <span className="sr-only">coolpix - AI Headshot Studio</span>
         </Link>
 
         {userAuth ? (

@@ -24,17 +24,22 @@ const FooterSection: React.FC<FooterSectionProps> = ({
   <div className="flex flex-col items-center md:items-start">
     <h3 className="text-cyan-400 font-semibold text-sm tracking-wide">{title}</h3>
     <ul className="mt-4 space-y-3 flex flex-col items-center md:items-start">
-      {links.map((link, index) => (
-        <li key={index}>
-          <Link
-            href={link.href}
-            className="text-navy-300 hover:text-white transition-colors duration-300 text-sm"
-            prefetch={false}
-          >
-            {link.text}
-          </Link>
-        </li>
-      ))}
+      {links.map((link, index) => {
+        const isExternal = link.href.startsWith('http');
+        return (
+          <li key={index}>
+            <Link
+              href={link.href}
+              className="text-navy-300 hover:text-white transition-colors duration-300 text-sm"
+              prefetch={false}
+              target={isExternal ? "_blank" : undefined}
+              rel={isExternal ? "noopener noreferrer" : undefined}
+            >
+              {link.text}
+            </Link>
+          </li>
+        );
+      })}
       {children}
     </ul>
   </div>
@@ -63,31 +68,35 @@ const FooterList: React.FC = () => {
       ],
     },
     {
-      title: "MAKER OF",
+      title: "FREE TOOLS",
       links: [
         {
-          href: "https://www.johnnytran.link/",
-          text: "Johnnytran.link",
+          href: "https://www.linkedin.com/help/linkedin/answer/430/profile-photo-tips",
+          text: "LinkedIn Profile Optimizer",
         },
         {
-          href: "https://www.clonemysaas.com/",
-          text: "CloneMySaaS.com",
+          href: "https://www.indeed.com/career-advice/resumes-cover-letters/resume-photo",
+          text: "Resume Photo Guidelines",
         },
         {
-          href: "https://www.hpappen.se/",
-          text: "HPappen.se",
+          href: "https://www.thebalancecareers.com/professional-dress-code-guide-2061067",
+          text: "Professional Dress Code Guide",
         },
         {
-          href: "https://www.tweetviral.app/",
-          text: "TweetViral.app",
+          href: "https://www.petapixel.com/2019/03/14/how-to-pose-for-professional-headshots/",
+          text: "Headshot Pose Tips",
         },
         {
-          href: "https://www.growthack.dev/",
-          text: "Growthack.dev",
+          href: "https://coolors.co/",
+          text: "Background Color Selector",
         },
         {
-          href: "https://www.free-youtube-transcript.com/",
-          text: "Free-YouTube-Transcript.com",
+          href: "https://tinypng.com/",
+          text: "Image Compression Tool",
+        },
+        {
+          href: "https://www.hubspot.com/email-signature-generator",
+          text: "Email Signature Generator",
         },
       ],
     },

@@ -223,8 +223,8 @@ export default function AdvancedFeaturesPage() {
               <SocialSharing
                 imageUrl={mockImages[0].url}
                 title="Check out my new professional headshot!"
-                description="Created with CVPHOTO's advanced AI technology - professional results in minutes!"
-                hashtags={['AIHeadshots', 'CVPHOTO', 'ProfessionalPhotos', 'LinkedInProfile']}
+                description="Created with CoolPix's advanced AI technology - professional results in minutes!"
+                hashtags={['AIHeadshots', 'CoolPix', 'ProfessionalPhotos', 'LinkedInProfile']}
                 customMessage="💡 Pro tip: Use this headshot across all your professional profiles for consistent branding!"
               />
             </div>

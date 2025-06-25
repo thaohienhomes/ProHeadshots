@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - coolpix</title>
+    <style>
+        /* Reset styles */
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        /* Main styles */
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .header-subtitle {
+            color: #d1fae5;
+            font-size: 16px;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 24px;
+            color: #1a202c;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+        
+        .order-summary {
+            background-color: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .order-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .order-row:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 18px;
+            color: #2d3748;
+        }
+        
+        .order-label {
+            color: #4a5568;
+        }
+        
+        .order-value {
+            color: #2d3748;
+            font-weight: 500;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0;
+            transition: transform 0.2s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .next-steps {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .next-steps h3 {
+            color: #92400e;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .next-steps p {
+            color: #78350f;
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background-color: #2d3748;
+            color: #a0aec0;
+            padding: 30px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .footer a {
+            color: #10b981;
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+            }
+            .content {
+                padding: 30px 20px !important;
+            }
+            .header {
+                padding: 30px 20px !important;
+            }
+            .greeting {
+                font-size: 20px !important;
+            }
+            .order-summary {
+                padding: 20px !important;
+            }
+            .order-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <a href="https://coolpix.me" class="logo">coolpix</a>
+            <p class="header-subtitle">Order Confirmation</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <h1 class="greeting">Thank you for your order, {{firstName}}!</h1>
+            
+            <div class="message">
+                <p>We've received your order and payment has been successfully processed. Your professional headshots will be ready soon!</p>
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <div class="order-header">Order Summary</div>
+                
+                <div class="order-row">
+                    <span class="order-label">Order ID:</span>
+                    <span class="order-value">{{orderId}}</span>
+                </div>
+                
+                <div class="order-row">
+                    <span class="order-label">Plan:</span>
+                    <span class="order-value">{{planName}}</span>
+                </div>
+                
+                <div class="order-row">
+                    <span class="order-label">Order Date:</span>
+                    <span class="order-value">{{orderDate}}</span>
+                </div>
+                
+                <div class="order-row">
+                    <span class="order-label">Total Amount:</span>
+                    <span class="order-value">{{currency}}{{amount}}</span>
+                </div>
+            </div>
+            
+            <!-- Next Steps -->
+            <div class="next-steps">
+                <h3>What happens next?</h3>
+                <p>1. Upload your photos in your dashboard<br>
+                2. Our AI will process your images (typically takes 10-15 minutes)<br>
+                3. You'll receive an email when your headshots are ready<br>
+                4. Download your professional headshots</p>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="{{dashboardUrl}}" class="cta-button">Go to Dashboard</a>
+            </div>
+            
+            <div class="message">
+                <p>You can track your order status and upload your photos by visiting your dashboard. If you have any questions, please don't hesitate to contact our support team at <a href="mailto:support@coolpix.me" style="color: #10b981;">support@coolpix.me</a></p>
+                
+                <p>Best regards,<br>The coolpix Team</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2024 coolpix. All rights reserved.</p>
+            <p>
+                <a href="https://coolpix.me/privacy">Privacy Policy</a> | 
+                <a href="https://coolpix.me/terms">Terms of Service</a> | 
+                <a href="mailto:support@coolpix.me">Support</a>
+            </p>
+            <p>coolpix, coolpix.me</p>
+        </div>
+    </div>
+</body>
+</html>

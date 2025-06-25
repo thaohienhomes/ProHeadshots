@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Response - coolpix</title>
+    <style>
+        /* Reset styles */
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        /* Main styles */
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .header-subtitle {
+            color: #cffafe;
+            font-size: 16px;
+            margin: 0;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 24px;
+            color: #1a202c;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+        
+        .ticket-info {
+            background-color: #f0f9ff;
+            border: 2px solid #e0f2fe;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .ticket-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0c4a6e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .ticket-header:before {
+            content: "🎫";
+            margin-right: 8px;
+        }
+        
+        .ticket-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0f2fe;
+        }
+        
+        .ticket-row:last-child {
+            border-bottom: none;
+        }
+        
+        .ticket-label {
+            color: #075985;
+            font-weight: 500;
+        }
+        
+        .ticket-value {
+            color: #0c4a6e;
+            font-weight: 600;
+        }
+        
+        .response-section {
+            background-color: #f7fafc;
+            border-left: 4px solid #06b6d4;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .response-header {
+            color: #0c4a6e;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .response-header:before {
+            content: "💬";
+            margin-right: 8px;
+        }
+        
+        .response-content {
+            color: #374151;
+            font-size: 15px;
+            line-height: 1.6;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0;
+            transition: transform 0.2s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .help-section {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .help-section h3 {
+            color: #92400e;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .help-section p {
+            color: #78350f;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .satisfaction-survey {
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .satisfaction-survey h3 {
+            color: #0c4a6e;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .satisfaction-survey p {
+            color: #075985;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .rating-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .rating-button {
+            background-color: #06b6d4;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+        
+        .rating-button:hover {
+            background-color: #0891b2;
+        }
+        
+        .footer {
+            background-color: #2d3748;
+            color: #a0aec0;
+            padding: 30px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .footer a {
+            color: #06b6d4;
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+            }
+            .content {
+                padding: 30px 20px !important;
+            }
+            .header {
+                padding: 30px 20px !important;
+            }
+            .greeting {
+                font-size: 20px !important;
+            }
+            .ticket-info {
+                padding: 20px !important;
+            }
+            .ticket-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .rating-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <a href="https://coolpix.me" class="logo">coolpix</a>
+            <p class="header-subtitle">Support Response</p>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <h1 class="greeting">Hi {{firstName}},</h1>
+            
+            <div class="message">
+                <p>Thank you for contacting coolpix support. We've reviewed your inquiry and have a response for you below.</p>
+            </div>
+            
+            <!-- Ticket Information -->
+            <div class="ticket-info">
+                <div class="ticket-header">Support Ticket Details</div>
+                
+                <div class="ticket-row">
+                    <span class="ticket-label">Ticket ID:</span>
+                    <span class="ticket-value">{{ticketId}}</span>
+                </div>
+                
+                <div class="ticket-row">
+                    <span class="ticket-label">Subject:</span>
+                    <span class="ticket-value">{{subject}}</span>
+                </div>
+                
+                <div class="ticket-row">
+                    <span class="ticket-label">Status:</span>
+                    <span class="ticket-value">Resolved</span>
+                </div>
+            </div>
+            
+            <!-- Response Section -->
+            <div class="response-section">
+                <div class="response-header">Our Response</div>
+                <div class="response-content">
+                    {{responseMessage}}
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="{{dashboardUrl}}" class="cta-button">Go to Dashboard</a>
+            </div>
+            
+            <!-- Help Section -->
+            <div class="help-section">
+                <h3>💡 Need Additional Help?</h3>
+                <p>If this response doesn't fully address your question or if you need further assistance, please don't hesitate to reply to this email or contact us again.</p>
+                <p>You can also check our <a href="https://coolpix.me/help" style="color: #92400e;">Help Center</a> for answers to common questions.</p>
+            </div>
+            
+            <!-- Satisfaction Survey -->
+            <div class="satisfaction-survey">
+                <h3>📊 How did we do?</h3>
+                <p>Please rate your support experience to help us improve our service:</p>
+                
+                <div class="rating-buttons">
+                    <a href="https://coolpix.me/feedback?rating=5&ticket={{ticketId}}" class="rating-button">😊 Excellent</a>
+                    <a href="https://coolpix.me/feedback?rating=4&ticket={{ticketId}}" class="rating-button">😃 Good</a>
+                    <a href="https://coolpix.me/feedback?rating=3&ticket={{ticketId}}" class="rating-button">😐 Average</a>
+                    <a href="https://coolpix.me/feedback?rating=2&ticket={{ticketId}}" class="rating-button">😕 Poor</a>
+                </div>
+            </div>
+            
+            <div class="message">
+                <p>We appreciate your patience and thank you for choosing coolpix. Our goal is to provide you with the best possible experience, and your feedback helps us achieve that.</p>
+                
+                <p>If you have any other questions or need assistance with anything else, please don't hesitate to reach out to us at <a href="mailto:support@coolpix.me" style="color: #06b6d4;">support@coolpix.me</a></p>
+                
+                <p>Best regards,<br>The coolpix Support Team</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2024 coolpix. All rights reserved.</p>
+            <p>
+                <a href="https://coolpix.me/privacy">Privacy Policy</a> | 
+                <a href="https://coolpix.me/terms">Terms of Service</a> | 
+                <a href="mailto:support@coolpix.me">Support</a>
+            </p>
+            <p>coolpix, coolpix.me</p>
+        </div>
+    </div>
+</body>
+</html>

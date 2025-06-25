@@ -15,11 +15,11 @@ interface SEOConfig {
 }
 
 const defaultConfig = {
-  siteName: 'CVPHOTO - AI Headshot Studio',
-  siteUrl: 'https://cvphoto.app',
+  siteName: 'CoolPix - AI Headshot Studio',
+  siteUrl: 'https://coolpix.me',
   defaultImage: '/og-image.jpg',
   defaultDescription: 'Create professional AI-generated headshots in minutes. Powered by advanced AI models including Flux Pro Ultra, Imagen4, and Recraft V3.',
-  twitterHandle: '@cvphoto',
+  twitterHandle: '@coolpix',
   locale: 'en_US',
 };
 
@@ -122,8 +122,8 @@ export const seoConfigs = {
   },
 
   auth: {
-    title: 'Sign In to CVPHOTO',
-    description: 'Sign in to your CVPHOTO account to create professional AI-generated headshots.',
+    title: 'Sign In to coolpix',
+    description: 'Sign in to your coolpix account to create professional AI-generated headshots.',
     keywords: ['sign in', 'login', 'account', 'AI headshots'],
     url: '/auth',
   },
@@ -150,15 +150,15 @@ export const seoConfigs = {
   },
 
   about: {
-    title: 'About CVPHOTO',
-    description: 'Learn about CVPHOTO, the leading AI headshot generation platform powered by advanced AI models.',
+    title: 'About CoolPix',
+    description: 'Learn about CoolPix, the leading AI headshot generation platform powered by advanced AI models.',
     keywords: ['about', 'AI technology', 'company', 'team'],
     url: '/about',
   },
 
   contact: {
     title: 'Contact Us',
-    description: 'Get in touch with the CVPHOTO team for support or inquiries.',
+    description: 'Get in touch with the CoolPix team for support or inquiries.',
     keywords: ['contact', 'support', 'help', 'customer service'],
     url: '/contact',
   },

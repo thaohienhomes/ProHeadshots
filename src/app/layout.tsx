@@ -8,9 +8,9 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 const BG = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "The #1 AI Photo Generator in Sweden",
+  title: "coolpix - Professional AI Headshots",
   description:
-    "The most popular AI headshot generator in Sweden. Create studio quality headshots with CVPHOTO. Best for professional business headshots.",
+    "The most popular AI headshot generator. Create studio quality headshots with coolpix. Best for professional business headshots.",
 };
 
 export default function RootLayout({

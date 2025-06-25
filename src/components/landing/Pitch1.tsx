@@ -23,7 +23,7 @@ export default function Pitch1() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-16">
-          {/* CVPHOTO Benefits Card */}
+          {/* CoolPix Benefits Card */}
           <div className="group relative">
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-primary-500/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative bg-gradient-to-br from-cyan-500 to-primary-600 rounded-2xl shadow-xl overflow-hidden">
@@ -44,7 +44,7 @@ export default function Pitch1() {
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    With CVPHOTO
+                    With CoolPix
                   </h2>
                   <div className="bg-white/20 backdrop-blur-sm text-white font-bold py-2 px-4 text-sm sm:text-base rounded-lg whitespace-nowrap border border-white/30">
                     Studio Quality

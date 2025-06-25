@@ -2,7 +2,7 @@ import Image from "next/image";
 import getUser from "@/action/getUser";
 import { redirect } from "next/navigation";
 import { createTune } from "@/app/api/llm/tune/createTune";
-import { sendEmail } from "@/action/sendEmail";
+import { sendProcessingStartedEmail, sendScheduledProcessingCompleteEmail } from "@/action/emailActions";
 
 export default async function Page() {
   const userData = await getUser();
@@ -15,25 +15,19 @@ export default async function Page() {
     // Note: Middleware ensures users only reach this page if they have complete data
     if (workStatus === "ongoing" && !apiStatus) {
       await createTune(userData);
-      // Send email - Message to users: "Done, please wait...""
-      await sendEmail({
-        to: email, // Use user's email from userData
-        from: process.env.NOREPLY_EMAIL || "noreply@cvphoto.app", // Using env variable with fallback
-        templateId: "d-d966d02f4a324abeb43a1d7045da520a", // Replace with your template ID
+
+      // Send processing started email
+      await sendProcessingStartedEmail({
+        firstName: userData[0]?.name || 'there',
+        email: email,
+        estimatedTime: '10-15 minutes',
+        dashboardUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://coolpix.me'}/dashboard`,
+        supportUrl: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://coolpix.me'}/support`
       });
 
-      // Schedule second email with 2 hour delay - Message to users: "Your photos are ready!"
+      // Schedule completion email with 2 hour delay
       const TWO_HOURS_IN_SECONDS = 7200; // 2 hours * 60 minutes * 60 seconds
-      const sendAt = Math.floor(
-        (Date.now() + TWO_HOURS_IN_SECONDS * 1000) / 1000
-      );
-
-      await sendEmail({
-        to: email,
-        from: process.env.NOREPLY_EMAIL || "noreply@cvphoto.app",
-        templateId: "d-e937e48db4b945af9279e85baa1683e4", // Updated template ID for scheduled email
-        sendAt: sendAt,
-      });
+      await sendScheduledProcessingCompleteEmail(email, TWO_HOURS_IN_SECONDS);
     }
 
     if (userData && userData.length > 0) {

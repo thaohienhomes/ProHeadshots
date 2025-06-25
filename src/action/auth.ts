@@ -3,13 +3,15 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { AuthError } from "@supabase/supabase-js";
-import { sendEmail } from "./sendEmail";
+import { sendWelcomeEmail } from "./emailActions";
 
-async function sendWelcomeEmail(email: string) {
-  return await sendEmail({
-    to: email,
-    from: process.env.NOREPLY_EMAIL || 'noreply@cvphoto.app',
-    templateId: 'd-def6b236e0a64721a3420e36b19cd379',
+async function sendWelcomeEmailToUser(email: string, firstName: string = 'there') {
+  const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://coolpix.me'}/dashboard`;
+
+  return await sendWelcomeEmail({
+    firstName,
+    email,
+    dashboardUrl
   });
 }
 
