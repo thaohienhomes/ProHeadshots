@@ -1,8 +1,7 @@
-# CVPHOTO - $2K/m AI Business.
 
-Full codebase with custom FLUX API. Live App on: www.cvphoto.app
+Full codebase with custom FLUX API. Live App on: www.coolpix.me
 
-This repo was forked on 30th of November, 2024 and has all the code from CVPHoto.app. It is being supported and updated by @johnnytran for customers
+This repo was forked on 30th of November, 2024 and has all the code from coolpix.me. It is being supported and updated by @johnnytran for customers
 that bought the codebase of CVPhoto.app via clonemysaas.com.
 
 Star this repo to be notified with new updates and upcoming features.
