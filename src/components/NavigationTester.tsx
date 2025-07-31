@@ -136,7 +136,7 @@ export default function NavigationTester({ isVisible = false }: NavigationTester
             <p className="text-xs text-gray-400">
               Console commands:<br/>
               • <code>coolpixTest()</code><br/>
-              • <code>coolpixNavigate('section-id')</code>
+              • <code>coolpixNavigate(&apos;section-id&apos;)</code>
             </p>
           </div>
         </div>

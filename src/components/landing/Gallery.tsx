@@ -227,6 +227,7 @@ const ImageGallery = () => {
                         src={person.aiImages}
                         alt={`AI-generated image of ${person.name}`}
                         fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
                         className="select-none object-cover transition-transform duration-300 group-hover:scale-105"
                         draggable="false"
                       />
@@ -238,6 +239,7 @@ const ImageGallery = () => {
                             src={person.selfieUrl}
                             alt={`${person.name}&apos;s selfie`}
                             fill
+                            sizes="(max-width: 768px) 25vw, 12.5vw"
                             className="select-none object-cover"
                             draggable="false"
                           />
