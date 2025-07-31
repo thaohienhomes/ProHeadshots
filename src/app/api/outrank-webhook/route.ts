@@ -25,6 +25,33 @@ if (!outrankAccessToken) {
 // Create Supabase client with service role key for database operations
 const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
+// Simple in-memory rate limiting (for production, use Redis or similar)
+const requestCounts = new Map<string, { count: number; resetTime: number }>();
+
+/**
+ * Simple rate limiting: max 10 requests per minute per IP
+ */
+function checkRateLimit(clientIp: string): boolean {
+  const now = Date.now();
+  const windowMs = 60 * 1000; // 1 minute
+  const maxRequests = 10;
+
+  const current = requestCounts.get(clientIp);
+
+  if (!current || now > current.resetTime) {
+    // Reset or initialize
+    requestCounts.set(clientIp, { count: 1, resetTime: now + windowMs });
+    return true;
+  }
+
+  if (current.count >= maxRequests) {
+    return false; // Rate limit exceeded
+  }
+
+  current.count++;
+  return true;
+}
+
 /**
  * Validates the access token from the Authorization header
  */
@@ -81,6 +108,22 @@ async function storeArticle(article: OutrankArticle): Promise<{ success: boolean
 export async function POST(request: NextRequest) {
   try {
     console.log('🔔 Outrank webhook received');
+
+    // Log request details for debugging
+    const clientIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    const userAgent = request.headers.get('user-agent') || 'unknown';
+    console.log(`📊 Request from IP: ${clientIp}, User-Agent: ${userAgent}`);
+
+    // Check rate limiting
+    if (!checkRateLimit(clientIp)) {
+      console.log(`⚠️ Rate limit exceeded for IP: ${clientIp}`);
+      return NextResponse.json({
+        success: false,
+        message: 'Rate limit exceeded. Maximum 10 requests per minute.',
+        error_type: 'rate_limit',
+        timestamp: new Date().toISOString()
+      } as WebhookResponse, { status: 429 });
+    }
 
     // Validate access token
     if (!validateAccessToken(request)) {
@@ -168,11 +211,18 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('❌ Webhook processing error:', error);
+
+    // Check if it's a rate limiting error
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    const isRateLimitError = errorMessage.toLowerCase().includes('rate limit') ||
+                            errorMessage.toLowerCase().includes('too many requests');
+
     return NextResponse.json({
       success: false,
-      message: error instanceof Error ? error.message : 'Internal server error',
+      message: errorMessage,
+      error_type: isRateLimitError ? 'rate_limit' : 'internal_error',
       timestamp: new Date().toISOString()
-    } as WebhookResponse, { status: 500 });
+    } as WebhookResponse, { status: isRateLimitError ? 429 : 500 });
   }
 }
 
