@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    logger.error('Error in performance monitoring API', error, 'PERFORMANCE_API');
+    logger.error('Error in performance monitoring API', error as Error, 'PERFORMANCE_API');
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

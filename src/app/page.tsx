@@ -7,7 +7,8 @@ import Header from "@/components/Header";
 import Pitch1 from "@/components/landing/Pitch1";
 import Pitch2 from "@/components/landing/Pitch2";
 import Pricing from "@/components/landing/Pricing";
-import Faq from "@/components/landing/Faq";
+import Testimonials from "@/components/landing/Testimonials";
+import EnhancedFaq from "@/components/landing/EnhancedFaq";
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -24,7 +25,8 @@ export default async function Home() {
       <Pitch1 />
       <Pitch2 />
       <Pricing />
-      <Faq />
+      <Testimonials />
+      <EnhancedFaq />
       <Footer />
     </div>
   );

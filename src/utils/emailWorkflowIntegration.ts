@@ -1,15 +1,15 @@
 'use server'
 
-import { 
-  sendOrderConfirmationEmail, 
-  sendPaymentConfirmationEmail,
+import {
+  sendWelcomeEmail,
+  sendOrderConfirmationEmail,
   sendProcessingStartedEmail,
   sendProcessingCompleteEmail,
-  sendWelcomeEmail,
+  sendPaymentConfirmationEmail,
   sendPasswordResetEmail,
   sendPromotionalEmail,
   sendSupportResponseEmail
-} from './emailTemplates';
+} from '@/action/emailActions';
 import { createClient } from "@/utils/supabase/server";
 import { logger } from "@/utils/logger";
 

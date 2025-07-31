@@ -1,7 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import InfiniteScrollGallery from "@/components/ui/InfiniteScrollGallery";
+import { staggerContainer, fadeInUp } from "@/lib/animations";
 
 const people = [
   {
@@ -20,7 +23,55 @@ const people = [
   // Add more people as needed
 ];
 
+// Sample images for infinite scroll gallery
+const showcaseImages = [
+  {
+    id: "1",
+    src: "/democard/demo1-ai.webp",
+    alt: "Professional AI Headshot 1",
+    title: "Corporate Executive",
+    category: "Business",
+  },
+  {
+    id: "2",
+    src: "/democard/demo2-ai.webp",
+    alt: "Professional AI Headshot 2",
+    title: "Creative Professional",
+    category: "Creative",
+  },
+  {
+    id: "3",
+    src: "/democard/demo3-ai.webp",
+    alt: "Professional AI Headshot 3",
+    title: "Tech Leader",
+    category: "Technology",
+  },
+  {
+    id: "4",
+    src: "/democard/demo4-ai.webp",
+    alt: "Professional AI Headshot 4",
+    title: "Marketing Expert",
+    category: "Marketing",
+  },
+  {
+    id: "5",
+    src: "/democard/demo5-ai.webp",
+    alt: "Professional AI Headshot 5",
+    title: "Financial Advisor",
+    category: "Finance",
+  },
+  {
+    id: "6",
+    src: "/democard/demo6-ai.webp",
+    alt: "Professional AI Headshot 6",
+    title: "Healthcare Professional",
+    category: "Healthcare",
+  },
+];
+
 const ImageGallery = () => {
+  const [selectedImage, setSelectedImage] = useState<any>(null);
+
   useEffect(() => {
     const preventRightClick = (e: MouseEvent) => {
       if (e.target instanceof HTMLImageElement) {
@@ -35,6 +86,10 @@ const ImageGallery = () => {
     };
   }, []);
 
+  const handleImageClick = (image: any, index: number) => {
+    setSelectedImage({ ...image, index });
+  };
+
   return (
     <section className="relative w-full bg-gradient-to-br from-navy-900 via-navy-800 to-navy-700 py-20 sm:py-32 overflow-hidden">
       {/* Background decorations */}
@@ -44,13 +99,26 @@ const ImageGallery = () => {
       </div>
 
       <div className="relative z-10 max-w-section mx-auto px-section">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-center mb-6">
+        {/* Header Section */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="text-center mb-16"
+        >
+          <motion.h2
+            variants={fadeInUp}
+            className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl text-center mb-6"
+          >
             <span className="bg-gradient-to-r from-white via-cyan-100 to-primary-200 bg-clip-text text-transparent">
               Our Customers Trust Us
             </span>
-          </h2>
-          <div className="flex items-center justify-center mb-8 px-4">
+          </motion.h2>
+          <motion.div
+            variants={fadeInUp}
+            className="flex items-center justify-center mb-8 px-4"
+          >
             <div className="flex items-center gap-3 bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 rounded-full px-6 py-3">
               <svg
                 className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 text-cyan-400"
@@ -70,13 +138,53 @@ const ImageGallery = () => {
                 Money Back Guarantee If Not Satisfied
               </p>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="mt-16 space-y-12">
+        {/* Infinite Scroll Gallery Showcase */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="mb-20"
+        >
+          <motion.div variants={fadeInUp} className="text-center mb-12">
+            <h3 className="text-2xl font-semibold text-white mb-4">
+              Professional AI Headshots
+            </h3>
+            <p className="text-navy-300 max-w-2xl mx-auto">
+              See the quality and variety of professional headshots our AI creates.
+              Each image is uniquely generated to match your style and profession.
+            </p>
+          </motion.div>
+
+          <motion.div variants={fadeInUp}>
+            <InfiniteScrollGallery
+              images={showcaseImages}
+              direction="left"
+              speed={40}
+              pauseOnHover={true}
+              showOverlay={true}
+              aspectRatio="portrait"
+              onImageClick={handleImageClick}
+              className="mb-8"
+            />
+          </motion.div>
+        </motion.div>
+
+        {/* Customer Reviews Section */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="mt-16 space-y-12"
+        >
           {people.map((person, index) => (
-            <div
+            <motion.div
               key={index}
+              variants={fadeInUp}
               className="group relative"
             >
               {/* Glow effect */}
@@ -143,10 +251,47 @@ const ImageGallery = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
+
+      {/* Image Modal/Lightbox */}
+      {selectedImage && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            className="relative max-w-4xl max-h-[90vh] bg-navy-900 rounded-xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={selectedImage.src}
+              alt={selectedImage.alt}
+              className="w-full h-full object-contain"
+            />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy-900 to-transparent p-6">
+              <h3 className="text-white text-xl font-semibold">
+                {selectedImage.title}
+              </h3>
+              <p className="text-cyan-200 mt-1">{selectedImage.category}</p>
+            </div>
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 bg-navy-800/80 hover:bg-navy-700 text-white p-2 rounded-full transition-colors"
+            >
+              ✕
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
     </section>
   );
 };

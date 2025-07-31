@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { AuthError } from "@supabase/supabase-js";
 import { sendWelcomeEmail } from "./emailActions";
+import { trackConversion } from "@/utils/analytics";
 
 async function sendWelcomeEmailToUser(email: string, firstName: string = 'there') {
   const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://coolpix.me'}/dashboard`;
@@ -18,31 +19,33 @@ async function sendWelcomeEmailToUser(email: string, firstName: string = 'there'
 export async function signInWithGoogleAction(): Promise<never> {
   const supabase = await createClient();
 
-  // Get the redirect URL - prioritize production domain over localhost
+  // Get the redirect URL - prioritize development localhost
   const getRedirectUrl = () => {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    const isDevelopment = (process.env.NODE_ENV as string) === 'development' || (process.env.ENVIRONMENT as string) === 'DEVELOPMENT';
 
     console.log('🔍 OAuth redirect URL debug:', {
       siteUrl,
       nodeEnv: process.env.NODE_ENV,
-      environment: process.env.ENVIRONMENT
+      environment: process.env.ENVIRONMENT,
+      isDevelopment
     });
 
-    // If we're in development, use the configured site URL or fallback to localhost:3000
-    if ((process.env.NODE_ENV as string) === 'development' || (process.env.ENVIRONMENT as string) === 'DEVELOPMENT') {
+    // For development, ALWAYS use localhost regardless of Supabase configuration
+    if (isDevelopment) {
       const redirectUrl = `${siteUrl || 'http://localhost:3000'}/auth/callback`;
-      console.log('🔄 Development redirect URL:', redirectUrl);
+      console.log('🔄 Development redirect URL (FORCED):', redirectUrl);
       return redirectUrl;
     }
 
-    // For production, never use localhost
+    // For production, use the site URL or fallback to production domain
     if (siteUrl && !siteUrl.includes('localhost')) {
       const redirectUrl = `${siteUrl}/auth/callback`;
       console.log('🚀 Production redirect URL:', redirectUrl);
       return redirectUrl;
     }
 
-    // Fallback: construct from environment or use your known domain
+    // Fallback: use production domain
     const fallbackUrl = 'https://coolpix.me/auth/callback';
     console.log('⚠️ Fallback redirect URL:', fallbackUrl);
     return fallbackUrl;
@@ -56,6 +59,10 @@ export async function signInWithGoogleAction(): Promise<never> {
     options: {
       redirectTo: redirectUrl,
       skipBrowserRedirect: false,
+      queryParams: {
+        access_type: 'offline',
+        prompt: 'consent',
+      },
     },
   });
 
@@ -176,6 +183,24 @@ export async function signUpAction(formData: FormData): Promise<never> {
   }
 
   if (signUpData.user) {
+    // Track signup conversion for analytics and affiliate attribution
+    try {
+      await trackConversion(
+        'signup',
+        undefined, // No monetary value for signup
+        signUpData.user.id,
+        undefined, // No session ID for signup
+        {
+          email: email,
+          signupMethod: 'email',
+          timestamp: new Date().toISOString()
+        }
+      );
+    } catch (conversionError) {
+      console.error('Failed to track signup conversion:', conversionError);
+      // Don't fail the signup if conversion tracking fails
+    }
+
     // Send welcome email
     try {
       await sendWelcomeEmailToUser(email);

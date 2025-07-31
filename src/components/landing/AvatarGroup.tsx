@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { AvatarFallback, Avatar } from "@/components/ui/avatar";
+import AnimatedCounter from "@/components/ui/AnimatedCounter";
 
 // Member data
 const memberData = [
@@ -15,13 +16,13 @@ const memberData = [
 export const AvatarGroup = () => (
   <div className="flex items-center -space-x-3">
     {memberData.map(({ initials, imagePath }) => (
-      <Avatar key={initials} className="border-[3px] border-cyan-400/50 hover:border-cyan-400 transition-colors duration-300 shadow-lg">
+      <Avatar key={initials} className="border-[3px] border-cyan-400/50 hover:border-cyan-400 transition-colors duration-300 shadow-lg w-10 h-10">
         <Image
           src={imagePath}
           alt={initials}
-          width={40}
-          height={40}
-          className="rounded-full"
+          fill
+          sizes="40px"
+          className="rounded-full object-cover"
         />
         <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>
@@ -33,10 +34,20 @@ export const AvatarGroup = () => (
 export const MembershipInfo = () => (
   <div className="text-left">
     <p className="text-base font-semibold text-white">
-      92% of customers recommend us
+      <AnimatedCounter
+        end={92}
+        suffix="% of customers recommend us"
+        duration={2.5}
+        className="inline"
+      />
     </p>
     <p className="text-sm font-medium text-navy-300">
-      Trusted by 100+ satisfied customers
+      Trusted by <AnimatedCounter
+        end={100}
+        suffix="+ satisfied customers"
+        duration={2}
+        className="inline"
+      />
     </p>
   </div>
 );

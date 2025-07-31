@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       const maxModels = user.planType === 'executive' ? 3 : user.planType === 'professional' ? 2 : 1;
       selectedModels = [
         modelSelection.primaryModel.modelId,
-        ...modelSelection.alternativeModels.slice(0, maxModels - 1).map(alt => alt.modelId)
+        ...modelSelection.alternativeModels.slice(0, maxModels - 1).map((alt: any) => alt.modelId)
       ];
 
       intelligentSelectionUsed = true;

@@ -1,20 +1,25 @@
 import { createClient } from './supabase/server';
 import { logger } from './logger';
 import { FalAIModelId, FalAIImageGenerationResult } from './falAI';
+import { LeonardoAIModelId } from './leonardoAI';
+import { UnifiedImageGenerationResult, AIProvider } from './unifiedAI';
+import { ProviderStatus } from './providerHealthMonitoring';
 
 export interface CacheEntry {
   id: string;
   cache_key: string;
-  cache_type: 'generation' | 'model_selection' | 'user_preference' | 'model_performance';
+  cache_type: 'generation' | 'model_selection' | 'user_preference' | 'model_performance' | 'provider_health' | 'unified_generation';
   data: any;
   metadata: {
-    model_id?: FalAIModelId;
+    model_id?: FalAIModelId | LeonardoAIModelId | string;
     user_id?: string;
     prompt_hash?: string;
     parameters_hash?: string;
     quality_score?: number;
     generation_time?: number;
     cost?: number;
+    provider?: AIProvider;
+    fallback_used?: boolean;
   };
   created_at: string;
   expires_at: string;
@@ -31,9 +36,22 @@ export interface CacheOptions {
 
 export interface GenerationCacheKey {
   prompt: string;
-  modelId: FalAIModelId;
+  modelId: FalAIModelId | LeonardoAIModelId | string;
   parameters: Record<string, any>;
   userId?: string;
+  provider?: AIProvider;
+}
+
+export interface UnifiedGenerationCacheKey {
+  prompt: string;
+  requirements?: any;
+  parameters: Record<string, any>;
+  userId?: string;
+}
+
+export interface ProviderHealthCacheKey {
+  provider: AIProvider;
+  timestamp?: number;
 }
 
 export interface ModelSelectionCacheKey {
@@ -268,12 +286,161 @@ export class AICache {
     try {
       const cacheKey = `user_pref_${userId}`;
       const entry = await this.getCacheEntry(cacheKey);
-      
+
       if (!entry) return null;
-      
+
       return entry.data;
     } catch (error) {
       logger.error('Error retrieving cached user preferences', error, 'AI_CACHE');
+      return null;
+    }
+  }
+
+  /**
+   * Cache unified AI generation results
+   */
+  async cacheUnifiedGeneration(
+    key: UnifiedGenerationCacheKey,
+    result: UnifiedImageGenerationResult,
+    metadata: {
+      generationTime: number;
+      cost: number;
+      qualityScore?: number;
+    }
+  ): Promise<void> {
+    try {
+      const cacheKey = this.generateCacheKey('unified_generation', key);
+      const entry: CacheEntry = {
+        id: `unified_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        cache_key: cacheKey,
+        cache_type: 'unified_generation',
+        data: this.compressData(result),
+        metadata: {
+          model_id: result.metadata.model,
+          user_id: key.userId,
+          prompt_hash: this.hashString(key.prompt),
+          parameters_hash: this.hashString(JSON.stringify(key.parameters)),
+          quality_score: metadata.qualityScore,
+          generation_time: metadata.generationTime,
+          cost: metadata.cost,
+          provider: result.metadata.provider,
+          fallback_used: result.metadata.fallbackUsed,
+        },
+        created_at: new Date().toISOString(),
+        expires_at: new Date(Date.now() + (this.options.ttl! * 1000)).toISOString(),
+        access_count: 0,
+        last_accessed: new Date().toISOString(),
+      };
+
+      this.memoryCache.set(cacheKey, entry);
+
+      if (this.options.enablePersistence) {
+        await this.persistCacheEntry(entry);
+      }
+
+      await this.enforceCacheSize();
+
+      logger.info('Unified AI generation result cached', {
+        cacheKey,
+        provider: result.metadata.provider,
+        model: result.metadata.model,
+        promptLength: key.prompt.length,
+        generationTime: metadata.generationTime,
+        fallbackUsed: result.metadata.fallbackUsed,
+      }, 'AI_CACHE');
+
+    } catch (error) {
+      logger.error('Error caching unified AI generation', error, 'AI_CACHE');
+    }
+  }
+
+  /**
+   * Get cached unified generation result
+   */
+  async getCachedUnifiedGeneration(key: UnifiedGenerationCacheKey): Promise<{
+    result: UnifiedImageGenerationResult;
+    metadata: any;
+    timestamp: string;
+  } | null> {
+    try {
+      this.cacheStats.totalRequests++;
+      const cacheKey = this.generateCacheKey('unified_generation', key);
+      const entry = await this.getCacheEntry(cacheKey);
+
+      if (!entry) {
+        this.cacheStats.misses++;
+        return null;
+      }
+
+      this.cacheStats.hits++;
+
+      logger.info('Unified AI generation cache hit', {
+        cacheKey,
+        provider: entry.metadata.provider,
+        accessCount: entry.access_count,
+        age: Date.now() - new Date(entry.created_at).getTime(),
+      }, 'AI_CACHE');
+
+      return {
+        result: this.decompressData(entry.data),
+        metadata: entry.metadata,
+        timestamp: entry.created_at,
+      };
+
+    } catch (error) {
+      logger.error('Error retrieving cached unified generation', error, 'AI_CACHE');
+      this.cacheStats.misses++;
+      return null;
+    }
+  }
+
+  /**
+   * Cache provider health status
+   */
+  async cacheProviderHealth(
+    key: ProviderHealthCacheKey,
+    healthStatus: ProviderStatus
+  ): Promise<void> {
+    try {
+      const cacheKey = this.generateCacheKey('provider_health', key);
+      const entry: CacheEntry = {
+        id: `health_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        cache_key: cacheKey,
+        cache_type: 'provider_health',
+        data: healthStatus,
+        metadata: {
+          provider: key.provider,
+        },
+        created_at: new Date().toISOString(),
+        expires_at: new Date(Date.now() + (300 * 1000)).toISOString(), // 5 minutes
+        access_count: 0,
+        last_accessed: new Date().toISOString(),
+      };
+
+      this.memoryCache.set(cacheKey, entry);
+
+      if (this.options.enablePersistence) {
+        await this.persistCacheEntry(entry);
+      }
+
+    } catch (error) {
+      logger.error('Error caching provider health', error, 'AI_CACHE');
+    }
+  }
+
+  /**
+   * Get cached provider health status
+   */
+  async getCachedProviderHealth(key: ProviderHealthCacheKey): Promise<ProviderStatus | null> {
+    try {
+      const cacheKey = this.generateCacheKey('provider_health', key);
+      const entry = await this.getCacheEntry(cacheKey);
+
+      if (!entry) return null;
+
+      return entry.data as ProviderStatus;
+    } catch (error) {
+      logger.error('Error retrieving cached provider health', error, 'AI_CACHE');
       return null;
     }
   }
@@ -554,6 +721,20 @@ export const aiUserPreferenceCache = new AICache({
   enablePersistence: true,
 });
 
+export const aiUnifiedGenerationCache = new AICache({
+  ttl: 3600, // 1 hour
+  maxSize: 300,
+  enableCompression: true,
+  enablePersistence: true,
+});
+
+export const aiProviderHealthCache = new AICache({
+  ttl: 300, // 5 minutes
+  maxSize: 50,
+  enableCompression: false,
+  enablePersistence: true,
+});
+
 /**
  * Convenience functions for common caching operations
  */
@@ -583,4 +764,69 @@ export async function getCachedModelSelectionResult(
   key: ModelSelectionCacheKey
 ): Promise<any | null> {
   return aiModelSelectionCache.getCachedModelSelection(key);
+}
+
+/**
+ * Convenience functions for unified AI caching
+ */
+export async function cacheUnifiedGenerationResult(
+  key: UnifiedGenerationCacheKey,
+  result: UnifiedImageGenerationResult,
+  metadata: { generationTime: number; cost: number; qualityScore?: number }
+): Promise<void> {
+  return aiUnifiedGenerationCache.cacheUnifiedGeneration(key, result, metadata);
+}
+
+export async function getCachedUnifiedGenerationResult(
+  key: UnifiedGenerationCacheKey
+): Promise<{
+  result: UnifiedImageGenerationResult;
+  metadata: any;
+  timestamp: string;
+} | null> {
+  return aiUnifiedGenerationCache.getCachedUnifiedGeneration(key);
+}
+
+/**
+ * Convenience functions for provider health caching
+ */
+export async function cacheProviderHealthStatus(
+  key: ProviderHealthCacheKey,
+  healthStatus: ProviderStatus
+): Promise<void> {
+  return aiProviderHealthCache.cacheProviderHealth(key, healthStatus);
+}
+
+export async function getCachedProviderHealthStatus(
+  key: ProviderHealthCacheKey
+): Promise<ProviderStatus | null> {
+  return aiProviderHealthCache.getCachedProviderHealth(key);
+}
+
+/**
+ * Get comprehensive cache statistics across all cache types
+ */
+export function getAllCacheStats() {
+  return {
+    generation: aiGenerationCache.getCacheStats(),
+    modelSelection: aiModelSelectionCache.getCacheStats(),
+    userPreference: aiUserPreferenceCache.getCacheStats(),
+    unifiedGeneration: aiUnifiedGenerationCache.getCacheStats(),
+    providerHealth: aiProviderHealthCache.getCacheStats(),
+  };
+}
+
+/**
+ * Clear all caches or specific cache types
+ */
+export async function clearAllCaches(type?: string): Promise<void> {
+  const caches = [
+    aiGenerationCache,
+    aiModelSelectionCache,
+    aiUserPreferenceCache,
+    aiUnifiedGenerationCache,
+    aiProviderHealthCache,
+  ];
+
+  await Promise.all(caches.map(cache => cache.clearCache(type)));
 }

@@ -350,7 +350,7 @@ export default function LogoTestPage() {
               <li>✓ <strong>NEW:</strong> Verify effects work on all variants</li>
               <li>✓ <strong>NEW:</strong> Test prefers-reduced-motion compliance</li>
               <li>✓ <strong>NEW:</strong> Check animation performance (no jank)</li>
-              <li>✓ <strong>NEW:</strong> Verify effects don't impact accessibility</li>
+              <li>✓ <strong>NEW:</strong> Verify effects don&apos;t impact accessibility</li>
             </ul>
           </div>
         </section>

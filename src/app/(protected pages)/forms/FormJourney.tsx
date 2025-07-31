@@ -47,7 +47,7 @@ export default function Page() {
               </div>
               <div>
                 <h3 className="font-semibold">Welcome to CoolPix!</h3>
-                <p className="text-sm text-green-100">Your account has been created successfully. Let's get started!</p>
+                <p className="text-sm text-green-100">Your account has been created successfully. Let&apos;s get started!</p>
               </div>
             </div>
           </div>

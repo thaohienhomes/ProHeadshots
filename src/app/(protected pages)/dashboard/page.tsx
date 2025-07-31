@@ -4,6 +4,8 @@ import getUser from "@/action/getUser";
 import { redirect } from "next/navigation";
 import { CheckCircle, Sparkles, Download, Eye, Calendar, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import SuccessConfetti from "@/components/ui/SuccessConfetti";
+import AnimatedCounter from "@/components/ui/AnimatedCounter";
 
 export const metadata = {
   title: "Your Dashboard | AI Headshot Generator",
@@ -78,6 +80,13 @@ export default async function DashboardPage() {
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto pt-12 p-6">
+        {/* Success Confetti */}
+        <SuccessConfetti
+          show={true}
+          duration={4000}
+          colors={['#06b6d4', '#0891b2', '#0e7490', '#155e75', '#164e63']}
+        />
+
         {/* Header Section */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-primary-600 text-white px-4 py-2 rounded-full text-sm font-medium mb-4">
@@ -158,7 +167,7 @@ export default async function DashboardPage() {
               </p>
 
               <Link href="/dashboard/results">
-                <Button variant="primary" className="w-full md:w-auto px-8 py-4 text-lg">
+                <Button variant="default" className="w-full md:w-auto px-8 py-4 text-lg">
                   View Your Results
                   <CheckCircle className="w-5 h-5 ml-2" />
                 </Button>

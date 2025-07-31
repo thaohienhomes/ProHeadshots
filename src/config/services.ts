@@ -3,8 +3,11 @@
 
 export interface ServiceConfig {
   ai: {
-    provider: 'astria' | 'fal';
+    provider: 'astria' | 'fal' | 'leonardo' | 'unified';
     enabled: boolean;
+    fallbackEnabled?: boolean;
+    primaryProvider?: 'fal' | 'leonardo';
+    secondaryProvider?: 'fal' | 'leonardo';
   };
   payment: {
     provider: 'stripe' | 'polar';
@@ -15,8 +18,11 @@ export interface ServiceConfig {
 // Default configuration - can be overridden by environment variables
 const defaultConfig: ServiceConfig = {
   ai: {
-    provider: 'fal', // Default to Fal AI
+    provider: 'unified', // Default to unified AI service
     enabled: true,
+    fallbackEnabled: true,
+    primaryProvider: 'fal',
+    secondaryProvider: 'leonardo',
   },
   payment: {
     provider: 'polar', // Default to Polar Payment
@@ -28,8 +34,11 @@ const defaultConfig: ServiceConfig = {
 export function getServiceConfig(): ServiceConfig {
   return {
     ai: {
-      provider: (process.env.AI_PROVIDER as 'astria' | 'fal') || defaultConfig.ai.provider,
+      provider: (process.env.AI_PROVIDER as 'astria' | 'fal' | 'leonardo' | 'unified') || defaultConfig.ai.provider,
       enabled: process.env.AI_ENABLED !== 'false',
+      fallbackEnabled: process.env.AI_FALLBACK_ENABLED !== 'false',
+      primaryProvider: (process.env.AI_PRIMARY_PROVIDER as 'fal' | 'leonardo') || defaultConfig.ai.primaryProvider,
+      secondaryProvider: (process.env.AI_SECONDARY_PROVIDER as 'fal' | 'leonardo') || defaultConfig.ai.secondaryProvider,
     },
     payment: {
       provider: (process.env.PAYMENT_PROVIDER as 'stripe' | 'polar') || defaultConfig.payment.provider,
@@ -46,7 +55,17 @@ export function isAstriaEnabled(): boolean {
 
 export function isFalAIEnabled(): boolean {
   const config = getServiceConfig();
-  return config.ai.provider === 'fal' && config.ai.enabled;
+  return (config.ai.provider === 'fal' || config.ai.provider === 'unified') && config.ai.enabled;
+}
+
+export function isLeonardoAIEnabled(): boolean {
+  const config = getServiceConfig();
+  return (config.ai.provider === 'leonardo' || config.ai.provider === 'unified') && config.ai.enabled;
+}
+
+export function isUnifiedAIEnabled(): boolean {
+  const config = getServiceConfig();
+  return config.ai.provider === 'unified' && config.ai.enabled;
 }
 
 export function isStripeEnabled(): boolean {
@@ -71,8 +90,19 @@ export function validateServiceConfig(): { valid: boolean; errors: string[] } {
     if (config.ai.provider === 'astria' && !process.env.ASTRIA_API_KEY) {
       errors.push('ASTRIA_API_KEY is required when using Astria AI');
     }
-    if (config.ai.provider === 'fal' && !process.env.FAL_AI_API_KEY) {
-      errors.push('FAL_AI_API_KEY is required when using Fal AI');
+    if ((config.ai.provider === 'fal' || config.ai.provider === 'unified') && !process.env.FAL_AI_API_KEY) {
+      errors.push('FAL_AI_API_KEY is required when using Fal AI or unified service');
+    }
+    if ((config.ai.provider === 'leonardo' || config.ai.provider === 'unified') && !process.env.LEONARDO_API_KEY) {
+      errors.push('LEONARDO_API_KEY is required when using Leonardo AI or unified service');
+    }
+    if (config.ai.provider === 'unified') {
+      if (!config.ai.primaryProvider || !config.ai.secondaryProvider) {
+        errors.push('PRIMARY_PROVIDER and SECONDARY_PROVIDER must be set when using unified AI service');
+      }
+      if (config.ai.primaryProvider === config.ai.secondaryProvider) {
+        errors.push('PRIMARY_PROVIDER and SECONDARY_PROVIDER must be different');
+      }
     }
   }
 
@@ -96,12 +126,31 @@ export function validateServiceConfig(): { valid: boolean; errors: string[] } {
 
 // Get the appropriate service functions based on configuration
 export function getAIService() {
-  if (isFalAIEnabled()) {
+  const config = getServiceConfig();
+
+  // Temporarily disable unified provider to avoid server-side import issues
+  // TODO: Fix server-side import issues in unified AI provider
+  if (false && config.ai.provider === 'unified') {
+    return {
+      createTune: () => Promise.resolve({ POST: () => Promise.resolve(new Response('Service temporarily disabled', { status: 503 })) }),
+      createPrompt: () => Promise.resolve({ POST: () => Promise.resolve(new Response('Service temporarily disabled', { status: 503 })) }),
+      getPrompts: () => import('../action/getFalPrompts').then(m => m.getFalPromptsFromDatabase), // Use fal for now
+      fixDiscrepancy: () => import('../action/fixDiscrepancyFal').then(m => m.fixDiscrepancyFal), // Use fal for now
+      healthCheck: () => Promise.resolve({ GET: () => Promise.resolve(new Response('Service temporarily disabled', { status: 503 })) }),
+    };
+  } else if (isFalAIEnabled()) {
     return {
       createTune: () => import('../app/api/llm/tune/createTuneFal').then(m => m.createTuneFal),
       createPrompt: () => import('../app/api/llm/prompt/createPromptFal').then(m => m.createPromptFal),
       getPrompts: () => import('../action/getFalPrompts').then(m => m.getFalPromptsFromDatabase),
       fixDiscrepancy: () => import('../action/fixDiscrepancyFal').then(m => m.fixDiscrepancyFal),
+    };
+  } else if (isLeonardoAIEnabled()) {
+    return {
+      createTune: () => import('../utils/leonardoAI').then(m => m.trainModel),
+      createPrompt: () => import('../utils/leonardoAI').then(m => m.generateImages),
+      getPrompts: () => import('../action/getFalPrompts').then(m => m.getFalPromptsFromDatabase), // Fallback to fal
+      fixDiscrepancy: () => import('../action/fixDiscrepancyFal').then(m => m.fixDiscrepancyFal), // Fallback to fal
     };
   } else {
     return {
@@ -115,10 +164,15 @@ export function getAIService() {
 
 export function getPaymentService() {
   if (isPolarEnabled()) {
+    // Use development pricing for non-production environments
+    const pricingFile = process.env.NODE_ENV === 'production'
+      ? '../app/checkout/pricingPlansPolar.json'
+      : '../app/checkout/pricingPlansPolar.dev.json';
+
     return {
       verifyPayment: () => import('../action/verifyPaymentPolar').then(m => m.verifyPaymentPolar),
       checkoutComponent: () => import('../app/checkout/CheckoutPagePolar').then(m => m.default),
-      pricingPlans: () => import('../app/checkout/pricingPlansPolar.json'),
+      pricingPlans: () => import(pricingFile),
     };
   } else {
     return {

@@ -1,4 +1,12 @@
+"use i18n";
+
 import Link from "next/link";
+import { BorderBeam } from "@/components/ui/border-beam";
+
+// Utility function for combining classes
+const cn = (...classes: (string | undefined | null | false)[]) => {
+  return classes.filter(Boolean).join(' ');
+};
 
 const PricingCard = ({
   plan,
@@ -63,14 +71,19 @@ const PricingCard = ({
       </ul>
       <Link href="/auth?mode=signup" passHref>
         <button
-          className={`w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 hover:scale-105 ${
+          className={`relative w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 hover:scale-105 overflow-hidden ${
             isPopular
               ? "bg-gradient-to-r from-cyan-500 to-primary-600 text-white hover:from-cyan-400 hover:to-primary-500 shadow-lg hover:shadow-xl"
               : "bg-navy-700/50 text-white border border-cyan-400/30 hover:bg-navy-600/50 hover:border-cyan-400/50"
           }`}
         >
-          Get {plan.headshots} headshots in {plan.time} hour
-          {plan.time > 1 ? "s" : ""}
+          <span className="relative z-10">
+            Get {plan.headshots} headshots in {plan.time} hour
+            {plan.time > 1 ? "s" : ""}
+          </span>
+          {isPopular && (
+            <BorderBeam size={120} duration={10} delay={0} />
+          )}
         </button>
       </Link>
     </div>
@@ -103,21 +116,21 @@ export default function Pricing() {
   ];
 
   return (
-    <section className="relative w-full py-16 md:py-24 lg:py-32 bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 overflow-hidden">
+    <section className="relative w-full bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-16 lg:py-24 overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0">
         <div className="absolute top-0 right-1/3 w-96 h-96 bg-gradient-to-br from-cyan-400/5 to-transparent rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-gradient-to-tl from-primary-500/5 to-transparent rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl mb-6 leading-tight">
-            <span className="bg-gradient-to-r from-white via-cyan-100 to-primary-200 bg-clip-text text-transparent">
+          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+            <span className="bg-gradient-to-r from-cyan-400 to-primary-500 bg-clip-text text-transparent">
               Simple, transparent pricing
             </span>
           </h2>
-          <p className="text-navy-300 max-w-3xl mx-auto text-lg leading-relaxed">
+          <p className="text-lg text-navy-200 max-w-3xl mx-auto">
             The average cost of professional headshots is $300 in EU and the
             U.S. Our packages start at just $29 -{" "}
             <strong className="text-cyan-400">up to 10x less expensive</strong> than traditional options.

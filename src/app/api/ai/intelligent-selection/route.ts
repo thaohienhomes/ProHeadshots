@@ -74,12 +74,12 @@ export async function POST(request: NextRequest) {
     );
 
     // Log the selection for analytics
-    logger.info('Intelligent model selection completed', {
+    logger.info('Intelligent model selection completed', 'AI_MODEL_SELECTION', {
       userId,
       primaryModel: modelSelection.primaryModel.modelId,
       confidence: modelSelection.primaryModel.confidence,
       requirements: enhancedRequirements,
-    }, 'AI_MODEL_SELECTION');
+    });
 
     return NextResponse.json({
       success: true,
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    logger.error('Error in intelligent model selection API', error, 'AI_MODEL_SELECTION');
+    logger.error('Error in intelligent model selection API', error as Error, 'AI_MODEL_SELECTION');
     
     return NextResponse.json(
       { 
@@ -142,7 +142,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    logger.error('Error fetching model selection history', error, 'AI_MODEL_SELECTION');
+    logger.error('Error fetching model selection history', error as Error, 'AI_MODEL_SELECTION');
     
     return NextResponse.json(
       { 

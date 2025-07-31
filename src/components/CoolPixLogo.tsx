@@ -25,7 +25,8 @@ export default function CoolPixLogo({
   ...props
 }: CoolPixLogoProps) {
   const dimensions = sizeMap[size][variant === 'icon-only' ? 'icon' : variant]
-  const uniqueId = `coolpix-${Math.random().toString(36).substr(2, 9)}`
+  // Use a more predictable ID generation to avoid hydration issues
+  const uniqueId = `coolpix-${variant}-${theme}-${size}-${effects}`
   
   // Color schemes based on theme
   const colors = {

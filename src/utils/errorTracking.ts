@@ -1,4 +1,5 @@
 // Enhanced error tracking with Sentry integration
+import * as Sentry from '@sentry/nextjs';
 import { logger } from './logger';
 
 // Error tracking configuration
@@ -30,7 +31,7 @@ class ErrorTrackingService {
 
   constructor() {
     this.config = {
-      dsn: process.env.SENTRY_DSN,
+      dsn: process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN,
       environment: process.env.NODE_ENV || 'development',
       release: process.env.VERCEL_GIT_COMMIT_SHA || 'unknown',
       sampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
@@ -45,9 +46,18 @@ class ErrorTrackingService {
     if (this.isInitialized) return;
 
     try {
-      // In a real implementation, you would initialize Sentry here
-      // For now, we'll use a mock implementation
+      // Sentry is automatically initialized via the config files
+      // We just need to verify it's working
       if (this.config.dsn) {
+        // Set up global error handlers
+        if (typeof window !== 'undefined') {
+          // Client-side initialization
+          Sentry.setTag('component', 'client');
+        } else {
+          // Server-side initialization
+          Sentry.setTag('component', 'server');
+        }
+
         console.log('🔍 Error tracking initialized with Sentry');
         this.isInitialized = true;
       } else {
@@ -253,13 +263,87 @@ class ErrorTrackingService {
   }
 
   private sendToSentry(error: Error, context?: ErrorContext, errorId?: string): void {
-    // Mock Sentry integration - in production, use actual Sentry SDK
-    console.log('📤 Sending to Sentry:', { error: error.message, context, errorId });
+    try {
+      // Set user context if available
+      if (context?.user) {
+        Sentry.setUser({
+          id: context.user.id,
+          email: context.user.email,
+          plan: context.user.plan,
+        });
+      }
+
+      // Set tags if available
+      if (context?.tags) {
+        Object.entries(context.tags).forEach(([key, value]) => {
+          Sentry.setTag(key, value);
+        });
+      }
+
+      // Set extra context
+      if (context?.extra) {
+        Sentry.setContext('extra', context.extra);
+      }
+
+      // Set error ID as tag
+      if (errorId) {
+        Sentry.setTag('errorId', errorId);
+      }
+
+      // Set fingerprint for grouping
+      if (context?.fingerprint) {
+        Sentry.withScope((scope) => {
+          scope.setFingerprint(context.fingerprint!);
+          Sentry.captureException(error);
+        });
+      } else {
+        Sentry.captureException(error);
+      }
+
+      console.log('📤 Error sent to Sentry:', { errorId, message: error.message });
+    } catch (sentryError) {
+      console.error('Failed to send error to Sentry:', sentryError);
+    }
   }
 
   private sendMessageToSentry(message: string, level: string, context?: ErrorContext, messageId?: string): void {
-    // Mock Sentry integration - in production, use actual Sentry SDK
-    console.log('📤 Sending message to Sentry:', { message, level, context, messageId });
+    try {
+      // Set user context if available
+      if (context?.user) {
+        Sentry.setUser({
+          id: context.user.id,
+          email: context.user.email,
+          plan: context.user.plan,
+        });
+      }
+
+      // Set tags if available
+      if (context?.tags) {
+        Object.entries(context.tags).forEach(([key, value]) => {
+          Sentry.setTag(key, value);
+        });
+      }
+
+      // Set extra context
+      if (context?.extra) {
+        Sentry.setContext('extra', context.extra);
+      }
+
+      // Set message ID as tag
+      if (messageId) {
+        Sentry.setTag('messageId', messageId);
+      }
+
+      // Map level to Sentry level
+      const sentryLevel = level as Sentry.SeverityLevel;
+
+      // Send message to Sentry
+      Sentry.captureMessage(message, sentryLevel);
+
+      console.log('📤 Message sent to Sentry:', { messageId, message, level });
+    } catch (sentryError) {
+      console.error('Failed to send message to Sentry:', sentryError);
+    }
   }
 
   private storeErrorLocally(error: Error, context?: ErrorContext, errorId?: string): void {

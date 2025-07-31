@@ -4,6 +4,9 @@ import Image from "next/image";
 import { trackDownload } from "@/action/trackDownload";
 import React, { useState, useEffect, useMemo } from "react";
 import { fixDiscrepancy } from "@/action/fixDiscrepancy";
+import { motion } from "framer-motion";
+import ProfessionalGallery from "@/components/ui/ProfessionalGallery";
+import { staggerContainer, fadeInUp } from "@/lib/animations";
 
 interface ImageGalleryProps {
   images: string[];
@@ -154,90 +157,180 @@ export default function ImageGallery({
     return images;
   }, [promptsResult, images]);
 
+  // Convert images to gallery format
+  const galleryImages = useMemo(() => {
+    return displayImages.map((src, index) => ({
+      id: `image-${index}`,
+      src,
+      alt: `AI-generated headshot ${index + 1}`,
+      title: `Professional Headshot ${index + 1}`,
+      category: userData?.planType || 'Professional',
+      featured: index < 3, // Mark first 3 as featured
+      aspectRatio: 1, // Square aspect ratio
+    }));
+  }, [displayImages, userData?.planType]);
+
   // Update to only show skeletons for the difference
   const uniqueImageCount = new Set(displayImages).size;
   const hasDiscrepancy = isLoading && uniqueImageCount < planLimit;
   const skeletonCount = planLimit - uniqueImageCount;
 
+  const handleImageClick = (image: any, index: number) => {
+    // Download the image when clicked
+    handleDownload(index);
+  };
+
+  const handleImageDownload = (image: any) => {
+    const index = galleryImages.findIndex(img => img.id === image.id);
+    if (index !== -1) {
+      handleDownload(index);
+    }
+  };
+
   return (
-    <>
-      <div className="mb-4 p-4 bg-mainOrange/10 border border-mainOrange/30 text-mainBlack rounded-lg shadow-sm">
-        <h3 className="text-lg font-semibold mb-1">Important Notice</h3>
-        <p className="text-sm">
-          Your generated images are available for download for the next 30 days.
-          To ensure you don&apos;t lose access, please download all images to
-          your device at your earliest convenience.
-        </p>
-      </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 h-full">
-        {/* Real images that are already generated */}
-        {displayImages.map((src, index) => (
-          <div
-            key={index}
-            className="aspect-square relative overflow-hidden rounded-lg transition-transform duration-300 ease-in-out hover:scale-[1.02] hover:shadow-lg group cursor-pointer"
-            onClick={() => handleDownload(index)}
+    <div className="min-h-screen bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 text-white">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header Section */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+          className="text-center mb-12"
+        >
+          <motion.h1
+            variants={fadeInUp}
+            className="text-4xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
           >
-            <Image
-              src={src}
-              alt={`AI-generated image ${index + 1}`}
-              fill
-              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-              className="object-cover rounded-lg opacity-80 transition-opacity duration-300 hover:opacity-100 group-hover:opacity-100 select-none pointer-events-none"
-              onContextMenu={(e) => e.preventDefault()}
-              draggable={false}
-            />
+            Your AI Generated Headshots
+          </motion.h1>
+          <motion.p
+            variants={fadeInUp}
+            className="text-navy-300 text-lg max-w-2xl mx-auto mb-8"
+          >
+            {uniqueImageCount} professional headshots ready for download.
+            {hasDiscrepancy && ` ${skeletonCount} more images are still generating.`}
+          </motion.p>
 
-            {/* Beta badge */}
-            <div className="absolute top-2 right-2 bg-white/30 text-white text-xs font-semibold px-2 py-1 rounded-full backdrop-blur-sm shadow-sm">
-              Beta V4
+          {/* Plan Info */}
+          <motion.div
+            variants={fadeInUp}
+            className="inline-flex items-center gap-3 bg-navy-800/50 backdrop-blur-sm border border-cyan-400/20 rounded-full px-6 py-3"
+          >
+            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+            <span className="text-white font-medium">
+              {userData?.planType} Plan - {uniqueImageCount}/{planLimit} Generated
+            </span>
+          </motion.div>
+        </motion.div>
+
+        {/* Important Notice */}
+        <motion.div
+          variants={fadeInUp}
+          initial="hidden"
+          animate="visible"
+          className="mb-8 p-6 bg-gradient-to-r from-cyan-900/20 to-blue-900/20 border border-cyan-400/20 rounded-xl backdrop-blur-sm"
+        >
+          <h3 className="text-lg font-semibold mb-2 text-cyan-400">📅 Important Notice</h3>
+          <p className="text-navy-200">
+            Your generated images are available for download for the next 30 days.
+            To ensure you don&apos;t lose access, please download all images to
+            your device at your earliest convenience.
+          </p>
+        </motion.div>
+        {/* Professional Gallery */}
+        <motion.div
+          variants={fadeInUp}
+          initial="hidden"
+          animate="visible"
+          className="mb-12"
+        >
+          <ProfessionalGallery
+            images={galleryImages}
+            columns={{ mobile: 2, tablet: 3, desktop: 4 }}
+            layout="grid"
+            showSearch={galleryImages.length > 8}
+            showFilters={false}
+            showCategories={false}
+            enableLightbox={true}
+            onImageClick={handleImageClick}
+            onImageDownload={handleImageDownload}
+            className="mb-8"
+          />
+        </motion.div>
+
+        {/* Loading/Generating Images Section */}
+        {hasDiscrepancy && (
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            animate="visible"
+            className="bg-navy-800/30 backdrop-blur-sm border border-navy-700 rounded-xl p-8"
+          >
+            <h3 className="text-xl font-semibold text-white mb-6 text-center">
+              🎨 Still Generating ({skeletonCount} remaining)
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[...Array(skeletonCount)].map((_, index) => (
+                <div
+                  key={`skeleton-${index}`}
+                  className="aspect-square relative overflow-hidden rounded-xl bg-navy-800/50 border border-navy-600"
+                >
+                  {/* Animated gradient background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-navy-800/50 to-blue-500/10 animate-pulse" />
+
+                  {/* Loading spinner and message */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+                    <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mb-3" />
+                    <p className="text-navy-300 text-xs font-medium text-center leading-tight">
+                      Generating your professional headshot...
+                    </p>
+                    <p className="text-navy-400 text-xs mt-1">
+                      1-2 hours remaining
+                    </p>
+                  </div>
+
+                  {/* Beta badge */}
+                  <div className="absolute top-2 right-2 bg-cyan-400/20 text-cyan-400 text-xs font-semibold px-2 py-1 rounded-full backdrop-blur-sm">
+                    Beta V4
+                  </div>
+                </div>
+              ))}
             </div>
 
-            {/* Downloaded badge */}
-            {downloadHistory.includes(src) && (
-              <div className="absolute top-2 left-2 bg-mainGreen/80 text-mainBlack text-xs font-semibold px-2 py-1 rounded-full backdrop-blur-sm shadow-sm">
-                Downloaded
-              </div>
-            )}
+            <div className="mt-6 text-center">
+              <p className="text-navy-300 text-sm">
+                💡 Your images will appear here automatically once generation is complete.
+                You&apos;ll receive an email notification when they&apos;re ready.
+              </p>
+            </div>
+          </motion.div>
+        )}
 
-            {/* Download button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDownload(index);
-              }}
-              className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-b from-transparent via-mainBlack/70 to-mainBlack text-2xl font-semibold px-4 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:from-transparent hover:via-mainBlack/80 hover:to-mainBlack flex items-end justify-center pb-4"
-            >
-              Download High-Resolution
-            </button>
+        {/* Download Stats */}
+        <motion.div
+          variants={fadeInUp}
+          initial="hidden"
+          animate="visible"
+          className="mt-12 text-center"
+        >
+          <div className="inline-flex items-center gap-6 bg-navy-800/30 backdrop-blur-sm border border-navy-700 rounded-xl px-8 py-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-cyan-400">{uniqueImageCount}</div>
+              <div className="text-navy-300 text-sm">Generated</div>
+            </div>
+            <div className="w-px h-8 bg-navy-600"></div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-400">{downloadHistory.length}</div>
+              <div className="text-navy-300 text-sm">Downloaded</div>
+            </div>
+            <div className="w-px h-8 bg-navy-600"></div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-400">{planLimit - uniqueImageCount}</div>
+              <div className="text-navy-300 text-sm">Remaining</div>
+            </div>
           </div>
-        ))}
-
-        {/* Only show skeleton cards for the images that are still generating */}
-        {hasDiscrepancy &&
-          [...Array(skeletonCount)].map((_, index) => (
-            <div
-              key={`skeleton-${index}`}
-              className="aspect-square relative overflow-hidden rounded-lg bg-mainBlack/5 animate-pulse"
-            >
-              {/* Gradient overlay to create depth */}
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-mainBlack/5 to-mainBlack/10" />
-
-              {/* Beta badge placeholder */}
-              <div className="absolute top-2 right-2 h-6 w-16 bg-white/30 rounded-full" />
-
-              {/* Loading spinner and message */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <div className="w-8 h-8 border-2 border-mainBlack/20 border-t-mainOrange rounded-full animate-spin mb-3" />
-                <p className="text-mainBlack/70 text-sm font-medium px-4 text-center">
-                  This photo is still generating, please come back in 1-2 hours.
-                </p>
-              </div>
-
-              {/* Download button placeholder */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 h-8 w-48 bg-mainBlack/10 rounded-lg" />
-            </div>
-          ))}
+        </motion.div>
       </div>
-    </>
+    </div>
   );
 }

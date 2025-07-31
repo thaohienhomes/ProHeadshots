@@ -1,8 +1,11 @@
 // Polar Payment utility functions
-// Use production API since we have production access token and products
+// Use appropriate API based on environment
 import crypto from 'crypto';
 
-const POLAR_API_BASE = 'https://api.polar.sh';
+// Use sandbox API for development, production API for production
+const POLAR_API_BASE = process.env.NODE_ENV === 'production'
+  ? 'https://api.polar.sh'
+  : 'https://sandbox-api.polar.sh';
 
 export interface PolarCheckoutSession {
   id: string;
@@ -138,25 +141,83 @@ export async function createPolarCheckoutSession(params: {
  */
 export async function getPolarCheckoutSession(checkoutId: string): Promise<PolarCheckoutSession> {
   const accessToken = process.env.POLAR_ACCESS_TOKEN;
-  
+
   if (!accessToken) {
     throw new Error('POLAR_ACCESS_TOKEN is not configured');
   }
 
-  const response = await fetch(`${POLAR_API_BASE}/v1/checkouts/${checkoutId}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  // Handle mock checkout sessions in development
+  if (process.env.NODE_ENV === 'development' && checkoutId.startsWith('mock_checkout_')) {
+    console.log('🧪 Development mode: Creating mock checkout session response for:', checkoutId);
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to retrieve Polar checkout session: ${response.status} ${errorText}`);
+    // Create a mock completed checkout session
+    const mockCheckoutSession: PolarCheckoutSession = {
+      id: checkoutId,
+      url: `https://polar.sh/checkout/mock?product=28d871b5-be69-4594-af59-737fa189d5df&user=00000000-0000-0000-0000-000000000001`,
+      customer_email: 'test@coolpix.me',
+      customer_name: 'Test User',
+      product_id: '28d871b5-be69-4594-af59-737fa189d5df', // Development Basic plan
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3005'}/postcheckout-polar?checkout_id={CHECKOUT_ID}`,
+      metadata: {
+        user_id: '00000000-0000-0000-0000-000000000001', // Use proper UUID format
+        plan_type: 'Basic'
+      },
+      created_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours
+      status: 'succeeded', // Mock as succeeded for testing (matches real Polar API)
+    };
+
+    console.log('Mock checkout session created for verification:', mockCheckoutSession.id);
+    return mockCheckoutSession;
   }
 
-  return response.json();
+  // For production or real checkout IDs, use the real API with timeout
+  console.log('🌐 Making API call to Polar for checkout session:', checkoutId);
+
+  // Create AbortController for timeout handling
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+  try {
+    const response = await fetch(`${POLAR_API_BASE}/v1/checkouts/${checkoutId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ Polar API error:', response.status, errorText);
+
+      // Handle specific error cases
+      if (response.status === 404) {
+        throw new Error(`Checkout session not found. This checkout may have expired or is invalid.`);
+      } else if (response.status === 401) {
+        throw new Error(`Authentication failed. Please check your Polar API credentials.`);
+      } else {
+        throw new Error(`Failed to retrieve Polar checkout session: ${response.status} ${errorText}`);
+      }
+    }
+
+    const data = await response.json();
+    console.log('✅ Successfully retrieved checkout session from Polar API');
+    return data;
+  } catch (error) {
+    clearTimeout(timeoutId);
+
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.error('❌ Polar API request timed out after 10 seconds');
+      throw new Error('Request timed out. Please try again or contact support if the issue persists.');
+    }
+
+    console.error('❌ Error calling Polar API:', error);
+    throw error;
+  }
 }
 
 /**
@@ -250,21 +311,53 @@ export function verifyPolarWebhook(payload: string, signature: string, secret: s
   }
 
   try {
-    // Polar uses HMAC-SHA256 for webhook signatures
-    // The signature format is typically: sha256=<hash>
-    const expectedSignature = crypto
-      .createHmac('sha256', secret)
-      .update(payload, 'utf8')
-      .digest('hex');
-
     // Handle different signature formats
+
+    // Format 1: Timestamp-based signature (t=timestamp,v1=signature)
+    if (signature.includes('t=') && signature.includes('v1=')) {
+      const parts = signature.split(',');
+      const timestampPart = parts.find(part => part.startsWith('t='));
+      const signaturePart = parts.find(part => part.startsWith('v1='));
+
+      if (!timestampPart || !signaturePart) {
+        console.error('Invalid timestamp-based signature format');
+        return false;
+      }
+
+      const timestamp = timestampPart.split('=')[1];
+      const receivedSignature = signaturePart.split('=')[1];
+
+      // Create expected signature with timestamp
+      const signaturePayload = `${timestamp}.${payload}`;
+      const expectedSignature = crypto
+        .createHmac('sha256', secret)
+        .update(signaturePayload, 'utf8')
+        .digest('hex');
+
+      // Use timing-safe comparison
+      if (expectedSignature.length !== receivedSignature.length) {
+        return false;
+      }
+
+      return crypto.timingSafeEqual(
+        Buffer.from(expectedSignature, 'hex'),
+        Buffer.from(receivedSignature, 'hex')
+      );
+    }
+
+    // Format 2: Simple sha256=<hash> format
     let receivedSignature = signature;
     if (signature.startsWith('sha256=')) {
       receivedSignature = signature.substring(7);
     }
 
+    // Create expected signature without timestamp
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(payload, 'utf8')
+      .digest('hex');
+
     // Use timing-safe comparison to prevent timing attacks
-    // Ensure both buffers have the same length to avoid errors
     if (expectedSignature.length !== receivedSignature.length) {
       return false;
     }
@@ -284,12 +377,20 @@ export function verifyPolarWebhook(payload: string, signature: string, secret: s
  * Product IDs are UUIDs, so we need to map them to plan types
  */
 export function extractPlanTypeFromProductId(productId: string): string {
-  // Product ID to Plan Type mapping (verified 2025-06-24)
-  const productIdMapping: Record<string, string> = {
-    '5b26fbdf-87ee-4002-aecf-82f6278a4831': 'Basic',      // $29
-    '2e38da8b-460f-4bb6-b7ab-e6e0056d99f5': 'Professional', // $39
-    '4fb38fdf-ebd1-484e-9f42-07781504af78': 'Executive',   // $59
-  };
+  // Environment-specific Product ID to Plan Type mapping
+  const productIdMapping: Record<string, string> = process.env.NODE_ENV === 'production'
+    ? {
+        // Production Product IDs (verified 2025-06-24)
+        '5b26fbdf-87ee-4002-aecf-82f6278a4831': 'Basic',      // $29
+        '2e38da8b-460f-4bb6-b7ab-e6e0056d99f5': 'Professional', // $39
+        '4fb38fdf-ebd1-484e-9f42-07781504af78': 'Executive',   // $59
+      }
+    : {
+        // Sandbox Product IDs (verified 2025-07-24)
+        '28d871b5-be69-4594-af59-737fa189d5df': 'Basic',      // $29/month
+        'aff54590-b4c6-4e24-a966-8945f2ae2e19': 'Professional', // $59/month
+        'e2696f0f-213f-4b15-9c78-e8b4e7d83116': 'Executive',   // $99/month
+      };
 
   return productIdMapping[productId] || 'Basic'; // Default fallback
 }

@@ -143,7 +143,7 @@ export async function DELETE(request: NextRequest) {
     );
 
   } catch (error) {
-    logger.error('Error deleting cache', error, 'AI_CACHE_API');
+    logger.error('Error deleting cache', error as Error, 'AI_CACHE_API');
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -166,6 +166,10 @@ async function handleGetStats(isAdmin: boolean) {
         totalMisses: generationStats.misses + selectionStats.misses + preferenceStats.misses,
         totalRequests: generationStats.totalRequests + selectionStats.totalRequests + preferenceStats.totalRequests,
         overallHitRate: 0,
+      },
+      database: {
+        totalEntries: 0,
+        byType: {} as Record<string, number>,
       },
     };
 
@@ -200,7 +204,7 @@ async function handleGetStats(isAdmin: boolean) {
     });
 
   } catch (error) {
-    logger.error('Error getting cache stats', error, 'AI_CACHE_API');
+    logger.error('Error getting cache stats', error as Error, 'AI_CACHE_API');
     throw error;
   }
 }
@@ -236,7 +240,7 @@ async function handleClearCache(type?: string | null) {
     });
 
   } catch (error) {
-    logger.error('Error clearing cache', error, 'AI_CACHE_API');
+    logger.error('Error clearing cache', error as Error, 'AI_CACHE_API');
     throw error;
   }
 }
@@ -297,7 +301,7 @@ async function handleGetCacheEntries(userId: string, type?: string | null, isAdm
     });
 
   } catch (error) {
-    logger.error('Error getting cache entries', error, 'AI_CACHE_API');
+    logger.error('Error getting cache entries', error as Error, 'AI_CACHE_API');
     throw error;
   }
 }

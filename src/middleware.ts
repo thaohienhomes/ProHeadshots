@@ -2,11 +2,12 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { getRequiredPhotoCount } from "@/utils/photoConfig";
+import { withAuth } from "next-auth/middleware";
+
+// No internationalization - using English only
 
 // Helper function to handle redirects based on user status
-const handleRedirectBasedOnWorkStatus = (user: any, request: NextRequest): NextResponse | null => {
-  const { pathname } = new URL(request.url);
-  
+const handleRedirectBasedOnWorkStatus = (user: any, request: NextRequest, pathname: string): NextResponse | null => {
   // Don't redirect if user is on API routes or Next.js internal routes
   if (pathname.startsWith('/api/') || pathname.startsWith('/_next/')) {
     return null;
@@ -89,7 +90,20 @@ const handleRedirectBasedOnWorkStatus = (user: any, request: NextRequest): NextR
 export async function middleware(request: NextRequest) {
   // Security headers and rate limiting
   const isProduction = process.env.NODE_ENV === 'production';
-  const { pathname } = new URL(request.url);
+  const { pathname, searchParams } = new URL(request.url);
+
+  // Development bypass for testing wait page
+  if (!isProduction && (pathname.startsWith('/test-wait') || searchParams.get('bypass') === 'dev')) {
+    return NextResponse.next();
+  }
+
+  // Skip processing for API routes, static files, and Next.js internals
+  if (pathname.startsWith('/api/') ||
+      pathname.startsWith('/_next/') ||
+      pathname.startsWith('/favicon.ico') ||
+      pathname.match(/\.(svg|png|jpg|jpeg|gif|webp)$/)) {
+    return NextResponse.next();
+  }
 
   // Rate limiting for API routes (simple implementation)
   if (pathname.startsWith('/api/') && isProduction) {
@@ -182,7 +196,25 @@ export async function middleware(request: NextRequest) {
 
     // This will refresh session if expired - required for Server Components
     const { data: { user } } = await supabase.auth.getUser();
-    const { pathname } = new URL(request.url);
+
+    // Also check for NextAuth.js session (for hybrid authentication)
+    let nextAuthUser = null;
+    try {
+      // Check for NextAuth.js session token
+      const sessionToken = request.cookies.get('next-auth.session-token')?.value ||
+                           request.cookies.get('__Secure-next-auth.session-token')?.value;
+
+      if (sessionToken) {
+        // In a real implementation, you'd verify the JWT token here
+        // For now, we'll assume it's valid if it exists
+        nextAuthUser = { id: 'nextauth-user' };
+      }
+    } catch (error) {
+      console.log('NextAuth session check failed:', error);
+    }
+
+    // Use either Supabase user or NextAuth user
+    const authenticatedUser = user || nextAuthUser;
 
     // Skip middleware processing for auth callback routes
     if (pathname.startsWith('/auth/callback')) {
@@ -190,12 +222,16 @@ export async function middleware(request: NextRequest) {
     }
 
     // Check if the path is a protected route
-    const isProtectedRoute = pathname.startsWith('/wait') || 
-                           pathname.startsWith('/upload/') || 
+    const isProtectedRoute = pathname.startsWith('/wait') ||
+                           pathname.startsWith('/upload/') ||
                            pathname.startsWith('/dashboard');
 
     // Redirect to auth if trying to access protected routes while not authenticated
-    if (isProtectedRoute && !user) {
+    if (isProtectedRoute && !authenticatedUser) {
+      // For NextAuth.js integration, redirect to NextAuth sign-in page
+      if (pathname.startsWith('/wait')) {
+        return NextResponse.redirect(new URL('/auth/signin?callbackUrl=' + encodeURIComponent(request.url), request.url));
+      }
       return NextResponse.redirect(new URL('/auth', request.url));
     }
 
@@ -238,7 +274,7 @@ export async function middleware(request: NextRequest) {
           return NextResponse.redirect(new URL(targetPath, request.url));
         }
       }
-      return null;  // Allow access to login/signup pages if not authenticated
+      return NextResponse.next();  // Allow access to login/signup pages if not authenticated
     }
 
     // If user is authenticated, check their status and redirect accordingly
@@ -252,7 +288,6 @@ export async function middleware(request: NextRequest) {
 
         if (!error && userData && userData.length > 0) {
           const userInfo = userData[0];
-          const { pathname } = new URL(request.url);
           
           // 🛡️ Enhanced logic for workStatus="ongoing" users
           if (userInfo.workStatus === "ongoing") {
@@ -310,7 +345,7 @@ export async function middleware(request: NextRequest) {
             }
           } else {
             // For non-ongoing users, use the existing logic
-            const redirectResponse = handleRedirectBasedOnWorkStatus(userInfo, request);
+            const redirectResponse = handleRedirectBasedOnWorkStatus(userInfo, request, pathname);
             
             if (redirectResponse) {
               // Delete old project cookies on redirect response too

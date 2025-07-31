@@ -1,6 +1,6 @@
 # ProHeadshots Email Templates Setup Guide
 
-This guide explains how to set up and use the comprehensive email template system for ProHeadshots using SendGrid.
+This guide explains how to set up and use the comprehensive email template system for ProHeadshots using Resend.com.
 
 ## 📧 Email Templates Overview
 
@@ -17,37 +17,46 @@ The ProHeadshots application includes 8 professional email templates:
 
 ## 🚀 Quick Setup
 
-### 1. SendGrid Configuration
+### 1. Resend.com Configuration
 
-First, ensure your SendGrid API key is configured:
+First, ensure your Resend API key is configured:
 
 ```bash
 # In your .env file
-SENDGRID_API_KEY=SG.your_sendgrid_api_key_here
+RESEND_API_KEY=re_your_resend_api_key_here
 NOREPLY_EMAIL=noreply@coolpix.me
 ADMIN_EMAIL=admin@coolpix.me
 ```
 
-### 2. Create SendGrid Templates
+### 2. Domain Verification
 
-You need to create templates in your SendGrid account and update the template IDs in `src/utils/emailTemplates.ts`:
+Verify your domain in the Resend dashboard:
+
+1. Go to https://resend.com/domains
+2. Add your domain (e.g., coolpix.me)
+3. Add the required DNS records
+4. Wait for verification
+
+### 3. Built-in HTML Templates
+
+The system now uses built-in HTML templates that are automatically generated. No external template setup required! The templates are defined in `src/utils/emailTemplates.ts`:
 
 ```typescript
-export const SENDGRID_TEMPLATE_IDS = {
-  welcome: 'd-your_welcome_template_id',
-  order_confirmation: 'd-your_order_confirmation_template_id',
-  processing_started: 'd-your_processing_started_template_id',
-  processing_complete: 'd-your_processing_complete_template_id',
-  payment_confirmation: 'd-your_payment_confirmation_template_id',
-  password_reset: 'd-your_password_reset_template_id',
-  promotional: 'd-your_promotional_template_id',
-  support_response: 'd-your_support_response_template_id'
+export const RESEND_TEMPLATE_IDS = {
+  welcome: 'd-709841e3498344fba8a981d8be9666ba',
+  order_confirmation: 'd-85b5b99d09684408ba908abfe98537f5',
+  processing_started: 'd-db27d729c9ef4a2ebb176451e3ab266a',
+  processing_complete: 'd-ee3bde9d6dec4c928eec5422300840f6',
+  payment_confirmation: 'd-7dcd6ecde3dc4a1c990d388c283e38f0',
+  password_reset: 'd-1b85a5df63c94e23ac388415916c1598',
+  promotional: 'd-3aafb72ab3474fcfb9a7da04b3afb2a1',
+  support_response: 'd-266b25ccb7ec4ff4a19135d64a50b66f'
 } as const;
 ```
 
-### 3. Upload HTML Templates to SendGrid
+### 4. Template Features
 
-Use the HTML files in `src/templates/email/` as the basis for your SendGrid templates:
+All templates now include:
 
 - `welcome.html` → Welcome template
 - `order-confirmation.html` → Order confirmation template

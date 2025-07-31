@@ -3,6 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes border-beam {
+  100% {
+    --angle: 360deg;
+  }
+}
+
 body {
   color: #f8fafc;
   background-color: #0f172a;
@@ -26,6 +32,13 @@ body {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+/* Border Beam Animation */
+@keyframes border-beam {
+  to {
+    --angle: 360deg;
   }
 }
 
@@ -93,4 +106,117 @@ body {
 
 .shimmer {
   animation: shimmer 1.5s infinite;
+}
+
+/* Enhanced animations for wait page */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(34, 211, 238, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.6), 0 0 30px rgba(14, 165, 233, 0.4);
+  }
+}
+
+@keyframes contentRotate {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.animate-content-rotate {
+  animation: contentRotate 8s ease-in-out infinite;
+}
+
+/* Neural network and processing animations */
+@keyframes neuralPulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes dataFlow {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes processingWave {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+.animate-neural-pulse {
+  animation: neuralPulse 2s ease-in-out infinite;
+}
+
+.animate-data-flow {
+  animation: dataFlow 3s linear infinite;
+}
+
+.animate-processing-wave {
+  animation: processingWave 2s ease-in-out infinite;
 }

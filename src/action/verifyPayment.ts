@@ -3,6 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import Stripe from 'stripe';
 import { sendSimpleEmail } from "./sendEmail";
+import { trackConversion } from "@/utils/analytics";
 
 export async function verifyPayment(sessionId: string) {
   if (!sessionId) {
@@ -54,15 +55,36 @@ export async function verifyPayment(sessionId: string) {
       throw new Error('Missing user ID in payment session. User ID must be provided as client_reference_id.');
     }
 
-    if (session.payment_status === 'paid') { 
+    if (session.payment_status === 'paid') {
       // Update user's plan in the database
-      await updatePlan({ 
-        paymentStatus: session.payment_status, 
+      await updatePlan({
+        paymentStatus: session.payment_status,
         amount: session.amount_total ?? 0,
         planType: planType ?? 'default',
         userId: userId
       });
       console.log('Payment successful', session.payment_status);
+
+      // Track conversion for analytics and affiliate attribution
+      try {
+        await trackConversion(
+          'payment',
+          (session.amount_total ?? 0) / 100, // Convert cents to dollars
+          userId,
+          sessionId,
+          {
+            orderId: sessionId,
+            currency: session.currency?.toUpperCase() || 'USD',
+            planType: planType ?? 'default',
+            customerEmail: session.customer_details?.email,
+            paymentMethod: 'stripe',
+            transactionId: sessionId
+          }
+        );
+      } catch (conversionError) {
+        console.error('Failed to track conversion:', conversionError);
+        // Don't fail the payment verification if conversion tracking fails
+      }
 
       // Send admin notification email
       if (process.env.ADMIN_EMAIL) {

@@ -25,11 +25,12 @@ const mockLogger = {
   error: (message, error, category, data) => console.error(`[${category}] ${message}`, error?.message || error, data || '')
 };
 
-// Mock the email functions with direct SendGrid calls
-import sgMail from '@sendgrid/mail';
+// Mock the email functions with direct Resend calls
+import { Resend } from 'resend';
 
-if (process.env.SENDGRID_API_KEY) {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+let resend = null;
+if (process.env.RESEND_API_KEY) {
+  resend = new Resend(process.env.RESEND_API_KEY);
 }
 
 const TEMPLATE_IDS = {

@@ -2,6 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, Clock, AlertCircle, Loader2, Sparkles, Zap } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 export interface ProcessingStep {
   id: string;
@@ -171,14 +175,14 @@ export default function AIProcessingStatus({
               <div className="mt-4">
                 <div className="flex justify-between text-xs text-slate-400 mb-2">
                   <span>Progress</span>
-                  <span>{Math.round(animatedProgress[step.id] || step.progress)}%</span>
+                  <Badge variant="secondary" className="text-xs">
+                    {Math.round(animatedProgress[step.id] || step.progress)}%
+                  </Badge>
                 </div>
-                <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-cyan-500 to-primary-600 rounded-full transition-all duration-300"
-                    style={{ width: `${animatedProgress[step.id] || step.progress}%` }}
-                  />
-                </div>
+                <Progress
+                  value={animatedProgress[step.id] || step.progress}
+                  className="h-2"
+                />
               </div>
             )}
 

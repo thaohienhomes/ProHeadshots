@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import { redirect, useRouter } from "next/navigation";
 import pricingPlans from "./pricingPlans.json";
 import pricingPlansPolar from "./pricingPlansPolar.json";
+import pricingPlansPolarDev from "./pricingPlansPolar.dev.json";
 import { useState, use, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { isPolarEnabled } from "@/config/services";
@@ -88,8 +89,18 @@ export default function CheckoutPage({
     redirect("/forms");
   }
 
-  // Use appropriate pricing plans based on service configuration
-  const currentPricingPlans = isPolarEnabledValue ? pricingPlansPolar : pricingPlans;
+  // Use appropriate pricing plans based on service configuration and environment
+  const getPricingPlans = () => {
+    if (!isPolarEnabledValue) {
+      return pricingPlans; // Use Stripe plans
+    }
+
+    // For Polar, use environment-specific plans
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    return isDevelopment ? pricingPlansPolarDev : pricingPlansPolar;
+  };
+
+  const currentPricingPlans = getPricingPlans();
   const selectedPlan = currentPricingPlans.plans.find(
     (p) => p.name.toLowerCase() === plan.toLowerCase()
   );
@@ -173,6 +184,11 @@ export default function CheckoutPage({
       if (isPolarEnabledValue) {
         // Use Polar Payment (server action)
         console.log("🔄 Creating Polar checkout session...");
+
+        // Get TrackDesk affiliate information
+        const trackdeskAffiliateId = sessionStorage.getItem('trackdesk_affiliate_id');
+        const trackdeskClickId = sessionStorage.getItem('trackdesk_click_id');
+
         const result = await createPolarCheckoutAction({
           productId: (selectedPlan as any).polarProductId,
           successUrl: `${window.location.origin}/postcheckout-polar?checkout_id={CHECKOUT_ID}`,
@@ -180,6 +196,8 @@ export default function CheckoutPage({
           metadata: {
             user_id: user.id,
             plan_type: selectedPlan.name,
+            ...(trackdeskAffiliateId && { trackdesk_affiliate_id: trackdeskAffiliateId }),
+            ...(trackdeskClickId && { trackdesk_click_id: trackdeskClickId }),
           },
         });
 

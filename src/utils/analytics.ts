@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { logger } from '@/utils/logger';
+import { trackAffiliateConversion } from './affiliateTracking';
 
 export interface AnalyticsEvent {
   id?: string;
@@ -115,11 +116,47 @@ export async function trackConversion(
   sessionId?: string,
   additionalProperties: Record<string, any> = {}
 ): Promise<void> {
+  // Track in our internal analytics
   await trackEvent(`conversion_${conversionType}`, {
     conversion_type: conversionType,
     value,
     ...additionalProperties
   }, userId, sessionId);
+
+  // Track in affiliate systems (TrackDesk, Rewardful, etc.)
+  try {
+    let affiliateConversionType: 'sale' | 'signup' | 'lead' | 'freetrial' = 'lead';
+
+    // Map our conversion types to affiliate types
+    switch (conversionType) {
+      case 'payment':
+        affiliateConversionType = 'sale';
+        break;
+      case 'signup':
+        affiliateConversionType = 'signup';
+        break;
+      case 'generation':
+      case 'download':
+        affiliateConversionType = 'lead';
+        break;
+    }
+
+    await trackAffiliateConversion({
+      conversionType: affiliateConversionType,
+      orderId: additionalProperties.orderId || additionalProperties.order_id,
+      revenue: value,
+      currency: additionalProperties.currency || 'USD',
+      customerId: userId,
+      customerEmail: additionalProperties.customerEmail || additionalProperties.email,
+      planType: additionalProperties.planType,
+      metadata: {
+        internal_conversion_type: conversionType,
+        ...additionalProperties
+      }
+    });
+  } catch (error) {
+    logger.error('Failed to track affiliate conversion', error as Error, 'ANALYTICS');
+  }
 }
 
 /**

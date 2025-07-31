@@ -1,0 +1,90 @@
+{
+  "hero": {
+    "title": "Professional AI Headshots in Minutes",
+    "subtitle": "Create stunning, professional headshots with our advanced AI technology. Perfect for LinkedIn, resumes, and professional profiles.",
+    "cta": "Get Started",
+    "trusted": "Trusted by professionals worldwide"
+  },
+  "features": {
+    "title": "Why Choose CoolPix?",
+    "quality": "Studio Quality",
+    "speed": "Lightning Fast",
+    "affordable": "Affordable Pricing"
+  },
+  "process": {
+    "title": "How It Works",
+    "step1": {
+      "title": "Upload your images",
+      "time": "2 minutes",
+      "description": "Choose from your existing photos or capture new selfies on the spot."
+    },
+    "step2": {
+      "title": "Our AI works its magic",
+      "time": "1-2 hours", 
+      "description": "Our AI will pull your most photogenic qualities from the photos you uploaded."
+    },
+    "step3": {
+      "title": "Select your top picks",
+      "time": "",
+      "description": "It's that simple! Choose your favorites and enjoy your new professional portraits."
+    }
+  },
+  "pricing": {
+    "title": "Simple, transparent pricing",
+    "subtitle": "The average cost of professional headshots is $300 in EU and the U.S. Our packages start at just $29 - up to 10x less expensive than traditional options.",
+    "basic": {
+      "name": "Basic",
+      "price": 29,
+      "headshots": 10,
+      "time": 3
+    },
+    "professional": {
+      "name": "Professional", 
+      "price": 39,
+      "headshots": 100,
+      "time": 2
+    },
+    "executive": {
+      "name": "Executive",
+      "price": 59,
+      "headshots": 200,
+      "time": 1
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "questions": {
+      "photos": {
+        "question": "What kind of photos do I need to upload?",
+        "answer": "Make variety a priority. Varied facial expressions and varied backgrounds, taken at various times of the day, are the keys to high quality input photos. Oh, and minimal makeup and accessories, please!"
+      },
+      "usage": {
+        "question": "What do you do with my uploaded photos?",
+        "answer": "The photos you upload are used to train our AI model so it can create realistic AI headshots. These input photos are deleted within 7 days, but you can instantly delete them at any time with our 'Delete' button."
+      },
+      "free": {
+        "question": "Is there a free AI headshot generator?",
+        "answer": "Yes, CoolPix has a 100% free AI headshot generator for simple photos. No email is required and no credit card is required. It is completely free."
+      },
+      "realistic": {
+        "question": "What is the most realistic headshot AI?",
+        "answer": "CoolPix is the most realistic headshot AI with excellent reviews. It's the only major AI headshot generator using Flux to generate realistic AI headshots. CoolPix is regularly used by professionals, companies and photographers."
+      },
+      "linkedin": {
+        "question": "Can I use AI headshots on LinkedIn?",
+        "answer": "25% of CoolPix customers use their AI headshots on LinkedIn. It's totally okay to use AI headshots on LinkedIn."
+      }
+    }
+  },
+  "footer": {
+    "description": "Professional AI-generated headshots powered by cutting-edge technology. Create stunning headshots in minutes.",
+    "trusted": "Trusted by professionals, teams, and businesses worldwide",
+    "copyright": "© 2024 coolpix - All rights reserved"
+  },
+  "navigation": {
+    "backToDashboard": "Back to Dashboard",
+    "signOut": "Sign Out",
+    "signingOut": "Signing out...",
+    "linkedinOptimizer": "LinkedIn Optimizer"
+  }
+}

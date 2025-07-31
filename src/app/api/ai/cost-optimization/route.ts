@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
     }
 
   } catch (error) {
-    logger.error('Error in cost optimization API', error, 'COST_OPTIMIZATION_API');
+    logger.error('Error in cost optimization API', error as Error, 'COST_OPTIMIZATION_API');
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    logger.error('Error in cost optimization POST API', error, 'COST_OPTIMIZATION_API');
+    logger.error('Error in cost optimization POST API', error as Error, 'COST_OPTIMIZATION_API');
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -135,7 +135,7 @@ async function handleAnalyzeCosts(timeframe: string, user: any, isAdmin: boolean
     });
 
   } catch (error) {
-    logger.error('Error analyzing costs', error, 'COST_OPTIMIZATION_API');
+    logger.error('Error analyzing costs', error as Error, 'COST_OPTIMIZATION_API');
     return NextResponse.json(
       { error: 'Failed to analyze costs' },
       { status: 500 }
@@ -166,7 +166,7 @@ async function handleGetResourceUsage(user: any, isAdmin: boolean): Promise<Next
     });
 
   } catch (error) {
-    logger.error('Error getting resource usage', error, 'COST_OPTIMIZATION_API');
+    logger.error('Error getting resource usage', error as Error, 'COST_OPTIMIZATION_API');
     return NextResponse.json(
       { error: 'Failed to get resource usage' },
       { status: 500 }
@@ -191,7 +191,7 @@ async function handleGetRecommendations(user: any, isAdmin: boolean): Promise<Ne
     });
 
   } catch (error) {
-    logger.error('Error getting recommendations', error, 'COST_OPTIMIZATION_API');
+    logger.error('Error getting recommendations', error as Error, 'COST_OPTIMIZATION_API');
     return NextResponse.json(
       { error: 'Failed to get recommendations' },
       { status: 500 }
@@ -233,7 +233,7 @@ async function handleBudgetMonitoring(user: any, isAdmin: boolean): Promise<Next
     });
 
   } catch (error) {
-    logger.error('Error monitoring budget', error, 'COST_OPTIMIZATION_API');
+    logger.error('Error monitoring budget', error as Error, 'COST_OPTIMIZATION_API');
     return NextResponse.json(
       { error: 'Failed to monitor budget' },
       { status: 500 }
@@ -271,7 +271,7 @@ async function handleGetModelCosts(user: any): Promise<NextResponse> {
     });
 
   } catch (error) {
-    logger.error('Error getting model costs', error, 'COST_OPTIMIZATION_API');
+    logger.error('Error getting model costs', error as Error, 'COST_OPTIMIZATION_API');
     return NextResponse.json(
       { error: 'Failed to get model costs' },
       { status: 500 }
@@ -313,7 +313,7 @@ async function handleCalculateCost(searchParams: URLSearchParams, user: any): Pr
     });
 
   } catch (error) {
-    logger.error('Error calculating cost', error, 'COST_OPTIMIZATION_API');
+    logger.error('Error calculating cost', error as Error, 'COST_OPTIMIZATION_API');
     return NextResponse.json(
       { error: 'Failed to calculate cost' },
       { status: 500 }
@@ -325,7 +325,7 @@ async function handleUpdateConfig(config: any, user: any): Promise<NextResponse>
   try {
     // In production, this would update the configuration in the database
     // For now, we'll just log the update
-    logger.info('Cost optimization config updated', { config, userId: user.id }, 'COST_OPTIMIZATION_API');
+    logger.info('Cost optimization config updated', 'COST_OPTIMIZATION_API', { config, userId: user.id });
 
     return NextResponse.json({
       success: true,
@@ -334,7 +334,7 @@ async function handleUpdateConfig(config: any, user: any): Promise<NextResponse>
     });
 
   } catch (error) {
-    logger.error('Error updating config', error, 'COST_OPTIMIZATION_API');
+    logger.error('Error updating config', error as Error, 'COST_OPTIMIZATION_API');
     return NextResponse.json(
       { error: 'Failed to update configuration' },
       { status: 500 }
@@ -345,7 +345,7 @@ async function handleUpdateConfig(config: any, user: any): Promise<NextResponse>
 async function handleSetBudget(budgetLimits: any, user: any): Promise<NextResponse> {
   try {
     // In production, this would update budget limits in the database
-    logger.info('Budget limits updated', { budgetLimits, userId: user.id }, 'COST_OPTIMIZATION_API');
+    logger.info('Budget limits updated', 'COST_OPTIMIZATION_API', { budgetLimits, userId: user.id });
 
     return NextResponse.json({
       success: true,
@@ -354,7 +354,7 @@ async function handleSetBudget(budgetLimits: any, user: any): Promise<NextRespon
     });
 
   } catch (error) {
-    logger.error('Error setting budget', error, 'COST_OPTIMIZATION_API');
+    logger.error('Error setting budget', error as Error, 'COST_OPTIMIZATION_API');
     return NextResponse.json(
       { error: 'Failed to set budget limits' },
       { status: 500 }
@@ -372,6 +372,7 @@ function getModelRecommendation(modelId: FalAIModelId): string {
     'aura-sr': 'Excellent for upscaling existing images',
     'clarity-upscaler': 'Professional upscaling with high quality',
     'flux-lora': 'Customizable with LoRA models',
+    'flux-lora-training': 'Train custom LoRA models for personalized results',
   };
 
   return recommendations[modelId] || 'General purpose AI model';
