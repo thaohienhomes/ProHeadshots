@@ -9,6 +9,8 @@ import Pitch2 from "@/components/landing/Pitch2";
 import Pricing from "@/components/landing/Pricing";
 import Testimonials from "@/components/landing/Testimonials";
 import EnhancedFaq from "@/components/landing/EnhancedFaq";
+import SectionIdManager from "@/components/SectionIdManager";
+import NavigationTester from "@/components/NavigationTester";
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -18,6 +20,9 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col items-center">
+      {/* Section ID Manager - Handles dynamic section ID assignment and smooth scrolling */}
+      <SectionIdManager enableDebugMode={process.env.NODE_ENV === 'development'} />
+
       <Header />
       <Hero />
       <HeroSteps />
@@ -28,6 +33,9 @@ export default async function Home() {
       <Testimonials />
       <EnhancedFaq />
       <Footer />
+
+      {/* Development Navigation Tester */}
+      <NavigationTester isVisible={process.env.NODE_ENV === 'development'} />
     </div>
   );
 }
