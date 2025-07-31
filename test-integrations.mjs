@@ -1,4 +1,4 @@
-// ES Module test script for CVPhoto.app integrations
+// ES Module test script for coolpix.me integrations
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -163,7 +163,7 @@ async function testEnvironmentVariables() {
 }
 
 async function runAllTests() {
-  console.log('🚀 Starting CVPhoto.app Integration Tests\n');
+  console.log('🚀 Starting coolpix.me Integration Tests\n');
   
   const results = {
     environment: await testEnvironmentVariables(),

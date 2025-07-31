@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# CVPhoto.app Production Deployment Script
-echo "🚀 Starting CVPhoto.app Production Deployment"
+# coolpix.me Production Deployment Script
+echo "🚀 Starting coolpix.me Production Deployment"
 echo "=============================================="
 
 # Check if Vercel CLI is installed

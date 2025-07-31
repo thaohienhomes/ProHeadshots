@@ -1,5 +1,5 @@
 @echo off
-echo 🚀 Starting CVPhoto.app Production Deployment
+echo 🚀 Starting coolpix.me Production Deployment
 echo ==============================================
 
 REM Check if Vercel CLI is installed

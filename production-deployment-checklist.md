@@ -1,4 +1,4 @@
-# 🚀 CVPhoto.app Production Deployment Checklist
+# 🚀 coolpix.me Production Deployment Checklist
 
 ## ✅ COMPLETED ITEMS
 - [x] Application builds successfully

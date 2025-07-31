@@ -1,6 +1,6 @@
 # Service Migration Guide
 
-This guide explains how to migrate from Astria AI to Fal AI and from Stripe to Polar Payment in your CV Photo application.
+This guide explains how to migrate from Astria AI to Fal AI and from Stripe to Polar Payment in your coolpix.me application.
 
 ## Overview
 

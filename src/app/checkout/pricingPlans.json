@@ -1,6 +1,6 @@
 {
   "_documentation": {
-    "description": "Pricing plans configuration for CV Photo app",
+    "description": "Pricing plans configuration for coolpix.me app",
     "fields": {
       "name": "Plan name displayed to users",
       "price": "Current price in USD",
@@ -10,7 +10,7 @@
       "isPopular": "Whether to show 'Most Popular' badge",
       "stripeUrl": "Stripe checkout URL"
     },
-    "IMPORTANT": "These are CVPhoto's Stripe links - replace with your own Stripe links"
+    "IMPORTANT": "These are coolpix.me's Stripe links - replace with your own Stripe links"
   },
   "plans": [
     {

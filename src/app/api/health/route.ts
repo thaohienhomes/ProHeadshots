@@ -4,6 +4,6 @@ export async function GET() {
   return NextResponse.json({ 
     status: 'healthy', 
     timestamp: new Date().toISOString(),
-    message: 'CVPhoto.app API is running'
+    message: 'coolpix.me API is running'
   });
 }
