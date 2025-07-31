@@ -23,7 +23,7 @@ const steps = [
 const HeroSteps = () => {
 
   return (
-    <section className="relative w-full bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 py-16 lg:py-24 overflow-hidden">
+    <section id="how-it-works" className="relative w-full bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 py-16 lg:py-24 overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-cyan-400/10 to-transparent rounded-full blur-3xl" />

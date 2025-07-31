@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Enable smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
 @keyframes border-beam {
   100% {
     --angle: 360deg;

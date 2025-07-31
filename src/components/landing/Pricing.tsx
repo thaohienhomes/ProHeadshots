@@ -116,7 +116,7 @@ export default function Pricing() {
   ];
 
   return (
-    <section className="relative w-full bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-16 lg:py-24 overflow-hidden">
+    <section id="pricing" className="relative w-full bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-16 lg:py-24 overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0">
         <div className="absolute top-0 right-1/3 w-96 h-96 bg-gradient-to-br from-cyan-400/5 to-transparent rounded-full blur-3xl" />

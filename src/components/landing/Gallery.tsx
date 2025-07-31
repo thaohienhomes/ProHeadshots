@@ -91,7 +91,7 @@ const ImageGallery = () => {
   };
 
   return (
-    <section className="relative w-full bg-gradient-to-br from-navy-900 via-navy-800 to-navy-700 py-20 sm:py-32 overflow-hidden">
+    <section id="gallery" className="relative w-full bg-gradient-to-br from-navy-900 via-navy-800 to-navy-700 py-20 sm:py-32 overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0">
         <div className="absolute top-0 right-1/4 w-64 h-64 bg-gradient-to-br from-cyan-400/5 to-transparent rounded-full blur-3xl" />

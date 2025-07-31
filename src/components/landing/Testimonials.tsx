@@ -65,7 +65,7 @@ const thirdColumn = testimonials.slice(6, 9);
 
 const Testimonials = () => {
   return (
-    <section className="bg-navy-900 my-20 relative py-20">
+    <section id="testimonials" className="bg-navy-900 my-20 relative py-20">
       <div className="container z-10 mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
