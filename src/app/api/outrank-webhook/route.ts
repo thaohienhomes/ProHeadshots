@@ -183,6 +183,8 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     message: 'Outrank.so Webhook Endpoint',
     description: 'This endpoint receives article publication notifications from Outrank.so',
+    status: 'active',
+    version: '1.0.0',
     usage: {
       method: 'POST',
       authentication: 'Bearer token in Authorization header',
