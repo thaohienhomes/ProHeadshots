@@ -86,21 +86,35 @@ class TrackDeskTracker {
   private loadTrackingScript(): void {
     if (this.trackingPixelLoaded) return;
 
-    // Create tracking pixel/script
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://${TRACKDESK_CONFIG.trackingDomain}/tracking.js`;
-    
-    script.onload = () => {
-      this.trackingPixelLoaded = true;
-      logger.info('TrackDesk tracking script loaded', 'TRACKDESK');
-    };
+    try {
+      // Create tracking pixel/script
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://${TRACKDESK_CONFIG.trackingDomain}/tracking.js`;
 
-    script.onerror = () => {
-      logger.error('Failed to load TrackDesk tracking script', new Error('Script load failed'), 'TRACKDESK');
-    };
+      script.onload = () => {
+        this.trackingPixelLoaded = true;
+        // Silent success - don't log to prevent console spam
+      };
 
-    document.head.appendChild(script);
+      script.onerror = () => {
+        // Silent fail - don't log script load failures to prevent error loops
+        this.trackingPixelLoaded = false;
+      };
+
+      // Add timeout to prevent hanging
+      setTimeout(() => {
+        if (!this.trackingPixelLoaded) {
+          // Silent timeout - script didn't load
+          this.trackingPixelLoaded = false;
+        }
+      }, 5000);
+
+      document.head.appendChild(script);
+    } catch (error) {
+      // Silent fail - don't log to prevent error loops
+      this.trackingPixelLoaded = false;
+    }
   }
 
   /**

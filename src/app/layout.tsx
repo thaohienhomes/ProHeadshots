@@ -7,16 +7,15 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import SessionProvider from "@/components/providers/SessionProvider";
 import TrackDeskProvider from "@/components/TrackDeskProvider";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import AffonsoDebugger from "@/components/AffonsoDebugger";
+import { generateMetadata, seoConfigs } from "@/utils/seo";
+import { SkipToContent } from "@/components/ui/AccessibilityEnhancements";
 
 import { Toaster } from 'react-hot-toast';
 
 const BG = DM_Sans({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "coolpix - Professional AI Headshots",
-  description:
-    "The most popular AI headshot generator. Create studio quality headshots with coolpix. Best for professional business headshots.",
-};
+export const metadata: Metadata = generateMetadata(seoConfigs.home);
 
 export default function RootLayout({
   children,
@@ -27,13 +26,25 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Head content for production */}
+        {/* Affonso affiliate tracking script with error handling */}
+        <script
+          async
+          defer
+          src="https://affonso.io/js/pixel.min.js"
+          data-affonso="cmds69rp40042myuiowb6hje8"
+          data-cookie_duration="30"
+          onError="console.log('Affonso script failed to load')"
+        />
       </head>
       <body className={BG.className}>
+        <SkipToContent />
         <GoogleAnalytics />
         <TrackDeskProvider />
         <SessionProvider>
           <ErrorBoundary>
-            {children}
+            <main id="main-content">
+              {children}
+            </main>
           </ErrorBoundary>
         </SessionProvider>
         <Toaster
@@ -54,6 +65,7 @@ export default function RootLayout({
           }}
         />
         <Analytics />
+        <AffonsoDebugger />
       </body>
     </html>
   );
