@@ -154,7 +154,8 @@ export default function InfiniteScrollGallery({
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
                 sizes="320px"
-                priority={index < 3} // Only prioritize first 3 images to avoid conflicts
+                priority={index < images.length && index < 3} // Only prioritize first 3 unique images
+                loading={index < images.length && index < 3 ? "eager" : "lazy"} // Lazy load duplicates
               />
 
               {/* Hover overlay */}

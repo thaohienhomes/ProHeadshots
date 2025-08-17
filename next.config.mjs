@@ -61,6 +61,9 @@ const nextConfig = {
     // Allow SVG optimization for placeholder images
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Optimize image loading to prevent preload warnings
+    minimumCacheTTL: 60,
+    formats: ['image/webp', 'image/avif'],
   },
   // Fix for HTTP 431 error - move external packages to new location
   serverExternalPackages: ["@supabase/supabase-js"],

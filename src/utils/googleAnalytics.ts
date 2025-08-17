@@ -310,10 +310,8 @@ class GoogleAnalyticsService {
 // Create singleton instance
 export const googleAnalytics = new GoogleAnalyticsService();
 
-// Initialize on client side
-if (typeof window !== 'undefined') {
-  googleAnalytics.initialize();
-}
+// Note: Initialization is handled by GoogleAnalytics component in layout.tsx
+// to avoid duplicate script loading
 
 // Convenience functions
 export const trackPageView = (pageTitle: string, pagePath: string, userId?: string) =>
