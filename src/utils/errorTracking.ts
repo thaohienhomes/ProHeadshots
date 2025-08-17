@@ -74,8 +74,14 @@ class ErrorTrackingService {
    */
   captureError(error: Error, context?: ErrorContext): string {
     const errorId = this.generateErrorId();
-    
+
     try {
+      // Prevent recursive error tracking
+      if (error.message?.includes('Maximum call stack size exceeded') ||
+          error.message?.includes('Script load failed')) {
+        return errorId; // Silent fail for recursive errors
+      }
+
       // Enhanced error logging
       logger.error(
         `Error captured: ${error.message}`,
@@ -84,22 +90,22 @@ class ErrorTrackingService {
         {
           errorId,
           context,
-          stack: error.stack,
+          stack: error.stack?.substring(0, 500), // Limit stack trace
           timestamp: new Date().toISOString(),
         }
       );
 
-      // In production, send to Sentry
-      if (this.config.dsn && this.isInitialized) {
+      // In production, send to Sentry (with rate limiting)
+      if (this.config.dsn && this.isInitialized && Math.random() < 0.1) {
         this.sendToSentry(error, context, errorId);
       }
 
-      // Store error locally for analysis
+      // Store error locally for analysis (with safety checks)
       this.storeErrorLocally(error, context, errorId);
 
       return errorId;
     } catch (trackingError) {
-      console.error('Error in error tracking:', trackingError);
+      // Silent fail to prevent infinite loops
       return errorId;
     }
   }
@@ -300,9 +306,9 @@ class ErrorTrackingService {
         Sentry.captureException(error);
       }
 
-      console.log('📤 Error sent to Sentry:', { errorId, message: error.message });
+      // Silent success - don't log to prevent loops
     } catch (sentryError) {
-      console.error('Failed to send error to Sentry:', sentryError);
+      // Silent fail to prevent recursive errors
     }
   }
 
@@ -340,9 +346,9 @@ class ErrorTrackingService {
       // Send message to Sentry
       Sentry.captureMessage(message, sentryLevel);
 
-      console.log('📤 Message sent to Sentry:', { messageId, message, level });
+      // Silent success - don't log to prevent loops
     } catch (sentryError) {
-      console.error('Failed to send message to Sentry:', sentryError);
+      // Silent fail to prevent recursive errors
     }
   }
 
@@ -352,7 +358,7 @@ class ErrorTrackingService {
         const errorData = {
           id: errorId,
           message: error.message,
-          stack: error.stack,
+          stack: error.stack?.substring(0, 1000), // Limit stack trace size
           context,
           timestamp: new Date().toISOString(),
         };
@@ -360,15 +366,20 @@ class ErrorTrackingService {
         const errors = this.getLocalErrors();
         errors.push(errorData);
 
-        // Keep only last 100 errors
-        if (errors.length > 100) {
+        // Keep only last 10 errors to prevent storage issues
+        if (errors.length > 10) {
           errors.shift();
         }
 
-        localStorage.setItem('errorTracking_errors', JSON.stringify(errors));
+        // Safely stringify with size limit
+        const errorString = JSON.stringify(errors);
+        if (errorString.length < 50000) { // 50KB limit
+          localStorage.setItem('errorTracking_errors', errorString);
+        }
       }
     } catch (storageError) {
-      console.error('Error storing error locally:', storageError);
+      // Silent fail to prevent recursive errors
+      // Don't log this error to prevent infinite loops
     }
   }
 
@@ -391,7 +402,13 @@ class ErrorTrackingService {
         return stored ? JSON.parse(stored) : [];
       }
     } catch (error) {
-      console.error('Error getting local errors:', error);
+      // Silent fail to prevent recursive errors
+      // Clear corrupted data
+      try {
+        localStorage.removeItem('errorTracking_errors');
+      } catch (clearError) {
+        // Silent fail
+      }
     }
     return [];
   }
@@ -399,6 +416,17 @@ class ErrorTrackingService {
 
 // Create singleton instance
 export const errorTracking = new ErrorTrackingService();
+
+// Export errorTracker for compatibility with existing imports
+export const errorTracker = {
+  capture: (err: unknown, ctx?: Record<string, any>) => {
+    if (err instanceof Error) {
+      return errorTracking.captureError(err, ctx);
+    } else {
+      return errorTracking.captureMessage(String(err), 'error', ctx);
+    }
+  },
+};
 
 // Initialize error tracking
 if (typeof window !== 'undefined') {
