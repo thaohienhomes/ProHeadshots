@@ -1,13 +1,13 @@
 
 import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/react";
+// import { Analytics } from "@vercel/analytics/react"; // TEMPORARILY DISABLED
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import SessionProvider from "@/components/providers/SessionProvider";
-import TrackDeskProvider from "@/components/TrackDeskProvider";
-import GoogleAnalytics from "@/components/GoogleAnalytics";
-import AffonsoDebugger from "@/components/AffonsoDebugger";
+// import TrackDeskProvider from "@/components/TrackDeskProvider"; // TEMPORARILY DISABLED
+// import GoogleAnalytics from "@/components/GoogleAnalytics"; // TEMPORARILY DISABLED
+// import AffonsoDebugger from "@/components/AffonsoDebugger"; // TEMPORARILY DISABLED
 import { generateMetadata, seoConfigs } from "@/utils/seo";
 import { SkipToContent } from "@/components/ui/AccessibilityEnhancements";
 
@@ -26,7 +26,8 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Head content for production */}
-        {/* Affonso affiliate tracking script with error handling */}
+        {/* TEMPORARILY DISABLED - Affonso affiliate tracking script with error handling */}
+        {/*
         <script
           async
           defer
@@ -35,11 +36,12 @@ export default function RootLayout({
           data-cookie_duration="30"
           onError="console.log('Affonso script failed to load')"
         />
+        */}
       </head>
       <body className={BG.className}>
         <SkipToContent />
-        <GoogleAnalytics />
-        <TrackDeskProvider />
+        {/* TEMPORARILY DISABLED - <GoogleAnalytics /> */}
+        {/* TEMPORARILY DISABLED - <TrackDeskProvider /> */}
         <SessionProvider>
           <ErrorBoundary>
             <main id="main-content">
@@ -64,8 +66,8 @@ export default function RootLayout({
             },
           }}
         />
-        <Analytics />
-        <AffonsoDebugger />
+        {/* TEMPORARILY DISABLED - <Analytics /> */}
+        {/* TEMPORARILY DISABLED - <AffonsoDebugger /> */}
       </body>
     </html>
   );

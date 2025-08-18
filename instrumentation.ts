@@ -1,20 +1,8 @@
+// TEMPORARILY DISABLED - Sentry instrumentation
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
-    // Server-side Sentry initialization
-    const { init } = await import('@sentry/nextjs');
-    
-    init({
-      dsn: process.env.SENTRY_DSN,
-      
-      // Environment configuration
-      environment: process.env.NODE_ENV || 'development',
-      release: process.env.VERCEL_GIT_COMMIT_SHA || 'unknown',
-      
-      // Performance monitoring
-      tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
-      
-      // Error sampling
-      sampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+  // TEMPORARILY DISABLED - All Sentry initialization
+  console.log('Sentry temporarily disabled for streamlined deployment');
+}
       
       // Filter server-side errors
       beforeSend(event, hint) {

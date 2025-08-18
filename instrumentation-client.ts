@@ -1,19 +1,22 @@
-// This file configures the initialization of Sentry on the browser/client side
-import * as Sentry from "@sentry/nextjs";
+// TEMPORARILY DISABLED - This file configures the initialization of Sentry on the browser/client side
+// import * as Sentry from "@sentry/nextjs";
 
+console.log('Sentry client-side temporarily disabled for streamlined deployment');
+
+/*
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-  
+
   // Environment configuration
   environment: process.env.NODE_ENV || 'development',
   release: process.env.VERCEL_GIT_COMMIT_SHA || 'unknown',
-  
+
   // Performance monitoring
   tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
-  
+
   // Error sampling
   sampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
-  
+
   // Session replay for debugging (optional)
   replaysSessionSampleRate: process.env.NODE_ENV === 'production' ? 0.01 : 0.1,
   replaysOnErrorSampleRate: 1.0,
