@@ -15,11 +15,11 @@ interface SEOConfig {
 }
 
 const defaultConfig = {
-  siteName: 'CoolPix - AI Headshot Studio',
-  siteUrl: 'https://coolpix.me',
+  siteName: 'ProHeadshots - AI Headshot Studio',
+  siteUrl: 'https://proheadshots.vercel.app',
   defaultImage: '/og-image.jpg',
-  defaultDescription: 'Create professional AI-generated headshots in minutes. Powered by advanced AI models including Flux Pro Ultra, Imagen4, and Recraft V3.',
-  twitterHandle: '@coolpix',
+  defaultDescription: 'Create professional AI-generated headshots in minutes. Powered by Replicate AI with SDXL and FLUX models.',
+  twitterHandle: '@proheadshots',
   locale: 'en_US',
 };
 

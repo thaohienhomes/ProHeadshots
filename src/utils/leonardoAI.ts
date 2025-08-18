@@ -317,6 +317,12 @@ export async function getUserInfo() {
  * Health check for Leonardo AI service
  */
 export async function healthCheck(): Promise<boolean> {
+  // Skip health check during build time
+  if (process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV) {
+    console.log('Skipping Leonardo AI health check during build time');
+    return true; // Return true to avoid blocking build
+  }
+
   try {
     await getUserInfo();
     return true;

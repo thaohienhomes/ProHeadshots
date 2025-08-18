@@ -18,18 +18,10 @@ Sentry.init({
   replaysSessionSampleRate: process.env.NODE_ENV === 'production' ? 0.01 : 0.1,
   replaysOnErrorSampleRate: 1.0,
   
-  // Integration configuration
+  // Integration configuration - using default integrations for Next.js 15
   integrations: [
-    new Sentry.Replay({
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-    new Sentry.BrowserTracing({
-      // Set up automatic route change tracking for Next.js App Router
-      routingInstrumentation: Sentry.nextRouterInstrumentation({
-        // Add any custom routing configuration here
-      }),
-    }),
+    // Sentry automatically includes the necessary integrations for Next.js
+    // No need to manually configure Replay, BrowserTracing, or nextRouterInstrumentation
   ],
   
   // Filter out noise
@@ -63,7 +55,10 @@ Sentry.init({
   initialScope: {
     tags: {
       component: 'client',
-      app: 'coolpix-me'
+      app: 'proheadshots'
     },
   },
 });
+
+// Export router transition hook for navigation instrumentation
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;

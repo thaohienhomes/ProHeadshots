@@ -275,9 +275,9 @@ function getTemplateContent(templateName: string, data: Record<string, any>): st
   switch (templateName) {
     case 'welcome':
       return `
-        <h2>Welcome to Coolpix.me!</h2>
+        <h2>Welcome to ProHeadshots!</h2>
         <p>Hi ${data.firstName || 'there'},</p>
-        <p>Welcome to Coolpix.me! We're excited to help you create professional AI-generated headshots.</p>
+        <p>Welcome to ProHeadshots! We're excited to help you create professional AI-generated headshots.</p>
         <p><a href="${data.dashboardUrl || '#'}" class="button">Get Started</a></p>
       `;
     case 'order_confirmation':

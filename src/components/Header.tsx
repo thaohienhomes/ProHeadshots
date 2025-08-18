@@ -173,7 +173,7 @@ export default function Header({
               />
             </div>
           </div>
-          <span className="sr-only">coolpix - AI Headshot Studio</span>
+          <span className="sr-only">ProHeadshots - AI Headshot Studio</span>
         </Link>
 
         {userAuth ? (

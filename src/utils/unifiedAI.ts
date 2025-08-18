@@ -1,11 +1,11 @@
-// Unified AI service for Coolpix.me
-// Provides intelligent routing between fal.ai and Leonardo AI with automatic fallback
+// Unified AI service for ProHeadshots
+// Provides intelligent routing between Replicate and RunPod with automatic fallback
 
-import * as FalAI from './falAI';
-import * as LeonardoAI from './leonardoAI';
+import * as ReplicateAI from './replicateAI';
+import * as RunPodAI from './runpodAI';
 import { logger } from './logger';
 
-export type AIProvider = 'fal' | 'leonardo';
+export type AIProvider = 'replicate' | 'runpod';
 
 export interface ProviderStatus {
   provider: AIProvider;
@@ -101,6 +101,12 @@ class UnifiedAIService {
   }
 
   private startHealthChecking() {
+    // Skip health checking during build time
+    if (process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV) {
+      logger.info('Skipping health checks during build time', {}, 'UNIFIED_AI');
+      return;
+    }
+
     if (this.healthCheckTimer) {
       clearInterval(this.healthCheckTimer);
     }
@@ -109,8 +115,10 @@ class UnifiedAIService {
       this.checkAllProvidersHealth();
     }, this.config.healthCheckInterval);
 
-    // Initial health check
-    this.checkAllProvidersHealth();
+    // Initial health check (only if not during build)
+    if (typeof window !== 'undefined' || process.env.VERCEL_ENV) {
+      this.checkAllProvidersHealth();
+    }
   }
 
   private async checkProviderHealth(provider: AIProvider): Promise<boolean> {

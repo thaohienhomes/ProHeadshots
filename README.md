@@ -1,8 +1,9 @@
 
-Full codebase with custom FLUX API. Live App on: www.coolpix.me
+# ProHeadshots - AI Headshot Generation Platform
 
-This repo was forked on 30th of November, 2024 and has all the code from coolpix.me. It is being supported and updated by @johnnytran for customers
-that bought the codebase of coolpix.me via clonemysaas.com.
+Full codebase with Replicate AI integration. Live App on: proheadshots.vercel.app
+
+This is the ProHeadshots platform - a professional AI headshot generation service using Replicate.com and RunPod for scaling.
 
 Star this repo to be notified with new updates and upcoming features.
 
@@ -11,12 +12,12 @@ Star this repo to be notified with new updates and upcoming features.
 This codebase now supports multiple AI and payment providers:
 
 ### AI Services
-- **Astria AI** (original) - Custom FLUX API
-- **Fal AI** (new) - Modern AI infrastructure with better performance and lower costs
+- **Replicate** (Phase 1) - Primary AI provider with SDXL and FLUX models
+- **RunPod** (Phase 2) - Scaling solution for cost optimization
 
 ### Payment Services
-- **Stripe** (original) - Traditional payment processing
-- **Polar Payment** (new) - Developer-focused platform with 20% lower fees
+- **Polar Payment** - Developer-focused platform with lower fees
+- **Stripe** - Traditional payment processing (fallback)
 
 See [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md) for detailed migration instructions.
 

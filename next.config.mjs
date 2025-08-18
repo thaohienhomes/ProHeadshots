@@ -14,6 +14,38 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 
+  // Configure webpack to handle Supabase in Edge Runtime and optimize performance
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Exclude problematic Node.js modules from Edge Runtime
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        // Prevent Node.js APIs from being used in Edge Runtime
+        'process': false,
+        'fs': false,
+        'path': false,
+      };
+    }
+
+    // Optimize webpack cache to reduce large string serialization warnings
+    config.cache = {
+      ...config.cache,
+      compression: 'gzip',
+      maxMemoryGenerations: 1,
+    };
+
+    // Optimize module concatenation
+    config.optimization = {
+      ...config.optimization,
+      concatenateModules: true,
+    };
+
+    return config;
+  },
+
+  // External packages for server components
+  serverExternalPackages: ['@supabase/supabase-js'],
+
   // Exclude test pages from production build
   async redirects() {
     return [
@@ -65,8 +97,7 @@ const nextConfig = {
     minimumCacheTTL: 60,
     formats: ['image/webp', 'image/avif'],
   },
-  // Fix for HTTP 431 error - move external packages to new location
-  serverExternalPackages: ["@supabase/supabase-js"],
+
   // Configure security headers
   async headers() {
     return [

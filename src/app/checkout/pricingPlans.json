@@ -1,6 +1,6 @@
 {
   "_documentation": {
-    "description": "Pricing plans configuration for coolpix.me app",
+    "description": "Pricing plans configuration for ProHeadshots app",
     "fields": {
       "name": "Plan name displayed to users",
       "price": "Current price in USD",

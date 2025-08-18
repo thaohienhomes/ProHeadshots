@@ -311,9 +311,9 @@ function getTemplateContent(templateType: EmailTemplateType, data: Record<string
   switch (templateType) {
     case 'welcome':
       return `
-        <h2>Welcome to Coolpix.me!</h2>
+        <h2>Welcome to ProHeadshots!</h2>
         <p>Hi ${data.firstName || 'there'},</p>
-        <p>Welcome to Coolpix.me! We're excited to help you create professional AI-generated headshots that will make you stand out.</p>
+        <p>Welcome to ProHeadshots! We're excited to help you create professional AI-generated headshots that will make you stand out.</p>
         <div class="highlight-box">
           <p><strong>What's next?</strong></p>
           <ul style="margin: 10px 0; padding-left: 20px;">
@@ -402,7 +402,7 @@ function getTemplateContent(templateType: EmailTemplateType, data: Record<string
       return `
         <h2>Reset Your Password</h2>
         <p>Hi ${data.firstName || 'there'},</p>
-        <p>You requested to reset your password for your Coolpix.me account. Click the button below to create a new password:</p>
+        <p>You requested to reset your password for your ProHeadshots account. Click the button below to create a new password:</p>
         <div class="highlight-box">
           <p><strong>Important:</strong></p>
           <p>This link will expire in <strong>${data.expiryTime || '24 hours'}</strong></p>
@@ -456,7 +456,7 @@ function getTemplateContent(templateType: EmailTemplateType, data: Record<string
       return `
         <h2>Billing Notification</h2>
         <p>Hi ${data.firstName || 'there'},</p>
-        <p>This is a notification regarding your billing account with Coolpix.me.</p>
+        <p>This is a notification regarding your billing account with ProHeadshots.</p>
         <div class="highlight-box">
           <p><strong>Invoice ID:</strong> ${data.invoiceId || 'N/A'}</p>
           <p><strong>Amount:</strong> ${data.amount || 'N/A'} ${data.currency || 'USD'}</p>
@@ -517,7 +517,7 @@ function getTemplateContent(templateType: EmailTemplateType, data: Record<string
       return `
         <h2>Support Request Received</h2>
         <p>Hi ${data.firstName || 'there'},</p>
-        <p>Thank you for contacting Coolpix.me support. We've received your message and will respond as soon as possible.</p>
+        <p>Thank you for contacting ProHeadshots support. We've received your message and will respond as soon as possible.</p>
         <div class="highlight-box">
           <p><strong>Subject:</strong> ${data.subject || 'Support Request'}</p>
           <p><strong>Category:</strong> ${data.category || 'General'}</p>

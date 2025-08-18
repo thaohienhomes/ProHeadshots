@@ -52,6 +52,7 @@
     "react-tilt": "^1.0.2",
     "react-tweet": "^3.2.1",
     "react-typed": "^2.0.12",
+    "replicate": "^1.0.1",
     "resend": "^3.5.0",
     "stripe": "^17.3.0",
     "tailwind-merge": "^2.5.4",

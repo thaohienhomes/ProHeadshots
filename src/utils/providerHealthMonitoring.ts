@@ -66,12 +66,20 @@ class ProviderHealthMonitor {
   }
 
   public startMonitoring() {
+    // Skip monitoring during build time
+    if (process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV) {
+      logger.info('Skipping health monitoring during build time', {}, 'HEALTH_MONITOR');
+      return;
+    }
+
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
     }
 
-    // Initial check
-    this.performHealthChecks();
+    // Initial check (only if not during build)
+    if (typeof window !== 'undefined' || process.env.VERCEL_ENV) {
+      this.performHealthChecks();
+    }
 
     // Set up periodic monitoring
     this.monitoringInterval = setInterval(() => {

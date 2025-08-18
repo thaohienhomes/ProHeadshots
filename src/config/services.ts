@@ -3,11 +3,11 @@
 
 export interface ServiceConfig {
   ai: {
-    provider: 'astria' | 'fal' | 'leonardo' | 'unified';
+    provider: 'replicate' | 'runpod' | 'unified';
     enabled: boolean;
     fallbackEnabled?: boolean;
-    primaryProvider?: 'fal' | 'leonardo';
-    secondaryProvider?: 'fal' | 'leonardo';
+    primaryProvider?: 'replicate' | 'runpod';
+    secondaryProvider?: 'replicate' | 'runpod';
   };
   payment: {
     provider: 'stripe' | 'polar';
@@ -18,11 +18,11 @@ export interface ServiceConfig {
 // Default configuration - can be overridden by environment variables
 const defaultConfig: ServiceConfig = {
   ai: {
-    provider: 'unified', // Default to unified AI service
+    provider: 'replicate', // Phase 1: Replicate only
     enabled: true,
     fallbackEnabled: true,
-    primaryProvider: 'fal',
-    secondaryProvider: 'leonardo',
+    primaryProvider: 'replicate',
+    secondaryProvider: 'runpod', // Phase 2: RunPod for scaling
   },
   payment: {
     provider: 'polar', // Default to Polar Payment
@@ -34,11 +34,11 @@ const defaultConfig: ServiceConfig = {
 export function getServiceConfig(): ServiceConfig {
   return {
     ai: {
-      provider: (process.env.AI_PROVIDER as 'astria' | 'fal' | 'leonardo' | 'unified') || defaultConfig.ai.provider,
+      provider: (process.env.AI_PROVIDER as 'replicate' | 'runpod' | 'unified') || defaultConfig.ai.provider,
       enabled: process.env.AI_ENABLED !== 'false',
       fallbackEnabled: process.env.AI_FALLBACK_ENABLED !== 'false',
-      primaryProvider: (process.env.AI_PRIMARY_PROVIDER as 'fal' | 'leonardo') || defaultConfig.ai.primaryProvider,
-      secondaryProvider: (process.env.AI_SECONDARY_PROVIDER as 'fal' | 'leonardo') || defaultConfig.ai.secondaryProvider,
+      primaryProvider: (process.env.AI_PRIMARY_PROVIDER as 'replicate' | 'runpod') || defaultConfig.ai.primaryProvider,
+      secondaryProvider: (process.env.AI_SECONDARY_PROVIDER as 'replicate' | 'runpod') || defaultConfig.ai.secondaryProvider,
     },
     payment: {
       provider: (process.env.PAYMENT_PROVIDER as 'stripe' | 'polar') || defaultConfig.payment.provider,
@@ -48,19 +48,14 @@ export function getServiceConfig(): ServiceConfig {
 }
 
 // Helper functions to check which service to use
-export function isAstriaEnabled(): boolean {
+export function isReplicateEnabled(): boolean {
   const config = getServiceConfig();
-  return config.ai.provider === 'astria' && config.ai.enabled;
+  return (config.ai.provider === 'replicate' || config.ai.provider === 'unified') && config.ai.enabled;
 }
 
-export function isFalAIEnabled(): boolean {
+export function isRunPodEnabled(): boolean {
   const config = getServiceConfig();
-  return (config.ai.provider === 'fal' || config.ai.provider === 'unified') && config.ai.enabled;
-}
-
-export function isLeonardoAIEnabled(): boolean {
-  const config = getServiceConfig();
-  return (config.ai.provider === 'leonardo' || config.ai.provider === 'unified') && config.ai.enabled;
+  return (config.ai.provider === 'runpod' || config.ai.provider === 'unified') && config.ai.enabled;
 }
 
 export function isUnifiedAIEnabled(): boolean {
@@ -87,14 +82,11 @@ export function validateServiceConfig(): { valid: boolean; errors: string[] } {
 
   // Validate AI service configuration
   if (config.ai.enabled) {
-    if (config.ai.provider === 'astria' && !process.env.ASTRIA_API_KEY) {
-      errors.push('ASTRIA_API_KEY is required when using Astria AI');
+    if ((config.ai.provider === 'replicate' || config.ai.provider === 'unified') && !process.env.REPLICATE_API_TOKEN) {
+      errors.push('REPLICATE_API_TOKEN is required when using Replicate or unified service');
     }
-    if ((config.ai.provider === 'fal' || config.ai.provider === 'unified') && !process.env.FAL_AI_API_KEY) {
-      errors.push('FAL_AI_API_KEY is required when using Fal AI or unified service');
-    }
-    if ((config.ai.provider === 'leonardo' || config.ai.provider === 'unified') && !process.env.LEONARDO_API_KEY) {
-      errors.push('LEONARDO_API_KEY is required when using Leonardo AI or unified service');
+    if ((config.ai.provider === 'runpod' || config.ai.provider === 'unified') && !process.env.RUNPOD_API_KEY) {
+      errors.push('RUNPOD_API_KEY is required when using RunPod or unified service');
     }
     if (config.ai.provider === 'unified') {
       if (!config.ai.primaryProvider || !config.ai.secondaryProvider) {
@@ -128,51 +120,52 @@ export function validateServiceConfig(): { valid: boolean; errors: string[] } {
 export function getAIService() {
   const config = getServiceConfig();
 
-  // Temporarily disable unified provider to avoid server-side import issues
-  // TODO: Fix server-side import issues in unified AI provider
-  if (false && config.ai.provider === 'unified') {
+  if (isReplicateEnabled()) {
     return {
-      createTune: () => Promise.resolve({ POST: () => Promise.resolve(new Response('Service temporarily disabled', { status: 503 })) }),
-      createPrompt: () => Promise.resolve({ POST: () => Promise.resolve(new Response('Service temporarily disabled', { status: 503 })) }),
-      getPrompts: () => import('../action/getFalPrompts').then(m => m.getFalPromptsFromDatabase), // Use fal for now
-      fixDiscrepancy: () => import('../action/fixDiscrepancyFal').then(m => m.fixDiscrepancyFal), // Use fal for now
-      healthCheck: () => Promise.resolve({ GET: () => Promise.resolve(new Response('Service temporarily disabled', { status: 503 })) }),
+      createTune: () => import('../app/api/llm/tune/createTuneReplicate').then(m => m.createTuneReplicate),
+      createPrompt: () => import('../app/api/llm/prompt/createPromptReplicate').then(m => m.createPromptReplicate),
+      getPrompts: () => import('../action/getReplicatePrompts').then(m => m.getReplicatePromptsFromDatabase),
+      fixDiscrepancy: () => import('../action/fixDiscrepancyReplicate').then(m => m.fixDiscrepancyReplicate),
     };
-  } else if (isFalAIEnabled()) {
+  } else if (isRunPodEnabled()) {
     return {
-      createTune: () => import('../app/api/llm/tune/createTuneFal').then(m => m.createTuneFal),
-      createPrompt: () => import('../app/api/llm/prompt/createPromptFal').then(m => m.createPromptFal),
-      getPrompts: () => import('../action/getFalPrompts').then(m => m.getFalPromptsFromDatabase),
-      fixDiscrepancy: () => import('../action/fixDiscrepancyFal').then(m => m.fixDiscrepancyFal),
+      createTune: () => import('../utils/runpodAI').then(m => m.trainModel),
+      createPrompt: () => import('../utils/runpodAI').then(m => m.generateImages),
+      getPrompts: () => import('../action/getReplicatePrompts').then(m => m.getReplicatePromptsFromDatabase), // Fallback to replicate
+      fixDiscrepancy: () => import('../action/fixDiscrepancyReplicate').then(m => m.fixDiscrepancyReplicate), // Fallback to replicate
     };
-  } else if (isLeonardoAIEnabled()) {
+  } else if (isUnifiedAIEnabled()) {
+    // Phase 2: Unified Replicate + RunPod
     return {
-      createTune: () => import('../utils/leonardoAI').then(m => m.trainModel),
-      createPrompt: () => import('../utils/leonardoAI').then(m => m.generateImages),
-      getPrompts: () => import('../action/getFalPrompts').then(m => m.getFalPromptsFromDatabase), // Fallback to fal
-      fixDiscrepancy: () => import('../action/fixDiscrepancyFal').then(m => m.fixDiscrepancyFal), // Fallback to fal
+      createTune: () => import('../utils/unifiedAI').then(m => m.unifiedAI.trainModel),
+      createPrompt: () => import('../utils/unifiedAI').then(m => m.unifiedAI.generateImages),
+      getPrompts: () => import('../action/getReplicatePrompts').then(m => m.getReplicatePromptsFromDatabase),
+      fixDiscrepancy: () => import('../action/fixDiscrepancyReplicate').then(m => m.fixDiscrepancyReplicate),
     };
   } else {
+    // Fallback to Replicate
     return {
-      createTune: () => import('../app/api/llm/tune/createTune').then(m => m.createTune),
-      createPrompt: () => import('../app/api/llm/prompt/createPrompt').then(m => m.createPrompt),
-      getPrompts: () => import('../action/getAstriaPrompts').then(m => m.getAstriaPrompts),
-      fixDiscrepancy: () => import('../action/fixDiscrepancy').then(m => m.fixDiscrepancy),
+      createTune: () => import('../app/api/llm/tune/createTuneReplicate').then(m => m.createTuneReplicate),
+      createPrompt: () => import('../app/api/llm/prompt/createPromptReplicate').then(m => m.createPromptReplicate),
+      getPrompts: () => import('../action/getReplicatePrompts').then(m => m.getReplicatePromptsFromDatabase),
+      fixDiscrepancy: () => import('../action/fixDiscrepancyReplicate').then(m => m.fixDiscrepancyReplicate),
     };
   }
 }
 
 export function getPaymentService() {
   if (isPolarEnabled()) {
-    // Use development pricing for non-production environments
-    const pricingFile = process.env.NODE_ENV === 'production'
-      ? '../app/checkout/pricingPlansPolar.json'
-      : '../app/checkout/pricingPlansPolar.dev.json';
-
     return {
       verifyPayment: () => import('../action/verifyPaymentPolar').then(m => m.verifyPaymentPolar),
       checkoutComponent: () => import('../app/checkout/CheckoutPagePolar').then(m => m.default),
-      pricingPlans: () => import(pricingFile),
+      pricingPlans: () => {
+        // Use explicit imports to avoid webpack dynamic import warnings
+        if (process.env.NODE_ENV === 'production') {
+          return import('../app/checkout/pricingPlansPolar.json');
+        } else {
+          return import('../app/checkout/pricingPlansPolar.dev.json');
+        }
+      },
     };
   } else {
     return {
